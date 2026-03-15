@@ -5,6 +5,9 @@
     },
     "google_analytics.reports": {
       "version": "v1beta"
+    },
+    "resend.resend": {
+      "version": "v1.5.0"
     }
   },
   "mode": "production",
@@ -135,6 +138,142 @@
         "status": 200
       },
       "summary": "Sign in with an Identity Provider (OAuth)",
+      "type": "method"
+    },
+    "emails.email.create": {
+      "desc": "",
+      "inputs": [
+        {
+          "Idempotency-Key": {
+            "LOCATION": "header",
+            "REQUIRED": false,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "body": {
+            "LOCATION": "body",
+            "REQUIRED": false,
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "attachments": {
+                  "items": {
+                    "properties": {
+                      "content": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "content_id": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "content_type": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "filename": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "path": {
+                        "required": false,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "bcc": {
+                  "required": false,
+                  "type": "any"
+                },
+                "cc": {
+                  "required": false,
+                  "type": "any"
+                },
+                "from": {
+                  "required": true,
+                  "type": "string"
+                },
+                "headers": {
+                  "required": false,
+                  "type": "object"
+                },
+                "html": {
+                  "required": false,
+                  "type": "string"
+                },
+                "reply_to": {
+                  "required": false,
+                  "type": "any"
+                },
+                "scheduled_at": {
+                  "required": false,
+                  "type": "string"
+                },
+                "subject": {
+                  "required": true,
+                  "type": "string"
+                },
+                "tags": {
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "value": {
+                        "required": false,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "template": {
+                  "required": false,
+                  "type": "any"
+                },
+                "text": {
+                  "required": false,
+                  "type": "string"
+                },
+                "to": {
+                  "required": true,
+                  "type": "any"
+                },
+                "topic_id": {
+                  "required": false,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "from",
+                "to",
+                "subject"
+              ]
+            }
+          }
+        }
+      ],
+      "integration": "resend.resend@v1.5.0",
+      "output": {
+        "schema": {
+          "properties": {
+            "id": {
+              "required": false,
+              "type": "string"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Send an email",
       "type": "method"
     },
     "v1beta.{property}:runrealtimereport.create": {

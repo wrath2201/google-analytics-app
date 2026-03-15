@@ -8,85 +8,32 @@ import Button from "@/components/ui/Button";
 type GAKeyModalProps = {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit?: (keys: string[]) => void;
-    blurBackground?: boolean;
+    onSubmit?: (key: string) => void;
 };
 
-export default function GAKeyModal({
-    isOpen,
-    onClose,
-    onSubmit,
-    blurBackground,
-}: GAKeyModalProps) {
-
-    const [keys, setKeys] = useState<string[]>([""]);
-
-    const handleChange = (index: number, value: string) => {
-        const updated = [...keys];
-        updated[index] = value;
-        setKeys(updated);
-    };
-
-    const addInput = () => {
-        if (keys.length < 10) {
-            setKeys([...keys, ""]);
-        }
-    };
-
-    const removeInput = (index: number) => {
-        const updated = keys.filter((_, i) => i !== index);
-        setKeys(updated.length ? updated : [""]);
-    };
+export default function GAKeyModal({ isOpen, onClose, onSubmit }: GAKeyModalProps) {
+    const [gaKey, setGaKey] = useState("");
 
     const handleSubmit = () => {
-        const validKeys = keys.map(k => k.trim()).filter(Boolean);
-
-        if (validKeys.length && onSubmit) {
-            onSubmit(validKeys);
-            setKeys([""]);
+        if (gaKey.trim() && onSubmit) {
+            onSubmit(gaKey.trim());
+            setGaKey("");
             onClose();
         }
     };
 
     return (
-        <Modal
-            isOpen={isOpen}
-            onClose={onClose}
-            title="Add GA Properties"
-            blurBackground={blurBackground}
-        >
+        <Modal isOpen={isOpen} onClose={onClose} title="Add GA Property">
             <div className="space-y-4">
-
-                {keys.map((key, index) => (
-                    <div key={index} className="flex gap-2">
-                        <Input
-                            label={index === 0 ? "Measurement ID" : undefined}
-                            placeholder="G-XXXXXXXXXX"
-                            value={key}
-                            onChange={(e) => handleChange(index, e.target.value)}
-                        />
-
-                        {keys.length > 1 && (
-                            <Button
-                                variant="ghost"
-                                onClick={() => removeInput(index)}
-                            >
-                                ✕
-                            </Button>
-                        )}
-                    </div>
-                ))}
-
-                <div className="flex justify-between pt-2">
-
-                    <Button variant="outline" onClick={addInput}>
-                        + Add another
-                    </Button>
-
-                    <Button onClick={handleSubmit}>
-                        Add Properties
-                    </Button>
-
+                <Input
+                    label="Measurement ID"
+                    placeholder="G-XXXXXXXXXX"
+                    value={gaKey}
+                    onChange={(e) => setGaKey(e.target.value)}
+                />
+                <div className="flex justify-end gap-2">
+                    <Button variant="outline" onClick={onClose}>Cancel</Button>
+                    <Button onClick={handleSubmit} disabled={!gaKey.trim()}>Add Property</Button>
                 </div>
             </div>
         </Modal>

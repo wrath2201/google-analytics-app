@@ -1,9 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-
-// TODO: Import Firebase auth when ready
-// import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut, User as FirebaseUser } from "firebase/auth";
+import { auth, googleProvider } from "@/lib/firebase";
 
 type User = {
     uid: string;
@@ -26,19 +25,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // TODO: Subscribe to Firebase auth state changes
-        // const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => { ... });
-        setLoading(false);
-        // return () => unsubscribe();
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
+            if (firebaseUser) {
+                setUser({
+                    uid: firebaseUser.uid,
+                    email: firebaseUser.email,
+                    displayName: firebaseUser.displayName,
+                    photoURL: firebaseUser.photoURL,
+                });
+            } else {
+                setUser(null);
+            }
+            setLoading(false);
+        });
+        return () => unsubscribe();
     }, []);
 
-    const signInWithGoogle = async () => {
-        // TODO: Implement Google sign-in via Firebase
-        console.log("Google sign-in — not yet implemented");
+    const signInWithGoogle = async (): Promise<void> => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const idToken = await result.user.getIdToken();
+
+            const res = await fetch("http://localhost:4000/api/auth", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ idToken }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error("Backend auth failed");
+            }
+        } catch (err) {
+            throw err;
+        }
     };
 
-    const signOut = async () => {
-        // TODO: Implement sign-out
+    const signOut = async (): Promise<void> => {
+        await firebaseSignOut(auth);
         setUser(null);
     };
 

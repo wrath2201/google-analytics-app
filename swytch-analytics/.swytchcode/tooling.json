@@ -1,0 +1,1288 @@
+{
+  "integrations": {
+    "firebase.auth": {
+      "version": "v1.0.0"
+    },
+    "google_analytics.reports": {
+      "version": "v1beta"
+    },
+    "resend.resend": {
+      "version": "v1.5.0"
+    }
+  },
+  "mode": "production",
+  "tools": {
+    "accounts:signinwithidp.accounts:signinwithidp.create": {
+      "desc": "Signs in using credentials from a third-party provider such as Google,\nFacebook, GitHub, etc. Use this after obtaining the provider's token.\n",
+      "inputs": [
+        {
+          "body": {
+            "LOCATION": "body",
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "idToken": {
+                  "required": false,
+                  "type": "string"
+                },
+                "pendingToken": {
+                  "required": false,
+                  "type": "string"
+                },
+                "postBody": {
+                  "required": false,
+                  "type": "string"
+                },
+                "requestUri": {
+                  "required": true,
+                  "type": "string"
+                },
+                "returnIdpCredential": {
+                  "required": false,
+                  "type": "boolean"
+                },
+                "returnRefreshToken": {
+                  "required": false,
+                  "type": "boolean"
+                },
+                "returnSecureToken": {
+                  "required": false,
+                  "type": "boolean"
+                },
+                "sessionId": {
+                  "required": false,
+                  "type": "string"
+                },
+                "tenantId": {
+                  "required": false,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "requestUri"
+              ]
+            }
+          }
+        }
+      ],
+      "integration": "firebase.auth@v1.0.0",
+      "output": {
+        "schema": {
+          "properties": {
+            "displayName": {
+              "required": false,
+              "type": "string"
+            },
+            "email": {
+              "required": false,
+              "type": "string"
+            },
+            "expiresIn": {
+              "required": false,
+              "type": "string"
+            },
+            "federatedId": {
+              "required": false,
+              "type": "string"
+            },
+            "idToken": {
+              "required": false,
+              "type": "string"
+            },
+            "isNewUser": {
+              "required": false,
+              "type": "boolean"
+            },
+            "localId": {
+              "required": false,
+              "type": "string"
+            },
+            "mfaPendingCredential": {
+              "required": false,
+              "type": "string"
+            },
+            "needConfirmation": {
+              "required": false,
+              "type": "boolean"
+            },
+            "oauthAccessToken": {
+              "required": false,
+              "type": "string"
+            },
+            "oauthExpireIn": {
+              "required": false,
+              "type": "integer"
+            },
+            "oauthRefreshToken": {
+              "required": false,
+              "type": "string"
+            },
+            "photoUrl": {
+              "required": false,
+              "type": "string"
+            },
+            "providerId": {
+              "required": false,
+              "type": "string"
+            },
+            "rawUserInfo": {
+              "required": false,
+              "type": "string"
+            },
+            "refreshToken": {
+              "required": false,
+              "type": "string"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Sign in with an Identity Provider (OAuth)",
+      "type": "method"
+    },
+    "emails.email.create": {
+      "desc": "",
+      "inputs": [
+        {
+          "Idempotency-Key": {
+            "LOCATION": "header",
+            "REQUIRED": false,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "body": {
+            "LOCATION": "body",
+            "REQUIRED": false,
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "attachments": {
+                  "items": {
+                    "properties": {
+                      "content": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "content_id": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "content_type": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "filename": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "path": {
+                        "required": false,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "bcc": {
+                  "required": false,
+                  "type": "any"
+                },
+                "cc": {
+                  "required": false,
+                  "type": "any"
+                },
+                "from": {
+                  "required": true,
+                  "type": "string"
+                },
+                "headers": {
+                  "required": false,
+                  "type": "object"
+                },
+                "html": {
+                  "required": false,
+                  "type": "string"
+                },
+                "reply_to": {
+                  "required": false,
+                  "type": "any"
+                },
+                "scheduled_at": {
+                  "required": false,
+                  "type": "string"
+                },
+                "subject": {
+                  "required": true,
+                  "type": "string"
+                },
+                "tags": {
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "value": {
+                        "required": false,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "template": {
+                  "required": false,
+                  "type": "any"
+                },
+                "text": {
+                  "required": false,
+                  "type": "string"
+                },
+                "to": {
+                  "required": true,
+                  "type": "any"
+                },
+                "topic_id": {
+                  "required": false,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "from",
+                "to",
+                "subject"
+              ]
+            }
+          }
+        }
+      ],
+      "integration": "resend.resend@v1.5.0",
+      "output": {
+        "schema": {
+          "properties": {
+            "id": {
+              "required": false,
+              "type": "string"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Send an email",
+      "type": "method"
+    },
+    "v1beta.{property}:runrealtimereport.create": {
+      "desc": "Returns real-time event data for the property. Events appear in the report\nwithin 30 seconds to a few minutes. Supports a 30–60 minute lookback window\nvia `minuteRanges`.\n",
+      "inputs": [
+        {
+          "property": {
+            "LOCATION": "path",
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "body": {
+            "LOCATION": "body",
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "dimensionFilter": {
+                  "properties": {
+                    "andGroup": {
+                      "required": false,
+                      "type": "object"
+                    },
+                    "filter": {
+                      "properties": {
+                        "betweenFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "fieldName": {
+                          "required": true,
+                          "type": "string"
+                        },
+                        "inListFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "numericFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "stringFilter": {
+                          "required": false,
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "fieldName"
+                      ],
+                      "type": "object"
+                    },
+                    "notExpression": {
+                      "required": false,
+                      "type": "any"
+                    },
+                    "orGroup": {
+                      "required": false,
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "dimensions": {
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "required": true,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "limit": {
+                  "required": false,
+                  "type": "integer"
+                },
+                "metricAggregations": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "metricFilter": {
+                  "properties": {
+                    "andGroup": {
+                      "required": false,
+                      "type": "object"
+                    },
+                    "filter": {
+                      "properties": {
+                        "betweenFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "fieldName": {
+                          "required": true,
+                          "type": "string"
+                        },
+                        "inListFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "numericFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "stringFilter": {
+                          "required": false,
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "fieldName"
+                      ],
+                      "type": "object"
+                    },
+                    "notExpression": {
+                      "required": false,
+                      "type": "any"
+                    },
+                    "orGroup": {
+                      "required": false,
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "metrics": {
+                  "items": {
+                    "properties": {
+                      "expression": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "name": {
+                        "required": true,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "minuteRanges": {
+                  "items": {
+                    "properties": {
+                      "endMinutesAgo": {
+                        "required": false,
+                        "type": "integer"
+                      },
+                      "name": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "startMinutesAgo": {
+                        "required": false,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "orderBys": {
+                  "items": {
+                    "properties": {
+                      "desc": {
+                        "required": false,
+                        "type": "boolean"
+                      },
+                      "dimensionOrderBy": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "metricOrderBy": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "pivotOrderBy": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "returnPropertyQuota": {
+                  "required": false,
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "integration": "google_analytics.reports@v1beta",
+      "output": {
+        "schema": {
+          "properties": {
+            "dimensionHeaders": {
+              "items": {
+                "properties": {
+                  "name": {
+                    "required": false,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "kind": {
+              "required": false,
+              "type": "string"
+            },
+            "maximums": {
+              "items": {
+                "properties": {
+                  "dimensionValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "metricValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "metricHeaders": {
+              "items": {
+                "properties": {
+                  "name": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "type": {
+                    "required": false,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "minimums": {
+              "items": {
+                "properties": {
+                  "dimensionValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "metricValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "propertyQuota": {
+              "properties": {
+                "concurrentRequests": {
+                  "required": false,
+                  "type": "any"
+                },
+                "potentiallyThresholdedRequestsPerHour": {
+                  "properties": {
+                    "consumed": {
+                      "required": false,
+                      "type": "integer"
+                    },
+                    "remaining": {
+                      "required": false,
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                },
+                "serverErrorsPerProjectPerHour": {
+                  "required": false,
+                  "type": "any"
+                },
+                "tokensPerDay": {
+                  "required": false,
+                  "type": "any"
+                },
+                "tokensPerHour": {
+                  "required": false,
+                  "type": "any"
+                },
+                "tokensPerProjectPerDay": {
+                  "required": false,
+                  "type": "any"
+                }
+              },
+              "type": "object"
+            },
+            "rowCount": {
+              "required": false,
+              "type": "integer"
+            },
+            "rows": {
+              "items": {
+                "properties": {
+                  "dimensionValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "metricValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "totals": {
+              "items": {
+                "properties": {
+                  "dimensionValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "metricValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Run a real-time report",
+      "type": "method"
+    },
+    "v1beta.{property}:runreport.create": {
+      "desc": "Returns a customized report of your Google Analytics event data. Reports\ncontain statistics derived from data collected by the GA4 tracking code.\nMaximum 9 dimensions per request.\n",
+      "inputs": [
+        {
+          "property": {
+            "LOCATION": "path",
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "body": {
+            "LOCATION": "body",
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "cohortSpec": {
+                  "properties": {
+                    "cohortReportSettings": {
+                      "required": false,
+                      "type": "object"
+                    },
+                    "cohorts": {
+                      "required": false,
+                      "type": "[]ANY"
+                    },
+                    "cohortsRange": {
+                      "required": false,
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "comparisons": {
+                  "items": {
+                    "properties": {
+                      "comparison": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "dateRange": {
+                        "properties": {
+                          "endDate": {
+                            "required": true,
+                            "type": "string"
+                          },
+                          "name": {
+                            "required": false,
+                            "type": "string"
+                          },
+                          "startDate": {
+                            "required": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "startDate",
+                          "endDate"
+                        ],
+                        "type": "object"
+                      },
+                      "dimensionFilter": {
+                        "properties": {
+                          "andGroup": {
+                            "required": false,
+                            "type": "object"
+                          },
+                          "filter": {
+                            "properties": {
+                              "betweenFilter": {
+                                "required": false,
+                                "type": "object"
+                              },
+                              "fieldName": {
+                                "required": true,
+                                "type": "string"
+                              },
+                              "inListFilter": {
+                                "required": false,
+                                "type": "object"
+                              },
+                              "numericFilter": {
+                                "required": false,
+                                "type": "object"
+                              },
+                              "stringFilter": {
+                                "required": false,
+                                "type": "object"
+                              }
+                            },
+                            "required": [
+                              "fieldName"
+                            ],
+                            "type": "object"
+                          },
+                          "notExpression": {
+                            "required": false,
+                            "type": "any"
+                          },
+                          "orGroup": {
+                            "required": false,
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "name": {
+                        "required": false,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "currencyCode": {
+                  "required": false,
+                  "type": "string"
+                },
+                "dateRanges": {
+                  "items": {
+                    "properties": {
+                      "endDate": {
+                        "required": true,
+                        "type": "string"
+                      },
+                      "name": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "startDate": {
+                        "required": true,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "startDate",
+                      "endDate"
+                    ],
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "dimensionFilter": {
+                  "properties": {
+                    "andGroup": {
+                      "required": false,
+                      "type": "object"
+                    },
+                    "filter": {
+                      "properties": {
+                        "betweenFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "fieldName": {
+                          "required": true,
+                          "type": "string"
+                        },
+                        "inListFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "numericFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "stringFilter": {
+                          "required": false,
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "fieldName"
+                      ],
+                      "type": "object"
+                    },
+                    "notExpression": {
+                      "required": false,
+                      "type": "any"
+                    },
+                    "orGroup": {
+                      "required": false,
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "dimensions": {
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "required": true,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "keepEmptyRows": {
+                  "required": false,
+                  "type": "boolean"
+                },
+                "limit": {
+                  "required": false,
+                  "type": "integer"
+                },
+                "metricAggregations": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "metricFilter": {
+                  "properties": {
+                    "andGroup": {
+                      "required": false,
+                      "type": "object"
+                    },
+                    "filter": {
+                      "properties": {
+                        "betweenFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "fieldName": {
+                          "required": true,
+                          "type": "string"
+                        },
+                        "inListFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "numericFilter": {
+                          "required": false,
+                          "type": "object"
+                        },
+                        "stringFilter": {
+                          "required": false,
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "fieldName"
+                      ],
+                      "type": "object"
+                    },
+                    "notExpression": {
+                      "required": false,
+                      "type": "any"
+                    },
+                    "orGroup": {
+                      "required": false,
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "metrics": {
+                  "items": {
+                    "properties": {
+                      "expression": {
+                        "required": false,
+                        "type": "string"
+                      },
+                      "name": {
+                        "required": true,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "offset": {
+                  "required": false,
+                  "type": "integer"
+                },
+                "orderBys": {
+                  "items": {
+                    "properties": {
+                      "desc": {
+                        "required": false,
+                        "type": "boolean"
+                      },
+                      "dimensionOrderBy": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "metricOrderBy": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "pivotOrderBy": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "required": false,
+                  "type": "array"
+                },
+                "returnPropertyQuota": {
+                  "required": false,
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "integration": "google_analytics.reports@v1beta",
+      "output": {
+        "schema": {
+          "properties": {
+            "dimensionHeaders": {
+              "items": {
+                "properties": {
+                  "name": {
+                    "required": false,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "kind": {
+              "required": false,
+              "type": "string"
+            },
+            "maximums": {
+              "items": {
+                "properties": {
+                  "dimensionValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "metricValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "metadata": {
+              "properties": {
+                "currencyCode": {
+                  "required": false,
+                  "type": "string"
+                },
+                "dataLossFromOtherRow": {
+                  "required": false,
+                  "type": "boolean"
+                },
+                "emptyReason": {
+                  "required": false,
+                  "type": "string"
+                },
+                "schemaRestrictionResponse": {
+                  "required": false,
+                  "type": "object"
+                },
+                "subjectToThresholding": {
+                  "required": false,
+                  "type": "boolean"
+                },
+                "timeZone": {
+                  "required": false,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "metricHeaders": {
+              "items": {
+                "properties": {
+                  "name": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "type": {
+                    "required": false,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "minimums": {
+              "items": {
+                "properties": {
+                  "dimensionValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "metricValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "propertyQuota": {
+              "properties": {
+                "concurrentRequests": {
+                  "required": false,
+                  "type": "any"
+                },
+                "potentiallyThresholdedRequestsPerHour": {
+                  "properties": {
+                    "consumed": {
+                      "required": false,
+                      "type": "integer"
+                    },
+                    "remaining": {
+                      "required": false,
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                },
+                "serverErrorsPerProjectPerHour": {
+                  "required": false,
+                  "type": "any"
+                },
+                "tokensPerDay": {
+                  "required": false,
+                  "type": "any"
+                },
+                "tokensPerHour": {
+                  "required": false,
+                  "type": "any"
+                },
+                "tokensPerProjectPerDay": {
+                  "required": false,
+                  "type": "any"
+                }
+              },
+              "type": "object"
+            },
+            "rowCount": {
+              "required": false,
+              "type": "integer"
+            },
+            "rows": {
+              "items": {
+                "properties": {
+                  "dimensionValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "metricValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            },
+            "totals": {
+              "items": {
+                "properties": {
+                  "dimensionValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "metricValues": {
+                    "items": {
+                      "properties": {
+                        "value": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Run a report",
+      "type": "method"
+    }
+  },
+  "version": "1.0.7"
+}

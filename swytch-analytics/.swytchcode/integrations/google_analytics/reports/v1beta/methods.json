@@ -1,0 +1,69 @@
+{
+  "methods": [
+    {
+      "method_uuid": "",
+      "method_name": "Batch run up to 5 pivot reports for a property in a single call.",
+      "canonical_id": "v1beta.{property}:batchrunpivotreport.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Batch run up to 5 reports for a property and receive multiple reports in a single call.",
+      "canonical_id": "v1beta.{property}:batchrunreport.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Check dimension and metric compatibility for a report request.",
+      "canonical_id": "v1beta.{property}:checkcompatibility.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Create an audience export for later querying, capturing a snapshot of users in an audience at the time of creation.",
+      "canonical_id": "v1beta.audienceexport.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "List all audience exports for a property.",
+      "canonical_id": "v1beta.audienceexport.get"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Query an audience export by name and ID to retrieve previously created data.",
+      "canonical_id": "v1beta.audienceexport.{audienceExportId}:query.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Retrieve configuration metadata for a specific audience export.",
+      "canonical_id": "v1beta.audienceexport.get_6b48"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Retrieve metadata for dimensions and metrics available in reporting methods for a specified name.",
+      "canonical_id": "v1beta.metadata.get"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Retrieve the current state of all quotas for a property in an early-access environment.",
+      "canonical_id": "v1alpha.propertyquotassnapshot.get"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Run a funnel report for a property to analyze step-by-step conversion with up to 4 segments. Early-access endpoint.",
+      "canonical_id": "v1alpha.{property}:runfunnelreport.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Run a pivot report to get a customized pivot table of your Google Analytics event data.",
+      "canonical_id": "v1beta.{property}:runpivotreport.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Run a real-time report to fetch event data for a property with a 30-60 minute lookback window using `minuteRanges`.",
+      "canonical_id": "v1beta.{property}:runrealtimereport.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Run a report to get customized Google Analytics event data statistics with a maximum of 9 dimensions per request.",
+      "canonical_id": "v1beta.{property}:runreport.create"
+    }
+  ]
+}

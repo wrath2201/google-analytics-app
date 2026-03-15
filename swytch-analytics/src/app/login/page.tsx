@@ -2,10 +2,20 @@
 
 import { BarChart2 } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-    const handleGoogleLogin = () => {
-        console.log("Google login — Firebase coming soon");
+    const { signInWithGoogle } = useAuth();
+    const router = useRouter();
+
+    const handleGoogleLogin = async () => {
+        try {
+            await signInWithGoogle();
+            router.push("/dashboard");
+        } catch (error) {
+            console.error("Login failed:", error);
+        }
     };
 
     return (

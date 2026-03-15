@@ -31,7 +31,9 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-family: var(--font-display);
 }
 
@@ -42,8 +44,9 @@ html {
 /* ── Card lift on hover ── */
 .card-hover {
     transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
-                box-shadow 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+        box-shadow 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
+
 .card-hover:hover {
     transform: translateY(-6px);
     box-shadow:
@@ -55,10 +58,12 @@ html {
 .btn-hover {
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
 .btn-hover:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(27, 58, 107, 0.18);
 }
+
 .btn-hover:active {
     transform: translateY(0);
     box-shadow: none;
@@ -66,23 +71,51 @@ html {
 
 /* ── Fade-up entrance animation ── */
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
 .fade-up {
     animation: fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
     opacity: 0;
 }
-.fade-up-delay-1 { animation-delay: 0.1s; }
-.fade-up-delay-2 { animation-delay: 0.2s; }
-.fade-up-delay-3 { animation-delay: 0.3s; }
-.fade-up-delay-4 { animation-delay: 0.4s; }
+
+.fade-up-delay-1 {
+    animation-delay: 0.1s;
+}
+
+.fade-up-delay-2 {
+    animation-delay: 0.2s;
+}
+
+.fade-up-delay-3 {
+    animation-delay: 0.3s;
+}
+
+.fade-up-delay-4 {
+    animation-delay: 0.4s;
+}
 
 /* ── Subtle float for decorative elements ── */
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-12px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
 }
+
 .float {
     animation: float 6s ease-in-out infinite;
 }
@@ -92,4 +125,12 @@ html {
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+}
+
+.blur-text {
+    font-family: var(--font-display);
+}
+
+html {
+    scroll-behavior: smooth;
 }

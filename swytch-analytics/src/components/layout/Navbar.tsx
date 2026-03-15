@@ -2,10 +2,22 @@
 
 import { BarChart2, LogOut } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Navbar() {
     const pathname = usePathname();
+    const { signOut } = useAuth();
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        await fetch("http://localhost:4000/api/auth", {
+            method: "DELETE",
+            credentials: "include",
+        });
+        await signOut();
+        router.push("/login");
+    };
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-30 glass border-b border-[#E5E0D8]/60">
@@ -47,7 +59,10 @@ export default function Navbar() {
                     <div className="w-8 h-8 rounded-full bg-[#EDE8E0] flex items-center justify-center text-sm font-medium text-[#1A1814]">
                         U
                     </div>
-                    <button className="p-2 rounded-lg hover:bg-[#EDE8E0] transition-all duration-300 cursor-pointer">
+                    <button
+                        onClick={handleLogout}
+                        className="p-2 rounded-lg hover:bg-[#EDE8E0] transition-all duration-300 cursor-pointer"
+                    >
                         <LogOut size={16} className="text-[#8C8578]" />
                     </button>
                 </div>

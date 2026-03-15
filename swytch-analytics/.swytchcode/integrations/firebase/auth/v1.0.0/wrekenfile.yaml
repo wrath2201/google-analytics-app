@@ -1,0 +1,1448 @@
+VERSION: 2.0.2
+DEFAULTS:
+  query_key: <KEY>
+  w_base_url: https://identitytoolkit.googleapis.com/v1
+METHODS:
+  accounts:signup.accounts:signup.create:
+    SUMMARY: Sign up with email/password or create anonymous user
+    DESC: |
+      Creates a new email/password user, or creates an anonymous account if no
+      email/password is provided. Can also be used to upgrade an anonymous account
+      by providing an `idToken`.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:signUp
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(SignUpRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(SignUpResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(SignUpRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(SignUpResponse)
+        RETURNVAR: accounts:signup_accounts:signup_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:signup.accounts:signup.create
+  accounts:signinwithpassword.accounts:signinwithpassword.create:
+    SUMMARY: Sign in with email and password
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:signInWithPassword
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(SignInWithPasswordRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(SignInWithPasswordResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(SignInWithPasswordRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(SignInWithPasswordResponse)
+        RETURNVAR: accounts:signinwithpassword_accounts:signinwithpassword_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:signinwithpassword.accounts:signinwithpassword.create
+  accounts:signinwithcustomtoken.accounts:signinwithcustomtoken.create:
+    SUMMARY: Sign in with a custom token
+    DESC: Exchanges a custom Auth token (JWT) for Identity Platform credentials.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:signInWithCustomToken
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(SignInWithCustomTokenRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(SignInWithCustomTokenResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(SignInWithCustomTokenRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(SignInWithCustomTokenResponse)
+        RETURNVAR: accounts:signinwithcustomtoken_accounts:signinwithcustomtoken_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:signinwithcustomtoken.accounts:signinwithcustomtoken.create
+  accounts:signinwithidp.accounts:signinwithidp.create:
+    SUMMARY: Sign in with an Identity Provider (OAuth)
+    DESC: |
+      Signs in using credentials from a third-party provider such as Google,
+      Facebook, GitHub, etc. Use this after obtaining the provider's token.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:signInWithIdp
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(SignInWithIdpRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(SignInWithIdpResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(SignInWithIdpRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(SignInWithIdpResponse)
+        RETURNVAR: accounts:signinwithidp_accounts:signinwithidp_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:signinwithidp.accounts:signinwithidp.create
+  accounts:signinwithemaillink.accounts:signinwithemaillink.create:
+    SUMMARY: Sign in with email link
+    DESC: Signs in a user using an OOB code sent to their email address.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:signInWithEmailLink
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(SignInWithEmailLinkRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(SignInWithEmailLinkResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(SignInWithEmailLinkRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(SignInWithEmailLinkResponse)
+        RETURNVAR: accounts:signinwithemaillink_accounts:signinwithemaillink_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:signinwithemaillink.accounts:signinwithemaillink.create
+  accounts:signinwithphonenumber.accounts:signinwithphonenumber.create:
+    SUMMARY: Sign in with phone number
+    DESC: |
+      Completes phone number sign-in using a verification code from an SMS.
+      Requires prior phone verification via the `sendVerificationCode` endpoint.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:signInWithPhoneNumber
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(SignInWithPhoneNumberRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(SignInWithPhoneNumberResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(SignInWithPhoneNumberRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(SignInWithPhoneNumberResponse)
+        RETURNVAR: accounts:signinwithphonenumber_accounts:signinwithphonenumber_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:signinwithphonenumber.accounts:signinwithphonenumber.create
+  accounts:lookup.accounts:lookup.create:
+    SUMMARY: Get account information
+    DESC: |
+      Retrieves account information for the authenticated user. Admin operations
+      (lookups by `localId`, `email`, `phoneNumber`) require OAuth credentials.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:lookup
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(LookupRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(LookupResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(LookupRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(LookupResponse)
+        RETURNVAR: accounts:lookup_accounts:lookup_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:lookup.accounts:lookup.create
+  accounts:update.accounts:update.create:
+    SUMMARY: Update account information
+    DESC: |
+      Updates email, password, display name, photo URL, phone number, or other
+      account attributes. Requires a valid `idToken`. Admin operations require
+      OAuth credentials.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:update
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(UpdateRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(UpdateResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(UpdateRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(UpdateResponse)
+        RETURNVAR: accounts:update_accounts:update_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:update.accounts:update.create
+  accounts:delete.accounts:delete.create:
+    SUMMARY: Delete a user account
+    DESC: |
+      Deletes the account identified by the provided `idToken`. Admin operations
+      can delete by `localId` using OAuth credentials.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:delete
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(DeleteRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(DeleteResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(DeleteRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(DeleteResponse)
+        RETURNVAR: accounts:delete_accounts:delete_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:delete.accounts:delete.create
+  accounts:sendoobcode.accounts:sendoobcode.create:
+    SUMMARY: Send out-of-band confirmation code
+    DESC: |
+      Sends an out-of-band code for password reset, email sign-in link,
+      email address verification, or email change verification.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:sendOobCode
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(SendOobCodeRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(SendOobCodeResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(SendOobCodeRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(SendOobCodeResponse)
+        RETURNVAR: accounts:sendoobcode_accounts:sendoobcode_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:sendoobcode.accounts:sendoobcode.create
+  accounts:resetpassword.accounts:resetpassword.create:
+    SUMMARY: Reset or change password
+    DESC: |
+      Resets the user's password using an OOB code from `sendOobCode`, or
+      changes the password directly using the current password.
+      Sending only `oobCode` (without `newPassword`) validates the code without consuming it.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /accounts:resetPassword
+      HEADERS:
+        Content-Type: application/json
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(ResetPasswordRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(ResetPasswordResponse)
+    INPUTS:
+      - body:
+          TYPE: STRUCT(ResetPasswordRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(ResetPasswordResponse)
+        RETURNVAR: accounts:resetpassword_accounts:resetpassword_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: accounts:resetpassword.accounts:resetpassword.create
+  token.token.create:
+    SUMMARY: Refresh an ID token
+    DESC: |
+      Exchanges a refresh token for a new ID token.
+
+      **Note:** This endpoint is hosted at `https://securetoken.googleapis.com/v1`,
+      not the Identity Toolkit base URL.
+
+      Request body must be `application/x-www-form-urlencoded`.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /token
+      HEADERS:
+        Content-Type: application/x-www-form-urlencoded
+      CONTENT_TYPE: application/x-www-form-urlencoded
+      ACCEPT: application/json
+      BODYTYPE: x-www-form-urlencoded
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(RefreshTokenResponse)
+    RETURNS:
+      - RETURNTYPE: STRUCT(RefreshTokenResponse)
+        RETURNVAR: token_token_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+    CANONICAL_ID: token.token.create
+STRUCTS:
+  SignUpRequest:
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: User's email address (omit to create an anonymous account).
+    - name: password
+      NAME: password
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: User's password (required when email is provided).
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: photoUrl
+      NAME: photoUrl
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Existing ID token to upgrade an anonymous account.
+    - name: returnSecureToken
+      NAME: returnSecureToken
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Identity Platform multi-tenancy tenant ID.
+    - name: captchaResponse
+      NAME: captchaResponse
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: reCAPTCHA token (required when reCAPTCHA Enterprise is enforced).
+    - name: clientType
+      NAME: clientType
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SignUpResponse:
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Firebase ID token for the new account.
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: refreshToken
+      NAME: refreshToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: expiresIn
+      NAME: expiresIn
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Seconds until the ID token expires.
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Unique user ID (uid).
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: photoUrl
+      NAME: photoUrl
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SignInWithPasswordRequest:
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+    - name: password
+      NAME: password
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+    - name: returnSecureToken
+      NAME: returnSecureToken
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: captchaResponse
+      NAME: captchaResponse
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: clientType
+      NAME: clientType
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SignInWithPasswordResponse:
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: profilePicture
+      NAME: profilePicture
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: refreshToken
+      NAME: refreshToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: expiresIn
+      NAME: expiresIn
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: registered
+      NAME: registered
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: Whether the email is for an existing account.
+    - name: mfaPendingCredential
+      NAME: mfaPendingCredential
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Present if MFA is required; pass to MFA sign-in flow.
+    - name: mfaInfo
+      NAME: mfaInfo
+      type: "[]STRUCT(MfaEnrollment)"
+      TYPE: "[]STRUCT(MfaEnrollment)"
+      REQUIRED: false
+      comment: MFA enrollments for the account.
+  MfaEnrollment:
+    - name: mfaEnrollmentId
+      NAME: mfaEnrollmentId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: enrolledAt
+      NAME: enrolledAt
+      type: TIMESTAMP
+      TYPE: TIMESTAMP
+      REQUIRED: false
+    - name: phoneInfo
+      NAME: phoneInfo
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: E.164 format phone number used for SMS MFA.
+    - name: totpInfo
+      NAME: totpInfo
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+      comment: TOTP authenticator app enrollment details.
+  SignInWithCustomTokenRequest:
+    - name: token
+      NAME: token
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: Custom Auth token (JWT) generated by your server.
+    - name: returnSecureToken
+      NAME: returnSecureToken
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SignInWithCustomTokenResponse:
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: refreshToken
+      NAME: refreshToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: expiresIn
+      NAME: expiresIn
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: isNewUser
+      NAME: isNewUser
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+  SignInWithIdpRequest:
+    - name: requestUri
+      NAME: requestUri
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: The redirect URI where the IdP redirected the user.
+    - name: postBody
+      NAME: postBody
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: |
+        URL-encoded credential string. For example:
+        `id_token=TOKEN&providerId=google.com` or
+        `access_token=TOKEN&providerId=facebook.com`
+    - name: sessionId
+      NAME: sessionId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Session ID from a prior `createAuthUri` call (required for OAuth flows).
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Existing ID token to link the credential to.
+    - name: returnRefreshToken
+      NAME: returnRefreshToken
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: returnSecureToken
+      NAME: returnSecureToken
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: returnIdpCredential
+      NAME: returnIdpCredential
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: pendingToken
+      NAME: pendingToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Opaque token from a previous `signInWithIdp` response (MFA or conflict flows).
+  SignInWithIdpResponse:
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: refreshToken
+      NAME: refreshToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: expiresIn
+      NAME: expiresIn
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: photoUrl
+      NAME: photoUrl
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: federatedId
+      NAME: federatedId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: User's account ID at the IdP.
+    - name: providerId
+      NAME: providerId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: e.g. `google.com`, `facebook.com`
+    - name: isNewUser
+      NAME: isNewUser
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: needConfirmation
+      NAME: needConfirmation
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: True if the email is already associated with another account.
+    - name: rawUserInfo
+      NAME: rawUserInfo
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: JSON string of the provider's user profile data.
+    - name: oauthAccessToken
+      NAME: oauthAccessToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: oauthRefreshToken
+      NAME: oauthRefreshToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: oauthExpireIn
+      NAME: oauthExpireIn
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+    - name: mfaPendingCredential
+      NAME: mfaPendingCredential
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SignInWithEmailLinkRequest:
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+    - name: oobCode
+      NAME: oobCode
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: OOB code from the email link.
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SignInWithEmailLinkResponse:
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: refreshToken
+      NAME: refreshToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: expiresIn
+      NAME: expiresIn
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: isNewUser
+      NAME: isNewUser
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: mfaPendingCredential
+      NAME: mfaPendingCredential
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SignInWithPhoneNumberRequest:
+    - name: sessionInfo
+      NAME: sessionInfo
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: Encrypted session info from `sendVerificationCode`.
+    - name: code
+      NAME: code
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: SMS verification code entered by the user.
+    - name: phoneNumber
+      NAME: phoneNumber
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: E.164 format phone number (alternative to sessionInfo+code for test numbers).
+    - name: temporaryProof
+      NAME: temporaryProof
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SignInWithPhoneNumberResponse:
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: refreshToken
+      NAME: refreshToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: expiresIn
+      NAME: expiresIn
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: isNewUser
+      NAME: isNewUser
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: phoneNumber
+      NAME: phoneNumber
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: temporaryProof
+      NAME: temporaryProof
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  LookupRequest:
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: ID token of the user to retrieve (required for end-user calls).
+    - name: localId
+      NAME: localId
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+      comment: User IDs to retrieve (admin only).
+    - name: email
+      NAME: email
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+      comment: Email addresses to look up (admin only).
+    - name: phoneNumber
+      NAME: phoneNumber
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+      comment: Phone numbers in E.164 format (admin only).
+    - name: federatedUserId
+      NAME: federatedUserId
+      type: "[]ANY"
+      TYPE: "[]ANY"
+      REQUIRED: false
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  LookupResponse:
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: users
+      NAME: users
+      type: "[]STRUCT(UserInfo)"
+      TYPE: "[]STRUCT(UserInfo)"
+      REQUIRED: false
+  UserInfo:
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: emailVerified
+      NAME: emailVerified
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: photoUrl
+      NAME: photoUrl
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: phoneNumber
+      NAME: phoneNumber
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: disabled
+      NAME: disabled
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: createdAt
+      NAME: createdAt
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Unix timestamp in milliseconds (as string).
+    - name: lastLoginAt
+      NAME: lastLoginAt
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Unix timestamp in milliseconds (as string).
+    - name: validSince
+      NAME: validSince
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: passwordHash
+      NAME: passwordHash
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: salt
+      NAME: salt
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: providerUserInfo
+      NAME: providerUserInfo
+      type: "[]STRUCT(ProviderUserInfo)"
+      TYPE: "[]STRUCT(ProviderUserInfo)"
+      REQUIRED: false
+    - name: mfaInfo
+      NAME: mfaInfo
+      type: "[]STRUCT(MfaEnrollment)"
+      TYPE: "[]STRUCT(MfaEnrollment)"
+      REQUIRED: false
+    - name: customAttributes
+      NAME: customAttributes
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: JSON string of custom claims.
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  ProviderUserInfo:
+    - name: providerId
+      NAME: providerId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: e.g. `google.com`, `facebook.com`, `password`, `phone`
+    - name: federatedId
+      NAME: federatedId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: photoUrl
+      NAME: photoUrl
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: phoneNumber
+      NAME: phoneNumber
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: rawId
+      NAME: rawId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: screenName
+      NAME: screenName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  UpdateRequest:
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Valid ID token for the account to update.
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: User ID (admin only, requires OAuth credentials).
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: password
+      NAME: password
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: photoUrl
+      NAME: photoUrl
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: oobCode
+      NAME: oobCode
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Out-of-band code for email verification or recovery.
+    - name: emailVerified
+      NAME: emailVerified
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: Mark email as verified (admin only).
+    - name: deleteAttribute
+      NAME: deleteAttribute
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+      comment: Attributes to delete from the account.
+    - name: deleteProvider
+      NAME: deleteProvider
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+      comment: Provider IDs to unlink from the account.
+    - name: returnSecureToken
+      NAME: returnSecureToken
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: phoneNumber
+      NAME: phoneNumber
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: E.164 format phone number.
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: validSince
+      NAME: validSince
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Unix timestamp; tokens issued before this time are invalid.
+    - name: disableUser
+      NAME: disableUser
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: captchaResponse
+      NAME: captchaResponse
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  UpdateResponse:
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: displayName
+      NAME: displayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: photoUrl
+      NAME: photoUrl
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: passwordHash
+      NAME: passwordHash
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: providerUserInfo
+      NAME: providerUserInfo
+      type: "[]STRUCT(ProviderUserInfo)"
+      TYPE: "[]STRUCT(ProviderUserInfo)"
+      REQUIRED: false
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: New ID token (if `returnSecureToken` was true).
+    - name: refreshToken
+      NAME: refreshToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: expiresIn
+      NAME: expiresIn
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: emailVerified
+      NAME: emailVerified
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+  DeleteRequest:
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: ID token of the account to delete (required for end-user calls).
+    - name: localId
+      NAME: localId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: User ID to delete (admin only, requires OAuth credentials).
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  DeleteResponse:
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SendOobCodeRequest:
+    - name: requestType
+      NAME: requestType
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: |
+        - `PASSWORD_RESET`: Send password reset email (requires `email`)
+        - `EMAIL_SIGNIN`: Send email sign-in link (requires `email`)
+        - `VERIFY_EMAIL`: Send email verification (requires `idToken`)
+        - `VERIFY_AND_CHANGE_EMAIL`: Verify and change to new email (requires `idToken` and `newEmail`)
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Required for `PASSWORD_RESET`, `EMAIL_SIGNIN`, `VERIFY_EMAIL`.
+    - name: newEmail
+      NAME: newEmail
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Required for `VERIFY_AND_CHANGE_EMAIL`.
+    - name: idToken
+      NAME: idToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Required for `VERIFY_EMAIL` and `VERIFY_AND_CHANGE_EMAIL`.
+    - name: continueUrl
+      NAME: continueUrl
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: URL to redirect to after the email action.
+    - name: returnOobLink
+      NAME: returnOobLink
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: Return the OOB link in the response instead of sending an email (admin only).
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: captchaResp
+      NAME: captchaResp
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: iOSBundleId
+      NAME: iOSBundleId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: iOSAppStoreId
+      NAME: iOSAppStoreId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: androidPackageName
+      NAME: androidPackageName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: androidInstallApp
+      NAME: androidInstallApp
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: androidMinimumVersion
+      NAME: androidMinimumVersion
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: canHandleCodeInApp
+      NAME: canHandleCodeInApp
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: dynamicLinkDomain
+      NAME: dynamicLinkDomain
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: clientType
+      NAME: clientType
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  SendOobCodeResponse:
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Email address to which the OOB code was sent.
+    - name: oobCode
+      NAME: oobCode
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: OOB code (only returned when `returnOobLink` is true).
+    - name: oobLink
+      NAME: oobLink
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Full OOB link (only returned when `returnOobLink` is true).
+  ResetPasswordRequest:
+    - name: oobCode
+      NAME: oobCode
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: OOB code from `sendOobCode`. Providing only this validates the code without consuming it.
+    - name: newPassword
+      NAME: newPassword
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: New password (consumes the OOB code when provided).
+    - name: oldPassword
+      NAME: oldPassword
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Current password (for direct password change without OOB code).
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Account email (used with `oldPassword`).
+    - name: tenantId
+      NAME: tenantId
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  ResetPasswordResponse:
+    - name: email
+      NAME: email
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Email associated with the OOB code.
+    - name: newEmail
+      NAME: newEmail
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: New email address (for `VERIFY_AND_CHANGE_EMAIL`).
+    - name: requestType
+      NAME: requestType
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: mfaInfo
+      NAME: mfaInfo
+      type: STRUCT(MfaEnrollment)
+      TYPE: STRUCT(MfaEnrollment)
+      REQUIRED: false
+  RefreshTokenResponse:
+    - name: expires_in
+      NAME: expires_in
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Seconds until the new ID token expires.
+    - name: token_type
+      NAME: token_type
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: refresh_token
+      NAME: refresh_token
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: New refresh token.
+    - name: id_token
+      NAME: id_token
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: New Firebase ID token.
+    - name: user_id
+      NAME: user_id
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: User's unique ID.
+    - name: project_id
+      NAME: project_id
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Firebase project ID.

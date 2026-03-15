@@ -1,0 +1,1678 @@
+VERSION: 2.0.2
+DEFAULTS:
+  bearer_token: BEARER <ACCESS_TOKEN>
+  w_base_url: https://analyticsdata.googleapis.com
+METHODS:
+  v1beta.{property}:runreport.create:
+    SUMMARY: Run a report
+    DESC: |
+      Returns a customized report of your Google Analytics event data. Reports
+      contain statistics derived from data collected by the GA4 tracking code.
+      Maximum 9 dimensions per request.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1beta/{property}:runReport
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(RunReportRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(RunReportResponse)
+    INPUTS:
+      - property:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(RunReportRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(RunReportResponse)
+        RETURNVAR: v1beta_{property}:runreport_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+      - TYPE: ANY
+        STATUS: 429
+        WHEN: Client error (HTTP 429)
+    CANONICAL_ID: v1beta.{property}:runreport.create
+  v1beta.{property}:batchrunreport.create:
+    SUMMARY: Batch run up to 5 reports
+    DESC: |
+      Returns multiple reports in a single call. Each request in the batch is
+      an independent `RunReportRequest`. Maximum 5 requests per batch.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1beta/{property}:batchRunReports
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(BatchRunReportsRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(BatchRunReportsResponse)
+    INPUTS:
+      - property:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(BatchRunReportsRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(BatchRunReportsResponse)
+        RETURNVAR: v1beta_{property}:batchrunreport_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+      - TYPE: ANY
+        STATUS: 429
+        WHEN: Client error (HTTP 429)
+    CANONICAL_ID: v1beta.{property}:batchrunreport.create
+  v1beta.{property}:runpivotreport.create:
+    SUMMARY: Run a pivot report
+    DESC: |
+      Returns a customized pivot table of your Google Analytics event data.
+      The product of all `pivot.limit` values must not exceed 100,000.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1beta/{property}:runPivotReport
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(RunPivotReportRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(RunPivotReportResponse)
+    INPUTS:
+      - property:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(RunPivotReportRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(RunPivotReportResponse)
+        RETURNVAR: v1beta_{property}:runpivotreport_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+      - TYPE: ANY
+        STATUS: 429
+        WHEN: Client error (HTTP 429)
+    CANONICAL_ID: v1beta.{property}:runpivotreport.create
+  v1beta.{property}:batchrunpivotreport.create:
+    SUMMARY: Batch run up to 5 pivot reports
+    DESC: Maximum 5 pivot report requests per batch call.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1beta/{property}:batchRunPivotReports
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(BatchRunPivotReportsRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(BatchRunPivotReportsResponse)
+    INPUTS:
+      - property:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(BatchRunPivotReportsRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(BatchRunPivotReportsResponse)
+        RETURNVAR: v1beta_{property}:batchrunpivotreport_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+      - TYPE: ANY
+        STATUS: 429
+        WHEN: Client error (HTTP 429)
+    CANONICAL_ID: v1beta.{property}:batchrunpivotreport.create
+  v1beta.{property}:runrealtimereport.create:
+    SUMMARY: Run a real-time report
+    DESC: |
+      Returns real-time event data for the property. Events appear in the report
+      within 30 seconds to a few minutes. Supports a 30–60 minute lookback window
+      via `minuteRanges`.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1beta/{property}:runRealtimeReport
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(RunRealtimeReportRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(RunRealtimeReportResponse)
+    INPUTS:
+      - property:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(RunRealtimeReportRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(RunRealtimeReportResponse)
+        RETURNVAR: v1beta_{property}:runrealtimereport_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+      - TYPE: ANY
+        STATUS: 429
+        WHEN: Client error (HTTP 429)
+    CANONICAL_ID: v1beta.{property}:runrealtimereport.create
+  v1beta.metadata.get:
+    SUMMARY: Get metadata
+    DESC: |
+      Returns metadata for dimensions and metrics available in reporting methods.
+      Use `properties/0` to retrieve universal metadata applicable to all properties.
+    HTTP:
+      METHOD: GET
+      ENDPOINT: /v1beta/{name}/metadata
+      HEADERS:
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(MetadataResponse)
+    INPUTS:
+      - name:
+          TYPE: STRING
+          LOCATION: path
+    RETURNS:
+      - RETURNTYPE: STRUCT(MetadataResponse)
+        RETURNVAR: v1beta_metadata_get
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+    CANONICAL_ID: v1beta.metadata.get
+  v1beta.{property}:checkcompatibility.create:
+    SUMMARY: Check dimension and metric compatibility
+    DESC: |
+      Verifies which dimensions and metrics are compatible with each other and
+      with any applied filters for a given report request.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1beta/{property}:checkCompatibility
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(CheckCompatibilityRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(CheckCompatibilityResponse)
+    INPUTS:
+      - property:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(CheckCompatibilityRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(CheckCompatibilityResponse)
+        RETURNVAR: v1beta_{property}:checkcompatibility_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+    CANONICAL_ID: v1beta.{property}:checkcompatibility.create
+  v1beta.audienceexport.create:
+    SUMMARY: Create an audience export
+    DESC: |
+      Creates an audience export for later querying. An audience export is a
+      snapshot of the users in an audience at the time of the export's creation.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1beta/{parent}/audienceExports
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(AudienceExport)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(Operation)
+    INPUTS:
+      - parent:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(AudienceExport)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(Operation)
+        RETURNVAR: v1beta_audienceexport_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+    CANONICAL_ID: v1beta.audienceexport.create
+  v1beta.audienceexport.get:
+    SUMMARY: List audience exports
+    DESC: Lists all audience exports for a property.
+    HTTP:
+      METHOD: GET
+      ENDPOINT: /v1beta/{parent}/audienceExports
+      HEADERS:
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(ListAudienceExportsResponse)
+    INPUTS:
+      - parent:
+          TYPE: STRING
+          LOCATION: path
+      - pageSize:
+          TYPE: INT
+          REQUIRED: false
+          LOCATION: query
+      - pageToken:
+          TYPE: STRING
+          REQUIRED: false
+          LOCATION: query
+    RETURNS:
+      - RETURNTYPE: STRUCT(ListAudienceExportsResponse)
+        RETURNVAR: v1beta_audienceexport_get
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+    CANONICAL_ID: v1beta.audienceexport.get
+  v1beta.audienceexport.get_6b48:
+    SUMMARY: Get an audience export
+    DESC: Gets configuration metadata about a specific audience export.
+    HTTP:
+      METHOD: GET
+      ENDPOINT: /v1beta/{name}/audienceExports/{audienceExportId}
+      HEADERS:
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(AudienceExport)
+    INPUTS:
+      - name:
+          TYPE: STRING
+          LOCATION: path
+      - audienceExportId:
+          TYPE: STRING
+          LOCATION: path
+    RETURNS:
+      - RETURNTYPE: STRUCT(AudienceExport)
+        RETURNVAR: v1beta_audienceexport_get_6b48
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+      - TYPE: ANY
+        STATUS: 404
+        WHEN: Client error (HTTP 404)
+    CANONICAL_ID: v1beta.audienceexport.get_6b48
+  v1beta.audienceexport.{audienceExportId}:query.create:
+    SUMMARY: Query an audience export
+    DESC: Retrieves an audience export which was previously created.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1beta/{name}/audienceExports/{audienceExportId}:query
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(v1beta.audienceexport.{audienceExportId}:query.createRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(QueryAudienceExportResponse)
+    INPUTS:
+      - name:
+          TYPE: STRING
+          LOCATION: path
+      - audienceExportId:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(v1beta.audienceexport.{audienceExportId}:query.createRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(QueryAudienceExportResponse)
+        RETURNVAR: v1beta_audienceexport_{audienceExportId}:query_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+    CANONICAL_ID: v1beta.audienceexport.{audienceExportId}:query.create
+  v1alpha.{property}:runfunnelreport.create:
+    SUMMARY: Run a funnel report (alpha)
+    DESC: |
+      Returns a funnel report with step-by-step conversion analysis.
+      Supports up to 4 segments. This is an **early-access** endpoint and may change.
+    HTTP:
+      METHOD: POST
+      ENDPOINT: /v1alpha/{property}:runFunnelReport
+      HEADERS:
+        Content-Type: application/json
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+      BODY:
+        TYPE: STRUCT(RunFunnelReportRequest)
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(RunFunnelReportResponse)
+    INPUTS:
+      - property:
+          TYPE: STRING
+          LOCATION: path
+      - body:
+          TYPE: STRUCT(RunFunnelReportRequest)
+          LOCATION: body
+    RETURNS:
+      - RETURNTYPE: STRUCT(RunFunnelReportResponse)
+        RETURNVAR: v1alpha_{property}:runfunnelreport_create
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 400
+        WHEN: Client error (HTTP 400)
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+    CANONICAL_ID: v1alpha.{property}:runfunnelreport.create
+  v1alpha.propertyquotassnapshot.get:
+    SUMMARY: Get property quota snapshot (alpha)
+    DESC: |
+      Returns the current state of all quotas for a property. This is an
+      **early-access** endpoint.
+    HTTP:
+      METHOD: GET
+      ENDPOINT: /v1alpha/{property}/propertyQuotasSnapshot
+      HEADERS:
+        Authorization: bearer_token
+      CONTENT_TYPE: application/json
+      ACCEPT: application/json
+    EXECUTION:
+      KIND: http
+      MODE: async
+    ASYNC:
+      RETURNS: result
+      RESULT:
+        TYPE: STRUCT(PropertyQuotasSnapshot)
+    INPUTS:
+      - property:
+          TYPE: STRING
+          LOCATION: path
+    RETURNS:
+      - RETURNTYPE: STRUCT(PropertyQuotasSnapshot)
+        RETURNVAR: v1alpha_propertyquotassnapshot_get
+        STATUS: 200
+    ERRORS:
+      - TYPE: ANY
+        STATUS: 401
+        WHEN: Client error (HTTP 401)
+      - TYPE: ANY
+        STATUS: 403
+        WHEN: Client error (HTTP 403)
+    CANONICAL_ID: v1alpha.propertyquotassnapshot.get
+STRUCTS:
+  Dimension:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: |
+        The API name of the dimension (e.g., `country`, `city`, `deviceCategory`,
+        `eventName`, `sessionSource`).
+  Metric:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: |
+        The API name of the metric (e.g., `activeUsers`, `sessions`,
+        `engagementRate`, `conversions`, `totalRevenue`).
+    - name: expression
+      NAME: expression
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: A mathematical expression for a derived metric (e.g., `eventCount/sessions`).
+  DateRange:
+    - name: startDate
+      NAME: startDate
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: Inclusive start date in `YYYY-MM-DD` format, or relative values like `today`, `yesterday`, `NdaysAgo`.
+    - name: endDate
+      NAME: endDate
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: Inclusive end date in `YYYY-MM-DD` format, or relative values like `today`, `yesterday`, `NdaysAgo`.
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Optional name for this date range; appears in the response as a dimension value.
+  MinuteRange:
+    - name: startMinutesAgo
+      NAME: startMinutesAgo
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Inclusive start of the range in minutes ago. Max 29.
+    - name: endMinutesAgo
+      NAME: endMinutesAgo
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Inclusive end of the range in minutes ago. Min 0.
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Optional name for this minute range.
+  FilterExpression:
+    - name: andGroup
+      NAME: andGroup
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+      comment: Each expression in the AND group must be true.
+    - name: orGroup
+      NAME: orGroup
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+      comment: At least one expression in the OR group must be true.
+    - name: notExpression
+      NAME: notExpression
+      type: ANY
+      TYPE: ANY
+      REQUIRED: false
+      comment: The filter expression is NOT true.
+    - name: filter
+      NAME: filter
+      type: STRUCT(Filter)
+      TYPE: STRUCT(Filter)
+      REQUIRED: false
+  Filter:
+    - name: fieldName
+      NAME: fieldName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: true
+      comment: The dimension or metric API name to filter on.
+    - name: stringFilter
+      NAME: stringFilter
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: inListFilter
+      NAME: inListFilter
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: numericFilter
+      NAME: numericFilter
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: betweenFilter
+      NAME: betweenFilter
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+  OrderBy:
+    - name: dimensionOrderBy
+      NAME: dimensionOrderBy
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: metricOrderBy
+      NAME: metricOrderBy
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: pivotOrderBy
+      NAME: pivotOrderBy
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: desc
+      NAME: desc
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: If true, sorts descending; otherwise ascending.
+  Pivot:
+    - name: fieldNames
+      NAME: fieldNames
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: true
+      comment: Dimension API names to use as pivot columns.
+    - name: limit
+      NAME: limit
+      type: INT
+      TYPE: INT
+      REQUIRED: true
+      comment: Maximum number of unique values for this pivot (required).
+    - name: orderBys
+      NAME: orderBys
+      type: "[]STRUCT(OrderBy)"
+      TYPE: "[]STRUCT(OrderBy)"
+      REQUIRED: false
+    - name: metricAggregations
+      NAME: metricAggregations
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+      comment: Aggregation types to include in this pivot.
+    - name: offset
+      NAME: offset
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+  CohortSpec:
+    - name: cohorts
+      NAME: cohorts
+      type: "[]ANY"
+      TYPE: "[]ANY"
+      REQUIRED: false
+    - name: cohortsRange
+      NAME: cohortsRange
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: cohortReportSettings
+      NAME: cohortReportSettings
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+  Comparison:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: dimensionFilter
+      NAME: dimensionFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: comparison
+      NAME: comparison
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Comparison API name from the metadata response.
+    - name: dateRange
+      NAME: dateRange
+      type: STRUCT(DateRange)
+      TYPE: STRUCT(DateRange)
+      REQUIRED: false
+  RunReportRequest:
+    - name: dimensions
+      NAME: dimensions
+      type: "[]STRUCT(Dimension)"
+      TYPE: "[]STRUCT(Dimension)"
+      REQUIRED: false
+      comment: Maximum 9 dimensions per request.
+    - name: metrics
+      NAME: metrics
+      type: "[]STRUCT(Metric)"
+      TYPE: "[]STRUCT(Metric)"
+      REQUIRED: false
+    - name: dateRanges
+      NAME: dateRanges
+      type: "[]STRUCT(DateRange)"
+      TYPE: "[]STRUCT(DateRange)"
+      REQUIRED: false
+    - name: dimensionFilter
+      NAME: dimensionFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: metricFilter
+      NAME: metricFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: offset
+      NAME: offset
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Row offset for pagination. Default 0.
+    - name: limit
+      NAME: limit
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Number of rows to return. Default 10,000; max 250,000.
+    - name: metricAggregations
+      NAME: metricAggregations
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+    - name: orderBys
+      NAME: orderBys
+      type: "[]STRUCT(OrderBy)"
+      TYPE: "[]STRUCT(OrderBy)"
+      REQUIRED: false
+    - name: currencyCode
+      NAME: currencyCode
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: ISO 4217 currency code (e.g., `USD`). Affects currency metrics.
+    - name: cohortSpec
+      NAME: cohortSpec
+      type: STRUCT(CohortSpec)
+      TYPE: STRUCT(CohortSpec)
+      REQUIRED: false
+    - name: keepEmptyRows
+      NAME: keepEmptyRows
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: If true, rows with all-zero metrics are included.
+    - name: returnPropertyQuota
+      NAME: returnPropertyQuota
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: If true, the response includes current quota state.
+    - name: comparisons
+      NAME: comparisons
+      type: "[]STRUCT(Comparison)"
+      TYPE: "[]STRUCT(Comparison)"
+      REQUIRED: false
+  RunReportResponse:
+    - name: dimensionHeaders
+      NAME: dimensionHeaders
+      type: "[]STRUCT(DimensionHeader)"
+      TYPE: "[]STRUCT(DimensionHeader)"
+      REQUIRED: false
+    - name: metricHeaders
+      NAME: metricHeaders
+      type: "[]STRUCT(MetricHeader)"
+      TYPE: "[]STRUCT(MetricHeader)"
+      REQUIRED: false
+    - name: rows
+      NAME: rows
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: totals
+      NAME: totals
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: maximums
+      NAME: maximums
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: minimums
+      NAME: minimums
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: rowCount
+      NAME: rowCount
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Total number of rows matching the query (ignoring offset/limit).
+    - name: metadata
+      NAME: metadata
+      type: STRUCT(ResponseMetaData)
+      TYPE: STRUCT(ResponseMetaData)
+      REQUIRED: false
+    - name: propertyQuota
+      NAME: propertyQuota
+      type: STRUCT(PropertyQuota)
+      TYPE: STRUCT(PropertyQuota)
+      REQUIRED: false
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  DimensionHeader:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: The dimension API name.
+  MetricHeader:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: The metric API name.
+    - name: type
+      NAME: type
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  Row:
+    - name: dimensionValues
+      NAME: dimensionValues
+      type: "[]STRUCT(DimensionValue)"
+      TYPE: "[]STRUCT(DimensionValue)"
+      REQUIRED: false
+    - name: metricValues
+      NAME: metricValues
+      type: "[]STRUCT(MetricValue)"
+      TYPE: "[]STRUCT(MetricValue)"
+      REQUIRED: false
+  DimensionValue:
+    - name: value
+      NAME: value
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: The dimension value string.
+  MetricValue:
+    - name: value
+      NAME: value
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: The metric value as a string (always a string regardless of metric type).
+  ResponseMetaData:
+    - name: dataLossFromOtherRow
+      NAME: dataLossFromOtherRow
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: True if some rows were combined into an "(other)" row due to cardinality limits.
+    - name: schemaRestrictionResponse
+      NAME: schemaRestrictionResponse
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: currencyCode
+      NAME: currencyCode
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: The currency code used in the report.
+    - name: timeZone
+      NAME: timeZone
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: The property's current time zone (e.g., `America/New_York`).
+    - name: emptyReason
+      NAME: emptyReason
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Reason why the report is empty, if applicable.
+    - name: subjectToThresholding
+      NAME: subjectToThresholding
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+  PropertyQuota:
+    - name: tokensPerDay
+      NAME: tokensPerDay
+      type: ANY
+      TYPE: ANY
+      REQUIRED: false
+      comment: Standard properties have 200,000 tokens/day; Analytics 360 have 2,000,000.
+    - name: tokensPerHour
+      NAME: tokensPerHour
+      type: ANY
+      TYPE: ANY
+      REQUIRED: false
+      comment: Standard properties have 40,000 tokens/hour; Analytics 360 have 400,000.
+    - name: concurrentRequests
+      NAME: concurrentRequests
+      type: ANY
+      TYPE: ANY
+      REQUIRED: false
+      comment: "Standard: 10 max concurrent; Analytics 360: 50 max."
+    - name: serverErrorsPerProjectPerHour
+      NAME: serverErrorsPerProjectPerHour
+      type: ANY
+      TYPE: ANY
+      REQUIRED: false
+      comment: "Standard: 10 max; Analytics 360: 50 max."
+    - name: potentiallyThresholdedRequestsPerHour
+      NAME: potentiallyThresholdedRequestsPerHour
+      type: STRUCT(QuotaStatus)
+      TYPE: STRUCT(QuotaStatus)
+      REQUIRED: false
+    - name: tokensPerProjectPerDay
+      NAME: tokensPerProjectPerDay
+      type: ANY
+      TYPE: ANY
+      REQUIRED: false
+      comment: "Standard: 14,000 tokens/hour per project-property; Analytics 360: 140,000."
+  QuotaStatus:
+    - name: consumed
+      NAME: consumed
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Quota tokens consumed by this request.
+    - name: remaining
+      NAME: remaining
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Quota tokens remaining after this request.
+  BatchRunReportsRequest:
+    - name: requests
+      NAME: requests
+      type: "[]STRUCT(RunReportRequest)"
+      TYPE: "[]STRUCT(RunReportRequest)"
+      REQUIRED: false
+      comment: Up to 5 report requests.
+  BatchRunReportsResponse:
+    - name: reports
+      NAME: reports
+      type: "[]STRUCT(RunReportResponse)"
+      TYPE: "[]STRUCT(RunReportResponse)"
+      REQUIRED: false
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  RunPivotReportRequest:
+    - name: dimensions
+      NAME: dimensions
+      type: "[]STRUCT(Dimension)"
+      TYPE: "[]STRUCT(Dimension)"
+      REQUIRED: false
+    - name: metrics
+      NAME: metrics
+      type: "[]STRUCT(Metric)"
+      TYPE: "[]STRUCT(Metric)"
+      REQUIRED: false
+    - name: dateRanges
+      NAME: dateRanges
+      type: "[]STRUCT(DateRange)"
+      TYPE: "[]STRUCT(DateRange)"
+      REQUIRED: false
+    - name: pivots
+      NAME: pivots
+      type: "[]STRUCT(Pivot)"
+      TYPE: "[]STRUCT(Pivot)"
+      REQUIRED: false
+      comment: |
+        Pivot definitions. The product of all `pivot.limit` values must not
+        exceed 100,000.
+    - name: dimensionFilter
+      NAME: dimensionFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: metricFilter
+      NAME: metricFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: currencyCode
+      NAME: currencyCode
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: cohortSpec
+      NAME: cohortSpec
+      type: STRUCT(CohortSpec)
+      TYPE: STRUCT(CohortSpec)
+      REQUIRED: false
+    - name: keepEmptyRows
+      NAME: keepEmptyRows
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: returnPropertyQuota
+      NAME: returnPropertyQuota
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: comparisons
+      NAME: comparisons
+      type: "[]STRUCT(Comparison)"
+      TYPE: "[]STRUCT(Comparison)"
+      REQUIRED: false
+  RunPivotReportResponse:
+    - name: pivotHeaders
+      NAME: pivotHeaders
+      type: "[]STRUCT(PivotHeader)"
+      TYPE: "[]STRUCT(PivotHeader)"
+      REQUIRED: false
+    - name: dimensionHeaders
+      NAME: dimensionHeaders
+      type: "[]STRUCT(DimensionHeader)"
+      TYPE: "[]STRUCT(DimensionHeader)"
+      REQUIRED: false
+    - name: metricHeaders
+      NAME: metricHeaders
+      type: "[]STRUCT(MetricHeader)"
+      TYPE: "[]STRUCT(MetricHeader)"
+      REQUIRED: false
+    - name: rows
+      NAME: rows
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: aggregates
+      NAME: aggregates
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: rowCount
+      NAME: rowCount
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+    - name: metadata
+      NAME: metadata
+      type: STRUCT(ResponseMetaData)
+      TYPE: STRUCT(ResponseMetaData)
+      REQUIRED: false
+    - name: propertyQuota
+      NAME: propertyQuota
+      type: STRUCT(PropertyQuota)
+      TYPE: STRUCT(PropertyQuota)
+      REQUIRED: false
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  PivotHeader:
+    - name: pivotDimensionHeaders
+      NAME: pivotDimensionHeaders
+      type: "[]ANY"
+      TYPE: "[]ANY"
+      REQUIRED: false
+    - name: rowCount
+      NAME: rowCount
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+  BatchRunPivotReportsRequest:
+    - name: requests
+      NAME: requests
+      type: "[]STRUCT(RunPivotReportRequest)"
+      TYPE: "[]STRUCT(RunPivotReportRequest)"
+      REQUIRED: false
+      comment: Up to 5 pivot report requests.
+  BatchRunPivotReportsResponse:
+    - name: pivotReports
+      NAME: pivotReports
+      type: "[]STRUCT(RunPivotReportResponse)"
+      TYPE: "[]STRUCT(RunPivotReportResponse)"
+      REQUIRED: false
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  RunRealtimeReportRequest:
+    - name: dimensions
+      NAME: dimensions
+      type: "[]STRUCT(Dimension)"
+      TYPE: "[]STRUCT(Dimension)"
+      REQUIRED: false
+    - name: metrics
+      NAME: metrics
+      type: "[]STRUCT(Metric)"
+      TYPE: "[]STRUCT(Metric)"
+      REQUIRED: false
+    - name: minuteRanges
+      NAME: minuteRanges
+      type: "[]STRUCT(MinuteRange)"
+      TYPE: "[]STRUCT(MinuteRange)"
+      REQUIRED: false
+      comment: Up to 2 minute ranges. Default is the last 30 minutes.
+    - name: dimensionFilter
+      NAME: dimensionFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: metricFilter
+      NAME: metricFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: limit
+      NAME: limit
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Max 250,000.
+    - name: metricAggregations
+      NAME: metricAggregations
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+    - name: orderBys
+      NAME: orderBys
+      type: "[]STRUCT(OrderBy)"
+      TYPE: "[]STRUCT(OrderBy)"
+      REQUIRED: false
+    - name: returnPropertyQuota
+      NAME: returnPropertyQuota
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+  RunRealtimeReportResponse:
+    - name: dimensionHeaders
+      NAME: dimensionHeaders
+      type: "[]STRUCT(DimensionHeader)"
+      TYPE: "[]STRUCT(DimensionHeader)"
+      REQUIRED: false
+    - name: metricHeaders
+      NAME: metricHeaders
+      type: "[]STRUCT(MetricHeader)"
+      TYPE: "[]STRUCT(MetricHeader)"
+      REQUIRED: false
+    - name: rows
+      NAME: rows
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: totals
+      NAME: totals
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: maximums
+      NAME: maximums
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: minimums
+      NAME: minimums
+      type: "[]STRUCT(Row)"
+      TYPE: "[]STRUCT(Row)"
+      REQUIRED: false
+    - name: rowCount
+      NAME: rowCount
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+    - name: propertyQuota
+      NAME: propertyQuota
+      type: STRUCT(PropertyQuota)
+      TYPE: STRUCT(PropertyQuota)
+      REQUIRED: false
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  MetadataResponse:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: dimensions
+      NAME: dimensions
+      type: "[]STRUCT(DimensionMetadata)"
+      TYPE: "[]STRUCT(DimensionMetadata)"
+      REQUIRED: false
+    - name: metrics
+      NAME: metrics
+      type: "[]STRUCT(MetricMetadata)"
+      TYPE: "[]STRUCT(MetricMetadata)"
+      REQUIRED: false
+    - name: comparisons
+      NAME: comparisons
+      type: "[]STRUCT(ComparisonMetadata)"
+      TYPE: "[]STRUCT(ComparisonMetadata)"
+      REQUIRED: false
+  DimensionMetadata:
+    - name: apiName
+      NAME: apiName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: uiName
+      NAME: uiName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: description
+      NAME: description
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: deprecatedApiNames
+      NAME: deprecatedApiNames
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+    - name: customDefinition
+      NAME: customDefinition
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: category
+      NAME: category
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  MetricMetadata:
+    - name: apiName
+      NAME: apiName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: uiName
+      NAME: uiName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: description
+      NAME: description
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: deprecatedApiNames
+      NAME: deprecatedApiNames
+      type: "[]STRING"
+      TYPE: "[]STRING"
+      REQUIRED: false
+    - name: type
+      NAME: type
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: expression
+      NAME: expression
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: customDefinition
+      NAME: customDefinition
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+    - name: category
+      NAME: category
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  ComparisonMetadata:
+    - name: apiName
+      NAME: apiName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: uiName
+      NAME: uiName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: description
+      NAME: description
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  CheckCompatibilityRequest:
+    - name: dimensions
+      NAME: dimensions
+      type: "[]STRUCT(Dimension)"
+      TYPE: "[]STRUCT(Dimension)"
+      REQUIRED: false
+    - name: metrics
+      NAME: metrics
+      type: "[]STRUCT(Metric)"
+      TYPE: "[]STRUCT(Metric)"
+      REQUIRED: false
+    - name: dimensionFilter
+      NAME: dimensionFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: metricFilter
+      NAME: metricFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: compatibilityFilter
+      NAME: compatibilityFilter
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Filter the response to only show COMPATIBLE or INCOMPATIBLE fields.
+  CheckCompatibilityResponse:
+    - name: dimensionCompatibilities
+      NAME: dimensionCompatibilities
+      type: "[]ANY"
+      TYPE: "[]ANY"
+      REQUIRED: false
+    - name: metricCompatibilities
+      NAME: metricCompatibilities
+      type: "[]ANY"
+      TYPE: "[]ANY"
+      REQUIRED: false
+  AudienceExport:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: "Output only. Resource name: `properties/{property}/audienceExports/{audienceExport}`"
+    - name: audience
+      NAME: audience
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: "The audience resource name. Format: `properties/{property}/audiences/{audience}`"
+    - name: audienceDisplayName
+      NAME: audienceDisplayName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: dimensions
+      NAME: dimensions
+      type: "[]STRUCT(AudienceDimension)"
+      TYPE: "[]STRUCT(AudienceDimension)"
+      REQUIRED: false
+    - name: state
+      NAME: state
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: beginCreatingTime
+      NAME: beginCreatingTime
+      type: TIMESTAMP
+      TYPE: TIMESTAMP
+      REQUIRED: false
+    - name: creationQuotaTokensCharged
+      NAME: creationQuotaTokensCharged
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+    - name: rowCount
+      NAME: rowCount
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+    - name: errorMessage
+      NAME: errorMessage
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  AudienceDimension:
+    - name: dimensionName
+      NAME: dimensionName
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Dimension API name (e.g., `deviceId`, `userId`).
+  ListAudienceExportsResponse:
+    - name: audienceExports
+      NAME: audienceExports
+      type: "[]STRUCT(AudienceExport)"
+      TYPE: "[]STRUCT(AudienceExport)"
+      REQUIRED: false
+    - name: nextPageToken
+      NAME: nextPageToken
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+  QueryAudienceExportResponse:
+    - name: audienceExport
+      NAME: audienceExport
+      type: STRUCT(AudienceExport)
+      TYPE: STRUCT(AudienceExport)
+      REQUIRED: false
+    - name: audienceRows
+      NAME: audienceRows
+      type: "[]ANY"
+      TYPE: "[]ANY"
+      REQUIRED: false
+    - name: rowCount
+      NAME: rowCount
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+  RunFunnelReportRequest:
+    - name: dateRanges
+      NAME: dateRanges
+      type: "[]STRUCT(DateRange)"
+      TYPE: "[]STRUCT(DateRange)"
+      REQUIRED: false
+    - name: funnel
+      NAME: funnel
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: funnelBreakdown
+      NAME: funnelBreakdown
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: funnelNextAction
+      NAME: funnelNextAction
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: funnelVisualizationType
+      NAME: funnelVisualizationType
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: segments
+      NAME: segments
+      type: "[]STRUCT(Segment)"
+      TYPE: "[]STRUCT(Segment)"
+      REQUIRED: false
+      comment: Up to 4 segments for comparative funnel analysis.
+    - name: limit
+      NAME: limit
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+    - name: dimensionFilter
+      NAME: dimensionFilter
+      type: STRUCT(FilterExpression)
+      TYPE: STRUCT(FilterExpression)
+      REQUIRED: false
+    - name: returnPropertyQuota
+      NAME: returnPropertyQuota
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+  Segment:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: userSegment
+      NAME: userSegment
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+    - name: sessionSegment
+      NAME: sessionSegment
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+  RunFunnelReportResponse:
+    - name: kind
+      NAME: kind
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: funnelTable
+      NAME: funnelTable
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+      comment: Funnel data in tabular form.
+    - name: funnelVisualization
+      NAME: funnelVisualization
+      type: OBJECT
+      TYPE: OBJECT
+      REQUIRED: false
+      comment: Funnel data in visualization-friendly form.
+    - name: propertyQuota
+      NAME: propertyQuota
+      type: STRUCT(PropertyQuota)
+      TYPE: STRUCT(PropertyQuota)
+      REQUIRED: false
+  PropertyQuotasSnapshot:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: "Format: `properties/{property}/propertyQuotasSnapshot`"
+    - name: tokensPerDay
+      NAME: tokensPerDay
+      type: STRUCT(QuotaStatus)
+      TYPE: STRUCT(QuotaStatus)
+      REQUIRED: false
+    - name: tokensPerHour
+      NAME: tokensPerHour
+      type: STRUCT(QuotaStatus)
+      TYPE: STRUCT(QuotaStatus)
+      REQUIRED: false
+    - name: concurrentRequests
+      NAME: concurrentRequests
+      type: STRUCT(QuotaStatus)
+      TYPE: STRUCT(QuotaStatus)
+      REQUIRED: false
+    - name: serverErrorsPerProjectPerHour
+      NAME: serverErrorsPerProjectPerHour
+      type: STRUCT(QuotaStatus)
+      TYPE: STRUCT(QuotaStatus)
+      REQUIRED: false
+    - name: potentiallyThresholdedRequestsPerHour
+      NAME: potentiallyThresholdedRequestsPerHour
+      type: STRUCT(QuotaStatus)
+      TYPE: STRUCT(QuotaStatus)
+      REQUIRED: false
+    - name: tokensPerProjectPerDay
+      NAME: tokensPerProjectPerDay
+      type: STRUCT(QuotaStatus)
+      TYPE: STRUCT(QuotaStatus)
+      REQUIRED: false
+  Operation:
+    - name: name
+      NAME: name
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+      comment: Operation resource name.
+    - name: done
+      NAME: done
+      type: BOOL
+      TYPE: BOOL
+      REQUIRED: false
+      comment: True if the operation is complete.
+    - name: error
+      NAME: error
+      type: STRUCT(Status)
+      TYPE: STRUCT(Status)
+      REQUIRED: false
+    - name: response
+      NAME: response
+      type: map[STRING]ANY
+      TYPE: map[STRING]ANY
+      REQUIRED: false
+      comment: The operation result on success (contains the AudienceExport).
+  Status:
+    - name: code
+      NAME: code
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+    - name: message
+      NAME: message
+      type: STRING
+      TYPE: STRING
+      REQUIRED: false
+    - name: details
+      NAME: details
+      type: "[]ANY"
+      TYPE: "[]ANY"
+      REQUIRED: false
+  v1beta.audienceexport.{audienceExportId}:query.createRequest:
+    - name: offset
+      NAME: offset
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Row offset for pagination.
+    - name: limit
+      NAME: limit
+      type: INT
+      TYPE: INT
+      REQUIRED: false
+      comment: Number of rows to return. Default 10,000; max 250,000.

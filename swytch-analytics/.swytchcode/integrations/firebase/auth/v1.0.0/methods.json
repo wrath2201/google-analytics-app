@@ -1,0 +1,64 @@
+{
+  "methods": [
+    {
+      "method_uuid": "",
+      "method_name": "Delete a user account identified by `idToken` or `localId` using OAuth credentials.",
+      "canonical_id": "accounts:delete.accounts:delete.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Refresh an ID token by exchanging a refresh token for a new ID token.",
+      "canonical_id": "token.token.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Reset or change a user's password using an OOB code or the current password.",
+      "canonical_id": "accounts:resetpassword.accounts:resetpassword.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Retrieve account information for the authenticated user using various lookup options like `localId`, `email`, or `phoneNumber`.",
+      "canonical_id": "accounts:lookup.accounts:lookup.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Send out-of-band confirmation code for password reset, email sign-in link, email address verification, or email change verification.",
+      "canonical_id": "accounts:sendoobcode.accounts:sendoobcode.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Sign in a user using an email link with an out-of-band code sent to their email address.",
+      "canonical_id": "accounts:signinwithemaillink.accounts:signinwithemaillink.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Sign in using a custom token to exchange a custom Auth token for Identity Platform credentials.",
+      "canonical_id": "accounts:signinwithcustomtoken.accounts:signinwithcustomtoken.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Sign in using credentials from third-party providers like Google, Facebook, or GitHub after obtaining the provider's token.",
+      "canonical_id": "accounts:signinwithidp.accounts:signinwithidp.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Sign in using email and password.",
+      "canonical_id": "accounts:signinwithpassword.accounts:signinwithpassword.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Sign in with phone number using verification code from SMS after prior phone verification.",
+      "canonical_id": "accounts:signinwithphonenumber.accounts:signinwithphonenumber.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Sign up with email/password or create anonymous user, including upgrading with an `idToken`.",
+      "canonical_id": "accounts:signup.accounts:signup.create"
+    },
+    {
+      "method_uuid": "",
+      "method_name": "Update account information including email, password, display name, photo URL, and phone number with a valid `idToken`.",
+      "canonical_id": "accounts:update.accounts:update.create"
+    }
+  ]
+}

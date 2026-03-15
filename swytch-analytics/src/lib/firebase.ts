@@ -12,5 +12,9 @@ const firebaseConfig = {
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export const auth = getAuth(app);
+
 export const googleProvider = new GoogleAuthProvider();
+googleProvider.addScope("https://www.googleapis.com/auth/analytics.readonly");
+googleProvider.addScope("https://www.googleapis.com/auth/userinfo.email");
+
 export default app;

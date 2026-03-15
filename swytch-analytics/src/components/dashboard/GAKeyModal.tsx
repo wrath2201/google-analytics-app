@@ -7,23 +7,24 @@ import Button from "@/components/ui/Button";
 
 type GAKeyModalProps = {
     isOpen: boolean;
-    onClose: () => void;
-    onSubmit?: (key: string) => void;
+    onCloseAction: () => void;
+    onSubmitAction?: (key: string) => void;
+    blurBackground?: boolean;
 };
 
-export default function GAKeyModal({ isOpen, onClose, onSubmit }: GAKeyModalProps) {
+export default function GAKeyModal({ isOpen, onCloseAction, onSubmitAction, blurBackground }: GAKeyModalProps) {
     const [gaKey, setGaKey] = useState("");
 
     const handleSubmit = () => {
-        if (gaKey.trim() && onSubmit) {
-            onSubmit(gaKey.trim());
+        if (gaKey.trim() && onSubmitAction) {
+            onSubmitAction(gaKey.trim());
             setGaKey("");
-            onClose();
+            onCloseAction();
         }
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Add GA Property">
+        <Modal isOpen={isOpen} onClose={onCloseAction} title="Add GA Property" blurBackground={blurBackground}>
             <div className="space-y-4">
                 <Input
                     label="Measurement ID"
@@ -32,7 +33,7 @@ export default function GAKeyModal({ isOpen, onClose, onSubmit }: GAKeyModalProp
                     onChange={(e) => setGaKey(e.target.value)}
                 />
                 <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={onClose}>Cancel</Button>
+                    <Button variant="outline" onClick={onCloseAction}>Cancel</Button>
                     <Button onClick={handleSubmit} disabled={!gaKey.trim()}>Add Property</Button>
                 </div>
             </div>

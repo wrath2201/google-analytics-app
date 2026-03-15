@@ -4,58 +4,49 @@ import { useState } from "react";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 
-const METRICS = [
-  { id: "users", label: "Users" },
-  { id: "sessions", label: "Sessions" },
-  { id: "pageViews", label: "Page Views" },
-  { id: "bounceRate", label: "Bounce Rate" },
-  { id: "avgSessionDuration", label: "Avg Session Duration" },
-  { id: "newUsers", label: "New Users" },
+const ALL_METRICS = [
+  { key: "users", label: "Users" },
+  { key: "sessions", label: "Sessions" },
+  { key: "pageViews", label: "Page Views" },
+  { key: "bounceRate", label: "Bounce Rate" },
+  { key: "avgSessionDuration", label: "Avg Session Duration" },
+  { key: "newUsers", label: "New Users" },
 ];
 
 type MetricsModalProps = {
   isOpen: boolean;
-  onClose: () => void;
-  onSave: (metrics: string[]) => void;
+  onCloseAction: () => void;
+  onSaveAction: (metrics: string[]) => void;
 };
 
-export default function MetricsModal({ isOpen, onClose, onSave }: MetricsModalProps) {
-  const [selected, setSelected] = useState<string[]>([]);
+export default function MetricsModal({ isOpen, onCloseAction, onSaveAction }: MetricsModalProps) {
+  const [selected, setSelected] = useState<string[]>(["users", "sessions", "pageViews", "bounceRate"]);
 
-  const toggleMetric = (metric: string) => {
-    if (selected.includes(metric)) {
-      setSelected(selected.filter((m) => m !== metric));
-    } else {
-      setSelected([...selected, metric]);
-    }
-  };
-
-  const handleSave = () => {
-    if (selected.length > 0) {
-      onSave(selected);
-      onClose();
-    }
+  const toggle = (key: string) => {
+    setSelected((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Select Dashboard Metrics" blurBackground>
-      <div className="space-y-4">
-
-        {METRICS.map((metric) => (
-          <label key={metric.id} className="flex items-center gap-2 cursor-pointer">
+    <Modal isOpen={isOpen} onClose={onCloseAction} title="Customize Metrics">
+      <div className="space-y-3">
+        {ALL_METRICS.map(({ key, label }) => (
+          <label key={key} className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
-              checked={selected.includes(metric.id)}
-              onChange={() => toggleMetric(metric.id)}
+              checked={selected.includes(key)}
+              onChange={() => toggle(key)}
+              className="w-4 h-4 accent-[#1B3A6B]"
             />
-            <span className="text-sm">{metric.label}</span>
+            <span className="text-sm text-[#1A1814]">{label}</span>
           </label>
         ))}
-
-        <div className="flex justify-end">
-          <Button onClick={handleSave}>Save Metrics</Button>
+        <div className="flex justify-end pt-2">
+          <Button onClick={() => { onSaveAction(selected); onCloseAction(); }} disabled={selected.length === 0}>
+            Save
+          </Button>
         </div>
-
       </div>
     </Modal>
   );

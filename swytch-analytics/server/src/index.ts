@@ -5,6 +5,7 @@ import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
 import mysqlPlugin from "./plugins/mysql";
 import authRoutes from "./routes/auth";
+import { startEmailReportsCron } from "./services/email_reports";
 
 const server = Fastify({ logger: true });
 
@@ -30,6 +31,7 @@ const start = async () => {
     });
 
     try {
+        startEmailReportsCron();
         await server.listen({
             port: Number(process.env.PORT) || 4000,
             host: "0.0.0.0",

@@ -99,4 +99,5 @@ export default async function authRoutes(server: FastifyInstance) {
             .clearCookie("token", { path: "/" })
             .send({ success: true });
     });
+
 }

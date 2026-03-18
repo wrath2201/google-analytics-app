@@ -12,6 +12,194 @@
   },
   "mode": "production",
   "tools": {
+    "accounts:lookup.accounts:lookup.create": {
+      "desc": "Retrieves account information for the authenticated user. Admin operations\n(lookups by `localId`, `email`, `phoneNumber`) require OAuth credentials.\n",
+      "inputs": [
+        {
+          "body": {
+            "LOCATION": "body",
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "email": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "federatedUserId": {
+                  "required": false,
+                  "type": "[]ANY"
+                },
+                "idToken": {
+                  "required": false,
+                  "type": "string"
+                },
+                "localId": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "phoneNumber": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "tenantId": {
+                  "required": false,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "integration": "firebase.auth@v1.0.0",
+      "output": {
+        "schema": {
+          "properties": {
+            "kind": {
+              "required": false,
+              "type": "string"
+            },
+            "users": {
+              "items": {
+                "properties": {
+                  "createdAt": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "customAttributes": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "disabled": {
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  "displayName": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "email": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "emailVerified": {
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  "lastLoginAt": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "localId": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "mfaInfo": {
+                    "items": {
+                      "properties": {
+                        "displayName": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "enrolledAt": {
+                          "required": false,
+                          "type": "TIMESTAMP"
+                        },
+                        "mfaEnrollmentId": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "phoneInfo": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "totpInfo": {
+                          "required": false,
+                          "type": "object"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "passwordHash": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "phoneNumber": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "photoUrl": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "providerUserInfo": {
+                    "items": {
+                      "properties": {
+                        "displayName": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "email": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "federatedId": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "phoneNumber": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "photoUrl": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "providerId": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "rawId": {
+                          "required": false,
+                          "type": "string"
+                        },
+                        "screenName": {
+                          "required": false,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "required": false,
+                    "type": "array"
+                  },
+                  "salt": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "tenantId": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "validSince": {
+                    "required": false,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "required": false,
+              "type": "array"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Get account information",
+      "type": "method"
+    },
     "accounts:signinwithidp.accounts:signinwithidp.create": {
       "desc": "Signs in using credentials from a third-party provider such as Google,\nFacebook, GitHub, etc. Use this after obtaining the provider's token.\n",
       "inputs": [

@@ -1,5 +1,28 @@
 import exec from "./client";
 
+// Firebase Auth via SwytchCode (integration)
+// Uses accounts:lookup to verify a Firebase idToken
+// Timeout: 5s via AbortController
+
+export async function verifyFirebaseToken(idToken: string) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    // this calls swytchcode cli and also passes api key +idtoken (crux of the integration)
+    try {
+        const result = await exec("accounts:lookup.accounts:lookup.create", {
+            params: {
+                key: process.env.FIREBASE_API_KEY,
+            },
+            body: { idToken },
+        });
+        return result;
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
+// ─── Resend Email via SwytchCode ─────────────────────────────
 export async function sendEmail({
     to,
     subject,

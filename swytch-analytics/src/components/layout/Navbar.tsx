@@ -11,12 +11,21 @@ export default function Navbar() {
     const router = useRouter();
 
     const handleLogout = async () => {
-        await fetch("http://localhost:4000/api/auth", {
-            method: "DELETE",
-            credentials: "include",
-        });
-        await signOut();
-        router.push("/login");
+        try {
+            await fetch("http://localhost:4000/api/auth", {
+                method: "DELETE",
+                credentials: "include",
+            });
+        } catch (e) {
+            console.error("Failed to call backend logout", e);
+        } finally {
+            try {
+                await signOut();
+            } catch (authErr) {
+                console.error("Firebase signout failed", authErr);
+            }
+            router.push("/login");
+        }
     };
 
     return (

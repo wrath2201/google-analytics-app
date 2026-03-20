@@ -12,6 +12,63 @@
   },
   "mode": "production",
   "tools": {
+    "accounts:lookup.accounts:lookup.create": {
+      "desc": "Retrieves account information for the authenticated user. Admin operations\n(lookups by `localId`, `email`, `phoneNumber`) require OAuth credentials.\n",
+      "inputs": [
+        {
+          "body": {
+            "LOCATION": "body",
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "email": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "federatedUserId": {
+                  "required": false,
+                  "type": "[]ANY"
+                },
+                "idToken": {
+                  "required": false,
+                  "type": "string"
+                },
+                "localId": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "phoneNumber": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "tenantId": {
+                  "required": false,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "integration": "firebase.auth@v1.0.0",
+      "output": {
+        "schema": {
+          "properties": {
+            "kind": {
+              "required": false,
+              "type": "string"
+            },
+            "users": {
+              "required": false,
+              "type": "[]STRUCT(UserInfo)"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Get account information",
+      "type": "method"
+    },
     "accounts:signinwithidp.accounts:signinwithidp.create": {
       "desc": "Signs in using credentials from a third-party provider such as Google,\nFacebook, GitHub, etc. Use this after obtaining the provider's token.\n",
       "inputs": [
@@ -723,194 +780,91 @@
             "schema": {
               "properties": {
                 "cohortSpec": {
-                  "properties": {
-                    "cohortReportSettings": {
-                      "required": false,
-                      "type": "object"
-                    },
-                    "cohorts": {
-                      "required": false,
-                      "type": "[]ANY"
-                    },
-                    "cohortsRange": {
-                      "required": false,
-                      "type": "object"
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "cohortReportSettings": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "cohorts": {
+                        "required": false,
+                        "type": "[]ANY"
+                      },
+                      "cohortsRange": {
+                        "required": false,
+                        "type": "object"
+                      }
                     }
                   },
                   "type": "object"
                 },
                 "comparisons": {
-                  "items": {
-                    "properties": {
-                      "comparison": {
-                        "required": false,
-                        "type": "string"
-                      },
-                      "dateRange": {
-                        "properties": {
-                          "endDate": {
-                            "required": true,
-                            "type": "string"
-                          },
-                          "name": {
-                            "required": false,
-                            "type": "string"
-                          },
-                          "startDate": {
-                            "required": true,
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "startDate",
-                          "endDate"
-                        ],
-                        "type": "object"
-                      },
-                      "dimensionFilter": {
-                        "properties": {
-                          "andGroup": {
-                            "required": false,
-                            "type": "object"
-                          },
-                          "filter": {
-                            "properties": {
-                              "betweenFilter": {
-                                "required": false,
-                                "type": "object"
-                              },
-                              "fieldName": {
-                                "required": true,
-                                "type": "string"
-                              },
-                              "inListFilter": {
-                                "required": false,
-                                "type": "object"
-                              },
-                              "numericFilter": {
-                                "required": false,
-                                "type": "object"
-                              },
-                              "stringFilter": {
-                                "required": false,
-                                "type": "object"
-                              }
-                            },
-                            "required": [
-                              "fieldName"
-                            ],
-                            "type": "object"
-                          },
-                          "notExpression": {
-                            "required": false,
-                            "type": "any"
-                          },
-                          "orGroup": {
-                            "required": false,
-                            "type": "object"
-                          }
-                        },
-                        "type": "object"
-                      },
-                      "name": {
-                        "required": false,
-                        "type": "string"
-                      }
-                    },
-                    "type": "object"
-                  },
                   "required": false,
-                  "type": "array"
+                  "type": "[]STRUCT(Comparison)"
                 },
                 "currencyCode": {
                   "required": false,
                   "type": "string"
                 },
                 "dateRanges": {
-                  "items": {
-                    "properties": {
-                      "endDate": {
-                        "required": true,
-                        "type": "string"
-                      },
-                      "name": {
-                        "required": false,
-                        "type": "string"
-                      },
-                      "startDate": {
-                        "required": true,
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "startDate",
-                      "endDate"
-                    ],
-                    "type": "object"
-                  },
                   "required": false,
-                  "type": "array"
+                  "type": "[]STRUCT(DateRange)"
                 },
                 "dimensionFilter": {
-                  "properties": {
-                    "andGroup": {
-                      "required": false,
-                      "type": "object"
-                    },
-                    "filter": {
-                      "properties": {
-                        "betweenFilter": {
-                          "required": false,
-                          "type": "object"
-                        },
-                        "fieldName": {
-                          "required": true,
-                          "type": "string"
-                        },
-                        "inListFilter": {
-                          "required": false,
-                          "type": "object"
-                        },
-                        "numericFilter": {
-                          "required": false,
-                          "type": "object"
-                        },
-                        "stringFilter": {
-                          "required": false,
-                          "type": "object"
-                        }
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "andGroup": {
+                        "required": false,
+                        "type": "object"
                       },
-                      "required": [
-                        "fieldName"
-                      ],
-                      "type": "object"
-                    },
-                    "notExpression": {
-                      "required": false,
-                      "type": "any"
-                    },
-                    "orGroup": {
-                      "required": false,
-                      "type": "object"
+                      "filter": {
+                        "required": false,
+                        "schema": {
+                          "properties": {
+                            "betweenFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "fieldName": {
+                              "required": true,
+                              "type": "string"
+                            },
+                            "inListFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "numericFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "stringFilter": {
+                              "required": false,
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "fieldName"
+                          ]
+                        },
+                        "type": "object"
+                      },
+                      "notExpression": {
+                        "required": false,
+                        "type": "any"
+                      },
+                      "orGroup": {
+                        "required": false,
+                        "type": "object"
+                      }
                     }
                   },
                   "type": "object"
                 },
                 "dimensions": {
-                  "items": {
-                    "properties": {
-                      "name": {
-                        "required": true,
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "name"
-                    ],
-                    "type": "object"
-                  },
                   "required": false,
-                  "type": "array"
+                  "type": "[]STRUCT(Dimension)"
                 },
                 "keepEmptyRows": {
                   "required": false,
@@ -918,105 +872,74 @@
                 },
                 "limit": {
                   "required": false,
-                  "type": "integer"
+                  "type": "INT"
                 },
                 "metricAggregations": {
                   "required": false,
                   "type": "[]STRING"
                 },
                 "metricFilter": {
-                  "properties": {
-                    "andGroup": {
-                      "required": false,
-                      "type": "object"
-                    },
-                    "filter": {
-                      "properties": {
-                        "betweenFilter": {
-                          "required": false,
-                          "type": "object"
-                        },
-                        "fieldName": {
-                          "required": true,
-                          "type": "string"
-                        },
-                        "inListFilter": {
-                          "required": false,
-                          "type": "object"
-                        },
-                        "numericFilter": {
-                          "required": false,
-                          "type": "object"
-                        },
-                        "stringFilter": {
-                          "required": false,
-                          "type": "object"
-                        }
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "andGroup": {
+                        "required": false,
+                        "type": "object"
                       },
-                      "required": [
-                        "fieldName"
-                      ],
-                      "type": "object"
-                    },
-                    "notExpression": {
-                      "required": false,
-                      "type": "any"
-                    },
-                    "orGroup": {
-                      "required": false,
-                      "type": "object"
+                      "filter": {
+                        "required": false,
+                        "schema": {
+                          "properties": {
+                            "betweenFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "fieldName": {
+                              "required": true,
+                              "type": "string"
+                            },
+                            "inListFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "numericFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "stringFilter": {
+                              "required": false,
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "fieldName"
+                          ]
+                        },
+                        "type": "object"
+                      },
+                      "notExpression": {
+                        "required": false,
+                        "type": "any"
+                      },
+                      "orGroup": {
+                        "required": false,
+                        "type": "object"
+                      }
                     }
                   },
                   "type": "object"
                 },
                 "metrics": {
-                  "items": {
-                    "properties": {
-                      "expression": {
-                        "required": false,
-                        "type": "string"
-                      },
-                      "name": {
-                        "required": true,
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "name"
-                    ],
-                    "type": "object"
-                  },
                   "required": false,
-                  "type": "array"
+                  "type": "[]STRUCT(Metric)"
                 },
                 "offset": {
                   "required": false,
-                  "type": "integer"
+                  "type": "INT"
                 },
                 "orderBys": {
-                  "items": {
-                    "properties": {
-                      "desc": {
-                        "required": false,
-                        "type": "boolean"
-                      },
-                      "dimensionOrderBy": {
-                        "required": false,
-                        "type": "object"
-                      },
-                      "metricOrderBy": {
-                        "required": false,
-                        "type": "object"
-                      },
-                      "pivotOrderBy": {
-                        "required": false,
-                        "type": "object"
-                      }
-                    },
-                    "type": "object"
-                  },
                   "required": false,
-                  "type": "array"
+                  "type": "[]STRUCT(OrderBy)"
                 },
                 "returnPropertyQuota": {
                   "required": false,
@@ -1032,249 +955,112 @@
         "schema": {
           "properties": {
             "dimensionHeaders": {
-              "items": {
-                "properties": {
-                  "name": {
-                    "required": false,
-                    "type": "string"
-                  }
-                },
-                "type": "object"
-              },
               "required": false,
-              "type": "array"
+              "type": "[]STRUCT(DimensionHeader)"
             },
             "kind": {
               "required": false,
               "type": "string"
             },
             "maximums": {
-              "items": {
-                "properties": {
-                  "dimensionValues": {
-                    "items": {
-                      "properties": {
-                        "value": {
-                          "required": false,
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "required": false,
-                    "type": "array"
-                  },
-                  "metricValues": {
-                    "items": {
-                      "properties": {
-                        "value": {
-                          "required": false,
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "required": false,
-                    "type": "array"
-                  }
-                },
-                "type": "object"
-              },
               "required": false,
-              "type": "array"
+              "type": "[]STRUCT(Row)"
             },
             "metadata": {
-              "properties": {
-                "currencyCode": {
-                  "required": false,
-                  "type": "string"
-                },
-                "dataLossFromOtherRow": {
-                  "required": false,
-                  "type": "boolean"
-                },
-                "emptyReason": {
-                  "required": false,
-                  "type": "string"
-                },
-                "schemaRestrictionResponse": {
-                  "required": false,
-                  "type": "object"
-                },
-                "subjectToThresholding": {
-                  "required": false,
-                  "type": "boolean"
-                },
-                "timeZone": {
-                  "required": false,
-                  "type": "string"
+              "required": false,
+              "schema": {
+                "properties": {
+                  "currencyCode": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "dataLossFromOtherRow": {
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  "emptyReason": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "schemaRestrictionResponse": {
+                    "required": false,
+                    "type": "object"
+                  },
+                  "subjectToThresholding": {
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  "timeZone": {
+                    "required": false,
+                    "type": "string"
+                  }
                 }
               },
               "type": "object"
             },
             "metricHeaders": {
-              "items": {
-                "properties": {
-                  "name": {
-                    "required": false,
-                    "type": "string"
-                  },
-                  "type": {
-                    "required": false,
-                    "type": "string"
-                  }
-                },
-                "type": "object"
-              },
               "required": false,
-              "type": "array"
+              "type": "[]STRUCT(MetricHeader)"
             },
             "minimums": {
-              "items": {
-                "properties": {
-                  "dimensionValues": {
-                    "items": {
-                      "properties": {
-                        "value": {
-                          "required": false,
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "required": false,
-                    "type": "array"
-                  },
-                  "metricValues": {
-                    "items": {
-                      "properties": {
-                        "value": {
-                          "required": false,
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "required": false,
-                    "type": "array"
-                  }
-                },
-                "type": "object"
-              },
               "required": false,
-              "type": "array"
+              "type": "[]STRUCT(Row)"
             },
             "propertyQuota": {
-              "properties": {
-                "concurrentRequests": {
-                  "required": false,
-                  "type": "any"
-                },
-                "potentiallyThresholdedRequestsPerHour": {
-                  "properties": {
-                    "consumed": {
-                      "required": false,
-                      "type": "integer"
-                    },
-                    "remaining": {
-                      "required": false,
-                      "type": "integer"
-                    }
+              "required": false,
+              "schema": {
+                "properties": {
+                  "concurrentRequests": {
+                    "required": false,
+                    "type": "any"
                   },
-                  "type": "object"
-                },
-                "serverErrorsPerProjectPerHour": {
-                  "required": false,
-                  "type": "any"
-                },
-                "tokensPerDay": {
-                  "required": false,
-                  "type": "any"
-                },
-                "tokensPerHour": {
-                  "required": false,
-                  "type": "any"
-                },
-                "tokensPerProjectPerDay": {
-                  "required": false,
-                  "type": "any"
+                  "potentiallyThresholdedRequestsPerHour": {
+                    "required": false,
+                    "schema": {
+                      "properties": {
+                        "consumed": {
+                          "required": false,
+                          "type": "INT"
+                        },
+                        "remaining": {
+                          "required": false,
+                          "type": "INT"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "serverErrorsPerProjectPerHour": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerDay": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerHour": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerProjectPerDay": {
+                    "required": false,
+                    "type": "any"
+                  }
                 }
               },
               "type": "object"
             },
             "rowCount": {
               "required": false,
-              "type": "integer"
+              "type": "INT"
             },
             "rows": {
-              "items": {
-                "properties": {
-                  "dimensionValues": {
-                    "items": {
-                      "properties": {
-                        "value": {
-                          "required": false,
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "required": false,
-                    "type": "array"
-                  },
-                  "metricValues": {
-                    "items": {
-                      "properties": {
-                        "value": {
-                          "required": false,
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "required": false,
-                    "type": "array"
-                  }
-                },
-                "type": "object"
-              },
               "required": false,
-              "type": "array"
+              "type": "[]STRUCT(Row)"
             },
             "totals": {
-              "items": {
-                "properties": {
-                  "dimensionValues": {
-                    "items": {
-                      "properties": {
-                        "value": {
-                          "required": false,
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "required": false,
-                    "type": "array"
-                  },
-                  "metricValues": {
-                    "items": {
-                      "properties": {
-                        "value": {
-                          "required": false,
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
-                    },
-                    "required": false,
-                    "type": "array"
-                  }
-                },
-                "type": "object"
-              },
               "required": false,
-              "type": "array"
+              "type": "[]STRUCT(Row)"
             }
           }
         },

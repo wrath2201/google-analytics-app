@@ -1,0 +1,9 @@
+{
+  "google_analytics.reports": {
+    "version": "v1beta",
+    "sandbox_endpoint": "https://analyticsdata.googleapis.com",
+    "production_endpoint": "https://analyticsdata.googleapis.com",
+    "methods": 13,
+    "workflows": 0
+  }
+}

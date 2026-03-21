@@ -16,6 +16,7 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
 googleProvider.addScope("https://www.googleapis.com/auth/analytics.readonly");
+googleProvider.addScope("https://www.googleapis.com/auth/analytics.edit");
 googleProvider.addScope("https://www.googleapis.com/auth/userinfo.email");
 
 

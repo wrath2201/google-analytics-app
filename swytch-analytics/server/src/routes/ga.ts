@@ -37,11 +37,17 @@ export default async function gaRoutes(server: FastifyInstance) {
                 data.accountSummaries?.flatMap((account: any) =>
                     (account.propertySummaries || []).map((prop: any) => ({
                         propertyId: prop.property,
-                        displayName: prop.displayName
+                        displayName: prop.displayName,
+                        account: account.account
                     }))
                 ) || [];
 
-            return { properties };
+            const accounts = data.accountSummaries?.map((account: any) => ({
+                id: account.account,
+                displayName: account.displayName
+            })) || [];
+
+            return { properties, accounts };
 
         } catch (err) {
 
@@ -50,6 +56,90 @@ export default async function gaRoutes(server: FastifyInstance) {
 
         }
 
+    });
+
+    server.post("/ga/properties/create", async (request, reply) => {
+        try {
+            await request.jwtVerify({ onlyCookie: true });
+
+            const accessToken = request.cookies.google_access_token;
+            if (!accessToken) {
+                return reply.status(401).send({ error: "Google access token missing" });
+            }
+
+            const { parent, displayName, timeZone, websiteUrl } = request.body as {
+                parent: string;
+                displayName: string;
+                timeZone: string;
+                websiteUrl: string;
+            };
+
+            if (!parent || !displayName || !timeZone) {
+                return reply.status(400).send({ error: "Missing required fields for property creation" });
+            }
+
+            // 1. Create Property
+            const propRes = await fetch("https://analyticsadmin.googleapis.com/v1beta/properties", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    parent,
+                    displayName,
+                    timeZone
+                })
+            });
+
+            if (!propRes.ok) {
+                const err = await propRes.text();
+                request.log.error("Failed to create property: " + err);
+                return reply.status(propRes.status).send({ error: "Failed to create property via Google Admin API", details: err });
+            }
+
+            const newProperty = await propRes.json() as any;
+            const newPropertyId = newProperty.name;
+
+            // 2. Create Web Data Stream (if website provided)
+            let newStream = null;
+            if (websiteUrl) {
+                const streamRes = await fetch(`https://analyticsadmin.googleapis.com/v1beta/${newPropertyId}/dataStreams`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        type: "WEB_DATA_STREAM",
+                        displayName: `${displayName} Stream`,
+                        webStreamData: {
+                            defaultUri: websiteUrl
+                        }
+                    })
+                });
+
+                if (streamRes.ok) {
+                    newStream = await streamRes.json();
+                } else {
+                    request.log.warn("Property created, but Data Stream failed: " + await streamRes.text());
+                }
+            }
+
+            return {
+                success: true,
+                property: {
+                    propertyId: newPropertyId,
+                    displayName: newProperty.displayName,
+                    account: parent
+                },
+                stream: newStream
+            };
+
+        } catch (err) {
+            request.log.error(err);
+            return reply.status(500).send({ error: "Internal server error during property creation" });
+        }
     });
 
 

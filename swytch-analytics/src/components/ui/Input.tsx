@@ -3,10 +3,11 @@ type InputProps = {
     placeholder?: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    type?: "text" | "email" | "password";
+    type?: "text" | "email" | "password" | "url" | "number";
     error?: string;
     className?: string;
     disabled?: boolean;
+    required?: boolean;
 };
 
 export default function Input({
@@ -18,6 +19,7 @@ export default function Input({
     error,
     className = "",
     disabled = false,
+    required = false,
 }: InputProps) {
     return (
         <div className={`flex flex-col gap-1.5 ${className}`}>
@@ -30,6 +32,7 @@ export default function Input({
                 onChange={onChange}
                 placeholder={placeholder}
                 disabled={disabled}
+                required={required}
                 className={`
                     w-full px-4 py-2.5 rounded-lg border text-sm
                     bg-white text-[#1A1814] placeholder:text-[#8C8578]

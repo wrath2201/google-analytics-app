@@ -1,0 +1,922 @@
+{
+  "integrations": {
+    "google_analytics.reports": {
+      "version": "v1beta"
+    }
+  },
+  "mode": "sandbox",
+  "tools": {
+    "v1beta.audienceexport.get": {
+      "desc": "Lists all audience exports for a property.",
+      "inputs": [
+        {
+          "parent": {
+            "LOCATION": "path",
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "pageSize": {
+            "LOCATION": "query",
+            "REQUIRED": false,
+            "TYPE": "INT"
+          }
+        },
+        {
+          "pageToken": {
+            "LOCATION": "query",
+            "REQUIRED": false,
+            "TYPE": "STRING"
+          }
+        }
+      ],
+      "integration": "google_analytics.reports@v1beta",
+      "output": {
+        "schema": {
+          "properties": {
+            "audienceExports": {
+              "required": false,
+              "type": "[]STRUCT(AudienceExport)"
+            },
+            "nextPageToken": {
+              "required": false,
+              "type": "string"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "List audience exports",
+      "type": "method"
+    },
+    "v1beta.metadata.get": {
+      "desc": "Returns metadata for dimensions and metrics available in reporting methods.\nUse `properties/0` to retrieve universal metadata applicable to all properties.\n",
+      "inputs": [
+        {
+          "name": {
+            "LOCATION": "path",
+            "TYPE": "STRING"
+          }
+        }
+      ],
+      "integration": "google_analytics.reports@v1beta",
+      "output": {
+        "schema": {
+          "properties": {
+            "comparisons": {
+              "required": false,
+              "type": "[]STRUCT(ComparisonMetadata)"
+            },
+            "dimensions": {
+              "required": false,
+              "type": "[]STRUCT(DimensionMetadata)"
+            },
+            "metrics": {
+              "required": false,
+              "type": "[]STRUCT(MetricMetadata)"
+            },
+            "name": {
+              "required": false,
+              "type": "string"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Get metadata",
+      "type": "method"
+    },
+    "v1beta.{property}:runpivotreport.create": {
+      "desc": "Returns a customized pivot table of your Google Analytics event data.\nThe product of all `pivot.limit` values must not exceed 100,000.\n",
+      "inputs": [
+        {
+          "property": {
+            "LOCATION": "path",
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "body": {
+            "LOCATION": "body",
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "cohortSpec": {
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "cohortReportSettings": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "cohorts": {
+                        "required": false,
+                        "type": "[]ANY"
+                      },
+                      "cohortsRange": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                },
+                "comparisons": {
+                  "required": false,
+                  "type": "[]STRUCT(Comparison)"
+                },
+                "currencyCode": {
+                  "required": false,
+                  "type": "string"
+                },
+                "dateRanges": {
+                  "required": false,
+                  "type": "[]STRUCT(DateRange)"
+                },
+                "dimensionFilter": {
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "andGroup": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "filter": {
+                        "required": false,
+                        "schema": {
+                          "properties": {
+                            "betweenFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "fieldName": {
+                              "required": true,
+                              "type": "string"
+                            },
+                            "inListFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "numericFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "stringFilter": {
+                              "required": false,
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "fieldName"
+                          ]
+                        },
+                        "type": "object"
+                      },
+                      "notExpression": {
+                        "required": false,
+                        "type": "any"
+                      },
+                      "orGroup": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                },
+                "dimensions": {
+                  "required": false,
+                  "type": "[]STRUCT(Dimension)"
+                },
+                "keepEmptyRows": {
+                  "required": false,
+                  "type": "boolean"
+                },
+                "metricFilter": {
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "andGroup": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "filter": {
+                        "required": false,
+                        "schema": {
+                          "properties": {
+                            "betweenFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "fieldName": {
+                              "required": true,
+                              "type": "string"
+                            },
+                            "inListFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "numericFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "stringFilter": {
+                              "required": false,
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "fieldName"
+                          ]
+                        },
+                        "type": "object"
+                      },
+                      "notExpression": {
+                        "required": false,
+                        "type": "any"
+                      },
+                      "orGroup": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                },
+                "metrics": {
+                  "required": false,
+                  "type": "[]STRUCT(Metric)"
+                },
+                "pivots": {
+                  "required": false,
+                  "type": "[]STRUCT(Pivot)"
+                },
+                "returnPropertyQuota": {
+                  "required": false,
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "integration": "google_analytics.reports@v1beta",
+      "output": {
+        "schema": {
+          "properties": {
+            "aggregates": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            },
+            "dimensionHeaders": {
+              "required": false,
+              "type": "[]STRUCT(DimensionHeader)"
+            },
+            "kind": {
+              "required": false,
+              "type": "string"
+            },
+            "metadata": {
+              "required": false,
+              "schema": {
+                "properties": {
+                  "currencyCode": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "dataLossFromOtherRow": {
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  "emptyReason": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "schemaRestrictionResponse": {
+                    "required": false,
+                    "type": "object"
+                  },
+                  "subjectToThresholding": {
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  "timeZone": {
+                    "required": false,
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "object"
+            },
+            "metricHeaders": {
+              "required": false,
+              "type": "[]STRUCT(MetricHeader)"
+            },
+            "pivotHeaders": {
+              "required": false,
+              "type": "[]STRUCT(PivotHeader)"
+            },
+            "propertyQuota": {
+              "required": false,
+              "schema": {
+                "properties": {
+                  "concurrentRequests": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "potentiallyThresholdedRequestsPerHour": {
+                    "required": false,
+                    "schema": {
+                      "properties": {
+                        "consumed": {
+                          "required": false,
+                          "type": "INT"
+                        },
+                        "remaining": {
+                          "required": false,
+                          "type": "INT"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "serverErrorsPerProjectPerHour": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerDay": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerHour": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerProjectPerDay": {
+                    "required": false,
+                    "type": "any"
+                  }
+                }
+              },
+              "type": "object"
+            },
+            "rowCount": {
+              "required": false,
+              "type": "INT"
+            },
+            "rows": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Run a pivot report",
+      "type": "method"
+    },
+    "v1beta.{property}:runrealtimereport.create": {
+      "desc": "Returns real-time event data for the property. Events appear in the report\nwithin 30 seconds to a few minutes. Supports a 30–60 minute lookback window\nvia `minuteRanges`.\n",
+      "inputs": [
+        {
+          "property": {
+            "LOCATION": "path",
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "body": {
+            "LOCATION": "body",
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "dimensionFilter": {
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "andGroup": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "filter": {
+                        "required": false,
+                        "schema": {
+                          "properties": {
+                            "betweenFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "fieldName": {
+                              "required": true,
+                              "type": "string"
+                            },
+                            "inListFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "numericFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "stringFilter": {
+                              "required": false,
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "fieldName"
+                          ]
+                        },
+                        "type": "object"
+                      },
+                      "notExpression": {
+                        "required": false,
+                        "type": "any"
+                      },
+                      "orGroup": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                },
+                "dimensions": {
+                  "required": false,
+                  "type": "[]STRUCT(Dimension)"
+                },
+                "limit": {
+                  "required": false,
+                  "type": "INT"
+                },
+                "metricAggregations": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "metricFilter": {
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "andGroup": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "filter": {
+                        "required": false,
+                        "schema": {
+                          "properties": {
+                            "betweenFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "fieldName": {
+                              "required": true,
+                              "type": "string"
+                            },
+                            "inListFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "numericFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "stringFilter": {
+                              "required": false,
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "fieldName"
+                          ]
+                        },
+                        "type": "object"
+                      },
+                      "notExpression": {
+                        "required": false,
+                        "type": "any"
+                      },
+                      "orGroup": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                },
+                "metrics": {
+                  "required": false,
+                  "type": "[]STRUCT(Metric)"
+                },
+                "minuteRanges": {
+                  "required": false,
+                  "type": "[]STRUCT(MinuteRange)"
+                },
+                "orderBys": {
+                  "required": false,
+                  "type": "[]STRUCT(OrderBy)"
+                },
+                "returnPropertyQuota": {
+                  "required": false,
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "integration": "google_analytics.reports@v1beta",
+      "output": {
+        "schema": {
+          "properties": {
+            "dimensionHeaders": {
+              "required": false,
+              "type": "[]STRUCT(DimensionHeader)"
+            },
+            "kind": {
+              "required": false,
+              "type": "string"
+            },
+            "maximums": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            },
+            "metricHeaders": {
+              "required": false,
+              "type": "[]STRUCT(MetricHeader)"
+            },
+            "minimums": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            },
+            "propertyQuota": {
+              "required": false,
+              "schema": {
+                "properties": {
+                  "concurrentRequests": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "potentiallyThresholdedRequestsPerHour": {
+                    "required": false,
+                    "schema": {
+                      "properties": {
+                        "consumed": {
+                          "required": false,
+                          "type": "INT"
+                        },
+                        "remaining": {
+                          "required": false,
+                          "type": "INT"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "serverErrorsPerProjectPerHour": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerDay": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerHour": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerProjectPerDay": {
+                    "required": false,
+                    "type": "any"
+                  }
+                }
+              },
+              "type": "object"
+            },
+            "rowCount": {
+              "required": false,
+              "type": "INT"
+            },
+            "rows": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            },
+            "totals": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Run a real-time report",
+      "type": "method"
+    },
+    "v1beta.{property}:runreport.create": {
+      "desc": "Returns a customized report of your Google Analytics event data. Reports\ncontain statistics derived from data collected by the GA4 tracking code.\nMaximum 9 dimensions per request.\n",
+      "inputs": [
+        {
+          "property": {
+            "LOCATION": "path",
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "body": {
+            "LOCATION": "body",
+            "TYPE": "OBJECT",
+            "schema": {
+              "properties": {
+                "cohortSpec": {
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "cohortReportSettings": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "cohorts": {
+                        "required": false,
+                        "type": "[]ANY"
+                      },
+                      "cohortsRange": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                },
+                "comparisons": {
+                  "required": false,
+                  "type": "[]STRUCT(Comparison)"
+                },
+                "currencyCode": {
+                  "required": false,
+                  "type": "string"
+                },
+                "dateRanges": {
+                  "required": false,
+                  "type": "[]STRUCT(DateRange)"
+                },
+                "dimensionFilter": {
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "andGroup": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "filter": {
+                        "required": false,
+                        "schema": {
+                          "properties": {
+                            "betweenFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "fieldName": {
+                              "required": true,
+                              "type": "string"
+                            },
+                            "inListFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "numericFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "stringFilter": {
+                              "required": false,
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "fieldName"
+                          ]
+                        },
+                        "type": "object"
+                      },
+                      "notExpression": {
+                        "required": false,
+                        "type": "any"
+                      },
+                      "orGroup": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                },
+                "dimensions": {
+                  "required": false,
+                  "type": "[]STRUCT(Dimension)"
+                },
+                "keepEmptyRows": {
+                  "required": false,
+                  "type": "boolean"
+                },
+                "limit": {
+                  "required": false,
+                  "type": "INT"
+                },
+                "metricAggregations": {
+                  "required": false,
+                  "type": "[]STRING"
+                },
+                "metricFilter": {
+                  "required": false,
+                  "schema": {
+                    "properties": {
+                      "andGroup": {
+                        "required": false,
+                        "type": "object"
+                      },
+                      "filter": {
+                        "required": false,
+                        "schema": {
+                          "properties": {
+                            "betweenFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "fieldName": {
+                              "required": true,
+                              "type": "string"
+                            },
+                            "inListFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "numericFilter": {
+                              "required": false,
+                              "type": "object"
+                            },
+                            "stringFilter": {
+                              "required": false,
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "fieldName"
+                          ]
+                        },
+                        "type": "object"
+                      },
+                      "notExpression": {
+                        "required": false,
+                        "type": "any"
+                      },
+                      "orGroup": {
+                        "required": false,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "type": "object"
+                },
+                "metrics": {
+                  "required": false,
+                  "type": "[]STRUCT(Metric)"
+                },
+                "offset": {
+                  "required": false,
+                  "type": "INT"
+                },
+                "orderBys": {
+                  "required": false,
+                  "type": "[]STRUCT(OrderBy)"
+                },
+                "returnPropertyQuota": {
+                  "required": false,
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "integration": "google_analytics.reports@v1beta",
+      "output": {
+        "schema": {
+          "properties": {
+            "dimensionHeaders": {
+              "required": false,
+              "type": "[]STRUCT(DimensionHeader)"
+            },
+            "kind": {
+              "required": false,
+              "type": "string"
+            },
+            "maximums": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            },
+            "metadata": {
+              "required": false,
+              "schema": {
+                "properties": {
+                  "currencyCode": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "dataLossFromOtherRow": {
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  "emptyReason": {
+                    "required": false,
+                    "type": "string"
+                  },
+                  "schemaRestrictionResponse": {
+                    "required": false,
+                    "type": "object"
+                  },
+                  "subjectToThresholding": {
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  "timeZone": {
+                    "required": false,
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "object"
+            },
+            "metricHeaders": {
+              "required": false,
+              "type": "[]STRUCT(MetricHeader)"
+            },
+            "minimums": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            },
+            "propertyQuota": {
+              "required": false,
+              "schema": {
+                "properties": {
+                  "concurrentRequests": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "potentiallyThresholdedRequestsPerHour": {
+                    "required": false,
+                    "schema": {
+                      "properties": {
+                        "consumed": {
+                          "required": false,
+                          "type": "INT"
+                        },
+                        "remaining": {
+                          "required": false,
+                          "type": "INT"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "serverErrorsPerProjectPerHour": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerDay": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerHour": {
+                    "required": false,
+                    "type": "any"
+                  },
+                  "tokensPerProjectPerDay": {
+                    "required": false,
+                    "type": "any"
+                  }
+                }
+              },
+              "type": "object"
+            },
+            "rowCount": {
+              "required": false,
+              "type": "INT"
+            },
+            "rows": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            },
+            "totals": {
+              "required": false,
+              "type": "[]STRUCT(Row)"
+            }
+          }
+        },
+        "status": 200
+      },
+      "summary": "Run a report",
+      "type": "method"
+    }
+  },
+  "version": "1.0.2"
+}

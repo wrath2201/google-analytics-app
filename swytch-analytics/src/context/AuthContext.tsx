@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut, User as FirebaseUser } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
-
+import { GoogleAuthProvider } from "firebase/auth";
 type User = {
     uid: string;
     email: string | null;
@@ -44,20 +44,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const signInWithGoogle = async (): Promise<void> => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
+
             const idToken = await result.user.getIdToken();
+
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const accessToken = credential?.accessToken;
 
             const res = await fetch("http://localhost:4000/api/auth", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
-                body: JSON.stringify({ idToken }),
+                body: JSON.stringify({
+                    idToken,
+                    accessToken: credential?.accessToken || null
+                })
             });
-
-            const data = await res.json();
 
             if (!res.ok) {
                 throw new Error("Backend auth failed");
             }
+
         } catch (err) {
             throw err;
         }

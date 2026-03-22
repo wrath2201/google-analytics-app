@@ -11,12 +11,21 @@ export default function Navbar() {
     const router = useRouter();
 
     const handleLogout = async () => {
-        await fetch("http://localhost:4000/api/auth", {
-            method: "DELETE",
-            credentials: "include",
-        });
-        await signOut();
-        router.push("/login");
+        try {
+            await fetch("http://localhost:4000/api/auth", {
+                method: "DELETE",
+                credentials: "include",
+            });
+        } catch (e) {
+            console.error("Failed to call backend logout", e);
+        } finally {
+            try {
+                await signOut();
+            } catch (authErr) {
+                console.error("Firebase signout failed", authErr);
+            }
+            router.push("/login");
+        }
     };
 
     return (
@@ -51,6 +60,15 @@ export default function Navbar() {
                             }`}
                     >
                         Settings
+                    </Link>
+                    <Link
+                        href="/billing"
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${pathname === "/billing"
+                                ? "bg-[#EDE8E0] text-[#1A1814]"
+                                : "text-[#8C8578] hover:bg-[#EDE8E0] hover:text-[#1A1814]"
+                            }`}
+                    >
+                        Billing
                     </Link>
                 </div>
 

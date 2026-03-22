@@ -12,6 +12,7 @@ export const ROUTES = {
     LOGIN: "/login",
     DASHBOARD: "/dashboard",
     SETTINGS: "/settings",
+    BILLING: "/billing",
 } as const;
 
 /** API endpoints */

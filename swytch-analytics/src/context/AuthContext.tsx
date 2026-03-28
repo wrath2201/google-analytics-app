@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         console.log("Captured Google Refresh Token:", googleRefreshToken ? "YES" : "NO");
 
-        const res = await fetch("http://localhost:4000/api/auth", {
+        const res = await fetch(`${BACKEND}/api/auth`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

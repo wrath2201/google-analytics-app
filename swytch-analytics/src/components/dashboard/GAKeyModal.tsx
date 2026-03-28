@@ -304,12 +304,26 @@ export default function GAKeyModal({
                                 </div>
                             )}
 
-                            <Select
-                                label="Google Account"
-                                value={createForm.accountId}
-                                onChange={(e) => setCreateForm(f => ({ ...f, accountId: e.target.value }))}
-                                options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
-                            />
+                            {accounts.length === 0 ? (
+                                <div className="p-4 bg-orange-50 border border-orange-100 rounded-lg text-center">
+                                    <p className="text-sm text-orange-700 font-medium mb-3">
+                                        No Google Analytics accounts found.
+                                    </p>
+                                    <p className="text-xs text-orange-600 mb-4">
+                                        You need to authorize access to your Google Analytics account first.
+                                    </p>
+                                    <Button onClick={handleOAuthConnect} disabled={loading}>
+                                        {loading ? "Connecting..." : "Authorize Google Analytics"}
+                                    </Button>
+                                </div>
+                            ) : (
+                                <Select
+                                    label="Google Account"
+                                    value={createForm.accountId}
+                                    onChange={(e) => setCreateForm(f => ({ ...f, accountId: e.target.value }))}
+                                    options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
+                                />
+                            )}
 
                             <Input
                                 label="Property Name *"

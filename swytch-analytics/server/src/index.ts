@@ -10,6 +10,9 @@ import dashboardRoutes from "./routes/dashboard";
 import gaRoutes from "./routes/ga";
 import appsRoutes from "./routes/apps";
 import oauthRoutes from "./routes/oauth";
+import subscriptionRoutes from "./routes/subscriptions";
+import emailReportsRoutes from "./routes/email_reports";
+import stripeRoutes from "./routes/stripe";
 
 import { startEmailReportsCron } from "./services/email_reports";
 import { startAnalyticsCron } from "./cron/analyticsSync";
@@ -20,36 +23,44 @@ const server = Fastify({ logger: true });
 const start = async () => {
 
     await server.register(fastifyCors, {
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-});
-    
+        origin: ["http://localhost:3000", "http://localhost:3001"],
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    });
 
     await server.register(fastifyCookie);
 
     await server.register(fastifyJwt, {
-    secret: process.env.JWT_SECRET || "dev_secret_change_in_production",
-    cookie: {
-        cookieName: "token",
-        signed: false
-    }
-});
+        secret: process.env.JWT_SECRET || "dev_secret_change_in_production",
+        cookie: {
+            cookieName: "token",
+            signed: false
+        }
+    });
 
     await server.register(mysqlPlugin);
 
     // Auth routes
     await server.register(authRoutes, { prefix: "/api" });
-    
-    //ga routes
+
+    // GA routes
     await server.register(gaRoutes, { prefix: "/api" });
-    
-    //apps routes
+
+    // Apps routes
     await server.register(appsRoutes, { prefix: "/api" });
     await server.register(oauthRoutes, { prefix: "/api" });
 
+    // Subscription routes
+    await server.register(subscriptionRoutes, { prefix: "/api" });
+
     // Dashboard routes
     await server.register(dashboardRoutes, { prefix: "/api" });
+
+    // Email reports routes
+    await server.register(emailReportsRoutes, { prefix: "/api" });
+
+    // Stripe routes
+    await server.register(stripeRoutes, { prefix: "/api" });
 
     // Health check
     server.get("/health", async () => {

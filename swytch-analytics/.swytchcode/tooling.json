@@ -8,6 +8,9 @@
     },
     "resend.resend": {
       "version": "v1.5.0"
+    },
+    "stripe.stripe_sdk": {
+      "version": "2026-02-25.clover"
     }
   },
   "mode": "production",
@@ -328,6 +331,85 @@
       "summary": "Sign in with an Identity Provider (OAuth)",
       "type": "method"
     },
+    "checkout.session.create": {
+      "desc": "Creates a Stripe hosted checkout session.",
+      "inputs": [
+        {
+          "line_items": {
+            "LOCATION": "body",
+            "REQUIRED": true,
+            "TYPE": "[]ANY"
+          }
+        },
+        {
+          "mode": {
+            "LOCATION": "body",
+            "REQUIRED": true,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "customer": {
+            "LOCATION": "body",
+            "REQUIRED": false,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "success_url": {
+            "LOCATION": "body",
+            "REQUIRED": true,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "cancel_url": {
+            "LOCATION": "body",
+            "REQUIRED": false,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "metadata": {
+            "LOCATION": "body",
+            "REQUIRED": false,
+            "TYPE": "ANY"
+          }
+        }
+      ],
+      "integration": "stripe.stripe_sdk@2026-02-25.clover",
+      "summary": "Create a checkout session",
+      "type": "method"
+    },
+    "customers.customer.create": {
+      "desc": "Creates a new customer object.",
+      "inputs": [
+        {
+          "email": {
+            "LOCATION": "body",
+            "REQUIRED": false,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "name": {
+            "LOCATION": "body",
+            "REQUIRED": false,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "metadata": {
+            "LOCATION": "body",
+            "REQUIRED": false,
+            "TYPE": "ANY"
+          }
+        }
+      ],
+      "integration": "stripe.stripe_sdk@2026-02-25.clover",
+      "summary": "Create a customer",
+      "type": "method"
+    },
     "emails.email.create": {
       "desc": "",
       "inputs": [
@@ -462,6 +544,73 @@
         "status": 200
       },
       "summary": "Send an email",
+      "type": "method"
+    },
+    "invoices.invoice.get": {
+      "desc": "Retrieves the invoice with the given ID.",
+      "inputs": [
+        {
+          "invoice": {
+            "LOCATION": "path",
+            "REQUIRED": true,
+            "TYPE": "STRING"
+          }
+        }
+      ],
+      "integration": "stripe.stripe_sdk@2026-02-25.clover",
+      "summary": "Retrieve an invoice",
+      "type": "method"
+    },
+    "invoices.invoice.list": {
+      "desc": "Returns a list of invoices for a customer.",
+      "inputs": [
+        {
+          "customer": {
+            "LOCATION": "query",
+            "REQUIRED": false,
+            "TYPE": "STRING"
+          }
+        },
+        {
+          "limit": {
+            "LOCATION": "query",
+            "REQUIRED": false,
+            "TYPE": "INT"
+          }
+        }
+      ],
+      "integration": "stripe.stripe_sdk@2026-02-25.clover",
+      "summary": "List invoices",
+      "type": "method"
+    },
+    "subscriptions.subscription.delete": {
+      "desc": "Cancels a customer's subscription immediately.",
+      "inputs": [
+        {
+          "subscription_exposed_id": {
+            "LOCATION": "path",
+            "REQUIRED": true,
+            "TYPE": "STRING"
+          }
+        }
+      ],
+      "integration": "stripe.stripe_sdk@2026-02-25.clover",
+      "summary": "Cancel a subscription",
+      "type": "method"
+    },
+    "subscriptions.subscription.get": {
+      "desc": "Retrieves the subscription with the given ID.",
+      "inputs": [
+        {
+          "subscription_exposed_id": {
+            "LOCATION": "path",
+            "REQUIRED": true,
+            "TYPE": "STRING"
+          }
+        }
+      ],
+      "integration": "stripe.stripe_sdk@2026-02-25.clover",
+      "summary": "Retrieve a subscription",
       "type": "method"
     },
     "v1beta.{property}:runrealtimereport.create": {

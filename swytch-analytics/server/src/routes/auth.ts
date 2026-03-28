@@ -118,7 +118,7 @@ export default async function authRoutes(server: FastifyInstance) {
                     photo_url            = VALUES(photo_url),
                     google_refresh_token = COALESCE(VALUES(google_refresh_token), google_refresh_token)
             `;
-            
+
             await pool.execute(query, [
                 firebaseUser.localId,
                 firebaseUser.email,

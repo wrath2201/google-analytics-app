@@ -1,74 +1,73 @@
 import { FastifyInstance } from "fastify";
-import { getPool } from "../plugins/mysql";
+import { createApp, getUserApps, deleteApp } from "../services/apps";
+import { authenticate } from "../plugins/authenticate";
 
 export default async function appsRoutes(server: FastifyInstance) {
 
-    server.post("/apps", async (request, reply) => {
-
+    // ── GET /api/apps ────────────────────────────────────────
+    server.get("/apps", {
+        onRequest: [authenticate]
+    }, async (request, reply) => {
         try {
+            const user = request.user as any;
+            const apps = await getUserApps(user.db_id);
+            return { success: true, apps };
+        } catch (err) {
+            server.log.error(err);
+            return reply.status(500).send({ error: "Failed to fetch apps" });
+        }
+    });
 
-            const user = await request.jwtVerify() as any;
-
-            const {
-                propertyId,
-                websiteUrl,
-                businessType,
-                primaryGoal
-            } = request.body as {
-                propertyId: string;
-                websiteUrl: string;
-                businessType: string;
-                primaryGoal: string;
+    // ── POST /api/apps ───────────────────────────────────────
+    server.post("/apps", {
+        onRequest: [authenticate]
+    }, async (request, reply) => {
+        try {
+            const user = request.user as any;
+            const { name, url } = request.body as {
+                name: string;
+                url: string;
             };
 
-            if (!propertyId || !websiteUrl) {
+            if (!name || !url) {
                 return reply.status(400).send({
-                    error: "propertyId and websiteUrl are required"
+                    error: "name and url are required"
                 });
             }
 
-            const pool = getPool();
+            const result = await createApp(user.db_id, { name, url });
 
-            const [appResult] = await pool.execute(
-                `INSERT INTO apps
-                 (user_id, app_name, website_url, business_type, primary_goal)
-                 VALUES (?, ?, ?, ?, ?)`,
-                [
-                    user.db_id,
-                    websiteUrl,
-                    websiteUrl,
-                    businessType || null,
-                    primaryGoal || null
-                ]
-            ) as any;
+            if (!result.success) {
+                return reply.status(403).send({ error: result.error });
+            }
 
-            const appId = appResult.insertId;
-
-            await pool.execute(
-                `INSERT INTO ga_connections
-                 (app_id, ga_property_id)
-                 VALUES (?, ?)`,
-                [
-                    appId,
-                    propertyId
-                ]
-            );
-
-            return {
-                success: true,
-                appId
-            };
+            return reply.status(201).send({ success: true, app: result.app });
 
         } catch (err) {
-
             server.log.error(err);
-
-            return reply.status(500).send({
-                error: "Failed to create app"
-            });
-
+            return reply.status(500).send({ error: "Failed to create app" });
         }
-
     });
 
+    // ── DELETE /api/apps/:id ─────────────────────────────────
+    server.delete("/apps/:id", {
+        onRequest: [authenticate]
+    }, async (request, reply) => {
+        try {
+            const user = request.user as any;
+            const { id } = request.params as { id: string };
+
+            const result = await deleteApp(user.db_id, Number(id));
+
+            if (!result.success) {
+                return reply.status(404).send({ error: result.error });
+            }
+
+            return { success: true };
+
+        } catch (err) {
+            server.log.error(err);
+            return reply.status(500).send({ error: "Failed to delete app" });
+        }
+    });
 }

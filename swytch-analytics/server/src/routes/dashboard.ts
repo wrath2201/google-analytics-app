@@ -17,7 +17,7 @@ export default async function dashboardRoutes(server: FastifyInstance) {
     const pool = getPool();
 
     const [rows]: any = await pool.execute(
-      `SELECT gc.ga_property_id
+      `SELECT gc.property_id
        FROM ga_connections gc
        JOIN apps a ON gc.app_id = a.id
        WHERE a.id = ? AND a.user_id = ?`,
@@ -28,7 +28,7 @@ export default async function dashboardRoutes(server: FastifyInstance) {
       return reply.status(404).send({ error: "App not found" });
     }
 
-    const propertyId = rows[0].ga_property_id;
+    const propertyId = rows[0].property_id;
 
     // Ensure correct GA property format
     const propertyPath = propertyId.startsWith("properties/")

@@ -1,3 +1,9 @@
+// ============================================================
+// GA ROUTES
+// All report routes use SwytchCode runtime (no direct GA calls)
+// Properties + streams keep direct calls — Admin API not in tooling.json
+// ============================================================
+
 import { FastifyInstance } from "fastify";
 import { getPool } from "../plugins/mysql";
 
@@ -10,7 +16,7 @@ async function getCachedAnalytics(propertyId: string) {
          AND record_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
          AND record_date < CURDATE()
          ORDER BY record_date ASC`,
-         [cleanId]
+        [cleanId]
     ) as any[];
     return rows;
 }
@@ -27,7 +33,7 @@ function aggregateJSONBreakdown(rows: any[], keyName: string, sortByValue: boole
             }
         }
     }
-    const sortedLabels = Object.keys(aggregated).sort((a,b) => {
+    const sortedLabels = Object.keys(aggregated).sort((a, b) => {
         if (sortByValue) return aggregated[b] - aggregated[a];
         return a.localeCompare(b);
     });

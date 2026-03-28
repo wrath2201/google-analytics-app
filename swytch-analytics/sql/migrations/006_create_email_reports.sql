@@ -1,20 +1,21 @@
 -- ============================================================
 -- MIGRATION 006: Create email_reports table
--- Depends on: apps (003)
+-- Depends on: users (001)
+-- One report config per user (not per app)
 -- ============================================================
- 
+
 CREATE TABLE IF NOT EXISTS email_reports (
-  id               CHAR(36)                   NOT NULL DEFAULT (UUID()),
-  app_id           CHAR(36)                   NOT NULL,
-  enabled          BOOLEAN                    NOT NULL DEFAULT TRUE,
-  frequency        ENUM('weekly', 'monthly')  NOT NULL DEFAULT 'weekly',
-  last_sent_at     DATETIME                   NULL,
-  recipient_email  VARCHAR(255)               NOT NULL,
-  created_at       DATETIME                   NOT NULL DEFAULT CURRENT_TIMESTAMP,
- 
+  id           INT                        NOT NULL AUTO_INCREMENT,
+  user_id      INT                        NOT NULL,
+  frequency    ENUM('weekly', 'monthly')  NOT NULL DEFAULT 'weekly',
+  enabled      TINYINT(1)                 NOT NULL DEFAULT 1,
+  last_sent_at TIMESTAMP                  NULL,
+  created_at   TIMESTAMP                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP                  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (id),
-  UNIQUE KEY uq_email_reports_app (app_id),
-  CONSTRAINT fk_email_reports_app_id
-    FOREIGN KEY (app_id) REFERENCES apps(id)
+  UNIQUE KEY uq_email_reports_user (user_id),
+  CONSTRAINT fk_email_reports_user_id
+    FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

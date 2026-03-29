@@ -1,20 +1,9 @@
--- ============================================================
--- TABLE: apps
--- Each website/app a user connects to analytics is an "app".
--- One user can have multiple apps (limited by subscription plan).
--- ============================================================
- 
 CREATE TABLE IF NOT EXISTS apps (
-  id              CHAR(36)      NOT NULL DEFAULT (UUID()),
-  user_id         CHAR(36)      NOT NULL,
-  app_name        VARCHAR(255)  NOT NULL,
-  website_url     VARCHAR(500)  NOT NULL,
-  business_type   VARCHAR(100)  NULL,
-  primary_goal    VARCHAR(255)  NULL,
-  created_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
- 
-  PRIMARY KEY (id),
-  CONSTRAINT fk_apps_user_id
-    FOREIGN KEY (user_id) REFERENCES users(id)
-    ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

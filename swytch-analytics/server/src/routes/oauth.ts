@@ -27,7 +27,6 @@ export default async function oauthRoutes(server: FastifyInstance) {
 
             const url = oauth2Client.generateAuthUrl({
                 access_type: "offline", 
-                prompt: "consent", // Essential for generating a Refresh Token
                 scope: scopes,
                 // We can pass the user ID in the state so we know who authorized this request, or rely on cookie sessions
             });

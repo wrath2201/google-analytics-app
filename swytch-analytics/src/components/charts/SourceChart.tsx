@@ -18,55 +18,65 @@ export default function SourceChart({ data }: ChartProps) {
     const isEmpty = formattedData.length === 0;
 
     const option = {
+        color: ['#3864FF', '#00C2FF', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444'],
         title: {
             text: isEmpty ? 'No Data' : 'Traffic Sources',
-            textStyle: {
-                color: '#8C8578',
-                fontSize: 14,
-                fontWeight: 'normal'
-            },
-            left: 'center',
-            top: 10
+            textStyle: { color: '#1A1814', fontSize: 16, fontWeight: 600, fontFamily: 'system-ui, -apple-system, sans-serif' },
+            left: 0, top: 0
         },
         tooltip: {
-            trigger: 'item'
+            trigger: 'item',
+            backgroundColor: '#1A1814',
+            textStyle: { color: '#F9F8F6', fontSize: 13, fontFamily: 'system-ui' },
+            borderWidth: 0,
+            borderRadius: 8,
+            padding: [10, 14]
         },
         legend: {
-            bottom: 10,
+            bottom: 0,
             left: 'center',
-            textStyle: { color: '#8C8578' }
+            icon: 'circle',
+            itemWidth: 8,
+            textStyle: { color: '#8C8578', fontSize: 13, padding: [0, 0, 0, -4] },
+            itemGap: 24
         },
         series: [
             {
                 name: 'Sessions',
                 type: 'pie',
-                radius: ['40%', '70%'],
+                radius: ['55%', '85%'],
+                center: ['50%', '45%'],
                 avoidLabelOverlap: false,
                 itemStyle: {
-                    borderRadius: 10,
-                    borderColor: '#fff',
-                    borderWidth: 2
+                    borderRadius: 6,
+                    borderColor: '#ffffff',
+                    borderWidth: 3
                 },
                 label: { show: false, position: 'center' },
                 emphasis: {
                     label: {
                         show: true,
-                        fontSize: 20,
+                        fontSize: 22,
                         fontWeight: 'bold',
                         color: '#1A1814'
+                    },
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.15)'
                     }
                 },
                 labelLine: { show: false },
                 data: isEmpty
-                    ? [{ value: 0, name: 'No Data' }]
+                    ? [{ value: 0, name: 'No Data', itemStyle: { color: '#F0ECE4' } }]
                     : formattedData
             }
         ]
     };
 
     return (
-        <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#E5E1D8]">
-            <ReactECharts option={option} style={{ height: 350, width: '100%' }} />
+        <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-[#E5E1D8]">
+            <ReactECharts option={option} style={{ height: 380, width: '100%' }} />
         </div>
     );
 }

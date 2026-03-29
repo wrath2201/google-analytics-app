@@ -63,8 +63,26 @@ export default async function stripeRoutes(server: FastifyInstance) {
             return { url };
 
         } catch (err: any) {
+            console.error("STRIPE CRASH FULL LOG:", err);
             server.log.error({ err }, "[stripe] checkout failed");
-            return reply.status(500).send({ error: "Failed to create checkout session" });
+            return reply.status(500).send({ error: "Failed to create checkout session", details: err.message });
+        }
+    });
+
+    // ── POST /api/stripe/verify-session ──────────────────────
+    server.post("/stripe/verify-session", {
+        onRequest: [authenticate]
+    }, async (request, reply) => {
+        try {
+            const { sessionId } = request.body as { sessionId: string };
+            if (!sessionId) return reply.status(400).send({ error: "session_id required" });
+
+            const { verifyCheckoutSession } = require("../services/stripe");
+            await verifyCheckoutSession(sessionId);
+            return { success: true };
+        } catch (err: any) {
+            server.log.error({ err }, "[stripe] manual verification failed");
+            return reply.status(500).send({ error: "Verification failed" });
         }
     });
 

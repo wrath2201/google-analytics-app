@@ -304,39 +304,51 @@ export default function GAKeyModal({
                                 </div>
                             )}
 
-                            <Select
-                                label="Google Account"
-                                value={createForm.accountId}
-                                onChange={(e) => setCreateForm(f => ({ ...f, accountId: e.target.value }))}
-                                options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
-                            />
+                            {accounts.length === 0 ? (
+                                <div className="p-4 bg-amber-50 rounded-lg border border-amber-200 text-sm text-amber-800 text-center space-y-2 mb-4">
+                                    <p className="font-semibold text-base">No Google Analytics Account Found</p>
+                                    <p>Your Google profile doesn't have a Root Analytics Account yet! Google requires you to accept their Terms of Service directly on their website before third-party apps can generate properties for you.</p>
+                                    <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="inline-block mt-2 px-4 py-2 bg-white border border-amber-300 rounded-md font-medium text-amber-900 transition-colors hover:bg-amber-100">
+                                        Open analytics.google.com
+                                    </a>
+                                </div>
+                            ) : (
+                                <>
+                                    <Select
+                                        label="Google Account"
+                                        value={createForm.accountId}
+                                        onChange={(e) => setCreateForm(f => ({ ...f, accountId: e.target.value }))}
+                                        options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
+                                    />
 
-                            <Input
-                                label="Property Name *"
-                                placeholder="e.g. My Website"
-                                value={createForm.propertyName}
-                                onChange={(e) => setCreateForm(f => ({ ...f, propertyName: e.target.value }))}
-                                required
-                            />
+                                    <Input
+                                        label="Property Name *"
+                                        placeholder="e.g. My Website"
+                                        value={createForm.propertyName}
+                                        onChange={(e) => setCreateForm(f => ({ ...f, propertyName: e.target.value }))}
+                                        required
+                                    />
 
-                            <Input
-                                label="Website URL"
-                                placeholder="https://example.com"
-                                value={createForm.websiteUrl}
-                                onChange={(e) => setCreateForm(f => ({ ...f, websiteUrl: e.target.value }))}
-                                type="url"
-                            />
+                                    <Input
+                                        label="Website URL"
+                                        placeholder="https://example.com"
+                                        value={createForm.websiteUrl}
+                                        onChange={(e) => setCreateForm(f => ({ ...f, websiteUrl: e.target.value }))}
+                                        type="url"
+                                    />
 
-                            <Select
-                                label="Analytics Data Time Zone"
-                                value={createForm.timeZone}
-                                onChange={(e) => setCreateForm(f => ({ ...f, timeZone: e.target.value }))}
-                                options={TIME_ZONES}
-                            />
+                                    <Select
+                                        label="Analytics Data Time Zone"
+                                        value={createForm.timeZone}
+                                        onChange={(e) => setCreateForm(f => ({ ...f, timeZone: e.target.value }))}
+                                        options={TIME_ZONES}
+                                    />
+                                </>
+                            )}
 
                             <div className="flex justify-end gap-3 pt-4">
                                 <Button variant="outline" onClick={onCloseAction} disabled={creating}>Cancel</Button>
-                                <Button onClick={handleCreateProperty} disabled={creating}>
+                                <Button onClick={handleCreateProperty} disabled={creating || accounts.length === 0}>
                                     {creating ? "Creating..." : "Create Property"}
                                 </Button>
                             </div>

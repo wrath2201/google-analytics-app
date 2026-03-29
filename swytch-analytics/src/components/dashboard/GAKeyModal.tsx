@@ -50,7 +50,7 @@ export default function GAKeyModal({
     const [createError, setCreateError] = useState("");
 
     const [createdMeasurementId, setCreatedMeasurementId] = useState("");
-    const [createdPropertyInfo, setCreatedPropertyInfo] = useState<{id: string, name: string} | null>(null);
+    const [createdPropertyInfo, setCreatedPropertyInfo] = useState<{ id: string, name: string } | null>(null);
 
     const [createForm, setCreateForm] = useState({
         accountId: "",
@@ -166,9 +166,9 @@ export default function GAKeyModal({
                 setCreatedPropertyInfo({ id: data.property.propertyId, name: data.property.displayName });
             } else {
                 if (onSubmitAction) {
-                    onSubmitAction({ 
-                        propertyId: data.property.propertyId, 
-                        displayName: data.property.displayName 
+                    onSubmitAction({
+                        propertyId: data.property.propertyId,
+                        displayName: data.property.displayName
                     });
                 }
                 onCloseAction();
@@ -198,7 +198,7 @@ export default function GAKeyModal({
 
                     <div className="relative font-mono text-xs">
                         <pre className="bg-[#1A1814] text-[#F9F8F6] p-4 pt-5 pb-5 rounded-lg overflow-x-auto shadow-inner leading-relaxed border border-[#2A2824]">
-{`<!-- Google tag (gtag.js) -->
+                            {`<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=${createdMeasurementId}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -208,7 +208,7 @@ export default function GAKeyModal({
   gtag('config', '${createdMeasurementId}');
 </script>`}
                         </pre>
-                        <button 
+                        <button
                             className="absolute top-2 right-2 p-1.5 px-3 bg-white/10 hover:bg-white/20 rounded text-white transition-colors flex items-center gap-1.5"
                             onClick={() => {
                                 navigator.clipboard.writeText(`<!-- Google tag (gtag.js) -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=${createdMeasurementId}"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  gtag('config', '${createdMeasurementId}');\n</script>`);
@@ -297,7 +297,7 @@ export default function GAKeyModal({
                         </div>
                     ) : (
                         <div className="space-y-5">
-                            
+
                             {createError && (
                                 <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
                                     {createError}
@@ -305,25 +305,21 @@ export default function GAKeyModal({
                             )}
 
                             {accounts.length === 0 ? (
-                                <div className="p-4 bg-orange-50 border border-orange-100 rounded-lg text-center">
-                                    <p className="text-sm text-orange-700 font-medium mb-3">
-                                        No Google Analytics accounts found.
-                                    </p>
-                                    <p className="text-xs text-orange-600 mb-4">
-                                        You need to authorize access to your Google Analytics account first.
-                                    </p>
-                                    <Button onClick={handleOAuthConnect} disabled={loading}>
-                                        {loading ? "Connecting..." : "Authorize Google Analytics"}
-                                    </Button>
+                                <div className="p-4 bg-amber-50 rounded-lg border border-amber-200 text-sm text-amber-800 text-center space-y-2 mb-4">
+                                    <p className="font-semibold text-base">No Google Analytics Account Found</p>
+                                    <p>Your Google profile doesn't have a Root Analytics Account yet! Google requires you to accept their Terms of Service directly on their website before third-party apps can generate properties for you.</p>
+                                    <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="inline-block mt-2 px-4 py-2 bg-white border border-amber-300 rounded-md font-medium text-amber-900 transition-colors hover:bg-amber-100">
+                                        Open analytics.google.com
+                                    </a>
                                 </div>
                             ) : (
-                                <Select
-                                    label="Google Account"
-                                    value={createForm.accountId}
-                                    onChange={(e) => setCreateForm(f => ({ ...f, accountId: e.target.value }))}
-                                    options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
-                                />
-                            )}
+                                <>
+                                    <Select
+                                        label="Google Account"
+                                        value={createForm.accountId}
+                                        onChange={(e) => setCreateForm(f => ({ ...f, accountId: e.target.value }))}
+                                        options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
+                                    />
 
                             <Input
                                 label="Property Name *"
@@ -347,18 +343,21 @@ export default function GAKeyModal({
                                 onChange={(e) => setCreateForm(f => ({ ...f, timeZone: e.target.value }))}
                                 options={TIME_ZONES}
                             />
-
-                            <div className="flex justify-end gap-3 pt-4">
-                                <Button variant="outline" onClick={onCloseAction} disabled={creating}>Cancel</Button>
-                                <Button onClick={handleCreateProperty} disabled={creating}>
-                                    {creating ? "Creating..." : "Create Property"}
-                                </Button>
-                            </div>
-                        </div>
+                        </>
                     )}
-                </>
-            )}
 
-        </Modal>
+                    <div className="flex justify-end gap-3 pt-4">
+                        <Button variant="outline" onClick={onCloseAction} disabled={creating}>Cancel</Button>
+                        <Button onClick={handleCreateProperty} disabled={creating || accounts.length === 0}>
+                            {creating ? "Creating..." : "Create Property"}
+                        </Button>
+                    </div>
+                </div>
+                    )}
+        </>
+    )
+}
+
+        </Modal >
     );
 }

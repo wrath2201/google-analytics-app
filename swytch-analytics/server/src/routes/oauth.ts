@@ -29,7 +29,6 @@ export default async function oauthRoutes(server: FastifyInstance) {
 
             const url = oauth2Client.generateAuthUrl({
                 access_type: "offline",
-                prompt: "consent",
                 scope: scopes,
                 state: rawToken,   // carry the session JWT through the OAuth round-trip
             });

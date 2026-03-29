@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import GAKeyModal from "@/components/dashboard/GAKeyModal";
-import BusinessSetupModal, { BusinessSetupData } from "@/components/dashboard/BusinessSetupModal";
 import MetricCard from "@/components/dashboard/MetricCard";
 import TrafficChart from "@/components/charts/TrafficChart";
 import SourceChart from "@/components/charts/SourceChart";
@@ -13,6 +12,7 @@ import LocationChart from "@/components/charts/LocationChart";
 import HourlyChart from "@/components/charts/HourlyChart";
 import EventChart from "@/components/charts/EventChart";
 import InsightsPanel from "@/components/dashboard/InsightsPanel";
+import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import MetricsModal from "@/components/dashboard/MetricsModal";
@@ -20,7 +20,6 @@ import MetricsModal from "@/components/dashboard/MetricsModal";
 const STORAGE_KEY = "ga_properties";
 const SELECTED_KEY = "ga_selected_property";
 const METRICS_KEY = "dashboard_metrics";
-const BUSINESS_SETUP_KEY = "business_setup";
 
 const METRIC_LABELS: Record<string, string> = {
     users: "VisitorsThis Week",
@@ -39,7 +38,6 @@ export default function DashboardPage() {
     const [selectedProperty, setSelectedProperty] = useState<string>("");
 
     // Modals
-    const [setupModalOpen, setSetupModalOpen] = useState(false);
     const [gaModalOpen, setGaModalOpen] = useState(false);
     const [metricsModalOpen, setMetricsModalOpen] = useState(false);
 
@@ -62,14 +60,25 @@ export default function DashboardPage() {
 
     useEffect(() => {
 
-        const storedSetup = localStorage.getItem(BUSINESS_SETUP_KEY);
-        const storedSelected = localStorage.getItem(SELECTED_KEY);
-        const storedMetrics = localStorage.getItem(METRICS_KEY);
-
-        if (!storedSetup) {
-            setSetupModalOpen(true);
+        // ── Auto-verify Stripe Checkout Success without Webhooks ──
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+        if (sessionId) {
+            fetch("http://localhost:4000/api/stripe/verify-session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ sessionId })
+            }).then(() => {
+                // Strip the session ID from URL and reload natively to unlock UI
+                window.history.replaceState({}, document.title, window.location.pathname);
+                window.location.reload();
+            }).catch(console.error);
             return;
         }
+
+        const storedSelected = localStorage.getItem(SELECTED_KEY);
+        const storedMetrics = localStorage.getItem(METRICS_KEY);
 
         const fetchAllProperties = async () => {
             try {
@@ -208,19 +217,8 @@ export default function DashboardPage() {
 
     };
 
-    const handleBusinessSetupSubmit = (data: BusinessSetupData) => {
-        localStorage.setItem(BUSINESS_SETUP_KEY, JSON.stringify(data));
-        setSetupModalOpen(false);
-        setGaModalOpen(true); // Move seamlessly to next step
-    };
-
-    // Auto-select metrics based on Primary Goal
-    const determineMetricsForGoal = (goal: string): string[] => {
-        if (goal === "Online orders") {
-            return ["users", "newUsers", "customerActions", "conversionRate", "sessions", "pageViews"];
-        }
-        return ["users", "newUsers", "customerActions", "conversionRate", "sessions", "bounceRate", "pageViews"];
-    };
+    // Auto-select standard metrics for new properties
+    const defaultMetrics = ["users", "newUsers", "customerActions", "conversionRate", "sessions", "bounceRate", "pageViews"];
 
     const handleSaveMetrics = (metrics: string[]) => {
 
@@ -255,27 +253,14 @@ export default function DashboardPage() {
         fetchAnalytics(property.propertyId);
         fetchChartData(property.propertyId);
 
-        // Retrieve business setup to auto configure the dashboard
-        const storedSetupStr = localStorage.getItem(BUSINESS_SETUP_KEY);
-        if (storedSetupStr) {
-            try {
-                const setup = JSON.parse(storedSetupStr);
-                const optimalMetrics = determineMetricsForGoal(setup.primaryGoal);
+        // Auto configure the default structural dashboard metrics
+        const optimalMetrics = defaultMetrics;
+        const storedMetricsStr = localStorage.getItem(METRICS_KEY);
+        const metricsMap = storedMetricsStr ? JSON.parse(storedMetricsStr) : {};
+        metricsMap[property.propertyId] = optimalMetrics;
+        localStorage.setItem(METRICS_KEY, JSON.stringify(metricsMap));
 
-                // Save these auto-selected metrics to storage for this property immediately
-                const storedMetricsStr = localStorage.getItem(METRICS_KEY);
-                const metricsMap = storedMetricsStr ? JSON.parse(storedMetricsStr) : {};
-                metricsMap[property.propertyId] = optimalMetrics;
-                localStorage.setItem(METRICS_KEY, JSON.stringify(metricsMap));
-
-                setSelectedMetrics(optimalMetrics);
-            } catch (e) {
-                console.error("Failed to parse business setup info.");
-                setSelectedMetrics(["users", "newUsers", "customerActions", "conversionRate", "sessions", "pageViews", "bounceRate"]); // basic fallback
-            }
-        } else {
-            setSelectedMetrics(["users", "newUsers", "customerActions", "conversionRate", "sessions", "pageViews", "bounceRate"]); // fallback
-        }
+        setSelectedMetrics(optimalMetrics);
 
     };
 
@@ -344,81 +329,108 @@ export default function DashboardPage() {
                 {selectedProperty && (
 
                     <>
+                        {/* Top Row: Metric Cards */}
                         {selectedMetrics.length > 0 && (
-                            <div className="mb-8">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                                    {selectedMetrics.map((metric) => {
-                                        let val: any = "—";
-                                        if (metric === "customerActions") {
-                                            val = eventsData?.values?.reduce?.((a: number, b: number) => a + b, 0) ?? "—";
-                                        } else if (metric === "conversionRate") {
-                                            val = (metricsData.users && eventsData?.values?.length > 0)
-                                                ? ((eventsData.values.reduce((a: number, b: number) => a + b, 0) / metricsData.users) * 100).toFixed(2) + "%"
-                                                : "0%";
-                                        } else {
-                                            val = metricsData[metric as keyof typeof metricsData] ?? "—";
-                                            if (metric === "bounceRate" && typeof val === "number") {
-                                                val = (val * 100).toFixed(2) + "%";
-                                            } else if (metric === "avgSessionDuration" && typeof val === "number") {
-                                                const mins = Math.floor(val / 60);
-                                                const secs = Math.floor(val % 60);
-                                                val = `${mins}m ${secs}s`;
-                                            }
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                                {selectedMetrics.map((metric) => {
+                                    let val: any = "—";
+                                    // Calculate values exactly as before
+                                    if (metric === "customerActions") {
+                                        val = eventsData?.values?.reduce?.((a: number, b: number) => a + b, 0) ?? "—";
+                                    } else if (metric === "conversionRate") {
+                                        val = (metricsData.users && eventsData?.values?.length > 0)
+                                            ? ((eventsData.values.reduce((a: number, b: number) => a + b, 0) / metricsData.users) * 100).toFixed(2) + "%"
+                                            : "0%";
+                                    } else {
+                                        val = metricsData[metric as keyof typeof metricsData] ?? "—";
+                                        if (metric === "bounceRate" && typeof val === "number") {
+                                            val = (val * 100).toFixed(2) + "%";
+                                        } else if (metric === "avgSessionDuration" && typeof val === "number") {
+                                            const mins = Math.floor(val / 60);
+                                            const secs = Math.floor(val % 60);
+                                            val = `${mins}m ${secs}s`;
                                         }
-                                        return (
-                                            <MetricCard
-                                                key={metric}
-                                                title={METRIC_LABELS[metric] || metric}
-                                                value={loadingAnalytics ? "..." : val}
-                                            />
-                                        );
-                                    })}
-                                </div>
+                                    }
+                                    
+                                    const ICONS: Record<string, React.ReactNode> = {
+                                        users: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
+                                        newUsers: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>,
+                                        sessions: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>,
+                                        views: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2zM5 12V3L17 0v13M5 12c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2z" /></svg>
+                                    };
+
+                                    return (
+                                        <MetricCard
+                                            key={metric}
+                                            title={METRIC_LABELS[metric] || metric}
+                                            value={loadingAnalytics ? "..." : val}
+                                            icon={ICONS[metric] || <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>}
+                                        />
+                                    );
+                                })}
                             </div>
                         )}
 
-                        <div className="mb-8">
-                            <InsightsPanel data={intelligenceData} />
+                        {/* Middle Row: Left = Traffic chart (Revenue equivalent), Right = Source chart (Customer donut equivalent) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                            <div className="lg:col-span-2">
+                                <TrafficChart data={chartData} />
+                            </div>
+                            <div className="lg:col-span-1">
+                                <SourceChart data={sourcesData} />
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-6">
-
-                            <TrafficChart data={chartData} />
-
+                        {/* Third Row: Top Pages (Trending items equivalent) & Insights List (Recent reviews equivalent) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                            <div className="lg:col-span-2">
+                                <PageChart data={pagesData} />
+                            </div>
+                            <div className="lg:col-span-1 border border-[#E5E1D8] bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col p-6">
+                                <h2 className="text-lg font-bold text-[#1A1814] mb-4">Executive Intelligence</h2>
+                                <div className="h-full">
+                                    <InsightsPanel data={intelligenceData} hideCard={true} />
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                            <SourceChart data={sourcesData} />
+                        {/* Lower Rows: Hourly, Location, Device in 3-col grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                            <HourlyChart data={hourlyData} />
+                            <LocationChart data={locationsData} />
                             <DeviceChart data={devicesData} />
                         </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                            <PageChart data={pagesData} />
+                        
+                        <div className="mb-8 border border-[#E5E1D8] bg-white rounded-2xl shadow-sm overflow-hidden">
                             <EventChart data={eventsData} />
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                            <LocationChart data={locationsData} />
-                            <HourlyChart data={hourlyData} />
                         </div>
                     </>
 
                 )}
 
                 {!selectedProperty && (
-                    <p className="text-sm text-[#8C8578]">
-                        Add a Google Analytics property to start viewing metrics.
-                    </p>
+                    <div className="relative mt-8">
+                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] rounded-2xl">
+                            <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center border border-[#E5E0D8] max-w-sm text-center">
+                                <div className="w-12 h-12 bg-blue-50 text-[#1B3A6B] rounded-full flex items-center justify-center mb-4">
+                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-lg font-bold text-[#1A1814] mb-2">No Property Selected</h3>
+                                <p className="text-sm text-[#8C8578] mb-6">Connect a Google Analytics property to instantly auto-generate your interactive dashboard and AI intelligence reports.</p>
+                                <Button onClick={() => setGaModalOpen(true)}>
+                                    + Connect Analytics Property
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="select-none pointer-events-none">
+                            <DashboardSkeleton />
+                        </div>
+                    </div>
                 )}
 
             </main>
-
-            <BusinessSetupModal
-                isOpen={setupModalOpen}
-                onCloseAction={() => setSetupModalOpen(false)}
-                onSubmitAction={handleBusinessSetupSubmit}
-                blurBackground
-            />
 
             <GAKeyModal
                 isOpen={gaModalOpen}

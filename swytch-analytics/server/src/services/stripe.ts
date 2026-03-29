@@ -59,7 +59,7 @@ export async function createProCheckoutSession(
     const session = await createCheckoutSession({
         customerId,
         priceId,
-        successUrl: `${frontendUrl}/dashboard?upgrade=success`,
+        successUrl: `${frontendUrl}/dashboard?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
         cancelUrl:  `${frontendUrl}/billing?upgrade=cancelled`,
         userId,
     }) as any;
@@ -69,6 +69,19 @@ export async function createProCheckoutSession(
     }
 
     return { url: session.url };
+}
+
+// ── Verify session locally (Bypass webhook for localhost) ───
+export async function verifyCheckoutSession(sessionId: string): Promise<void> {
+    const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
+        headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}` }
+    });
+    if (!res.ok) throw new Error("Failed to verify session with Stripe");
+    
+    const session = await res.json() as any;
+    if (session.payment_status === "paid" && session.customer && session.subscription) {
+        await handleProUpgrade(session.customer, session.subscription, "");
+    }
 }
 
 // ── Handle successful payment — upgrade user to Pro ──────────

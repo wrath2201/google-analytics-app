@@ -41,6 +41,21 @@ function aggregateJSONBreakdown(rows: any[], keyName: string, sortByValue: boole
     return { labels: sortedLabels, values: sortedValues };
 }
 
+async function isProAccess(request: any, reply: any) {
+    const user = request.user as { db_id: number };
+    if (!user || typeof user.db_id !== 'number') {
+        reply.status(401).send({ error: "Unauthorized" });
+        return false;
+    }
+    const pool = getPool();
+    const [sub] = await pool.execute(`SELECT plan FROM subscriptions WHERE user_id = ?`, [user.db_id]) as any[];
+    if (!sub.length || sub[0].plan !== 'pro') {
+        reply.status(403).send({ locked: true, error: "Upgrade to Pro to access advanced analytics." });
+        return false;
+    }
+    return true;
+}
+
 export default async function gaRoutes(server: FastifyInstance) {
 
     server.get("/ga/properties", async (request, reply) => {
@@ -255,6 +270,7 @@ export default async function gaRoutes(server: FastifyInstance) {
     server.get("/ga/pages/:propertyId", async (request, reply) => {
         try {
             await request.jwtVerify({ onlyCookie: true });
+            if (!(await isProAccess(request, reply))) return;
             const { propertyId } = request.params as { propertyId: string };
             const rows = await getCachedAnalytics(propertyId);
             return aggregateJSONBreakdown(rows, "page_data");
@@ -267,6 +283,7 @@ export default async function gaRoutes(server: FastifyInstance) {
     server.get("/ga/events/:propertyId", async (request, reply) => {
         try {
             await request.jwtVerify({ onlyCookie: true });
+            if (!(await isProAccess(request, reply))) return;
             const { propertyId } = request.params as { propertyId: string };
             const rows = await getCachedAnalytics(propertyId);
             return aggregateJSONBreakdown(rows, "event_data");
@@ -279,6 +296,7 @@ export default async function gaRoutes(server: FastifyInstance) {
     server.get("/ga/locations/:propertyId", async (request, reply) => {
         try {
             await request.jwtVerify({ onlyCookie: true });
+            if (!(await isProAccess(request, reply))) return;
             const { propertyId } = request.params as { propertyId: string };
             const rows = await getCachedAnalytics(propertyId);
             return aggregateJSONBreakdown(rows, "location_data");
@@ -291,6 +309,7 @@ export default async function gaRoutes(server: FastifyInstance) {
     server.get("/ga/hourly/:propertyId", async (request, reply) => {
         try {
             await request.jwtVerify({ onlyCookie: true });
+            if (!(await isProAccess(request, reply))) return;
             const { propertyId } = request.params as { propertyId: string };
             const rows = await getCachedAnalytics(propertyId);
             // Sort by hour key chronologically (00, 01, ..., 23)
@@ -303,6 +322,7 @@ export default async function gaRoutes(server: FastifyInstance) {
     server.get("/ga/insights/:propertyId", async (request, reply) => {
         try {
             await request.jwtVerify({ onlyCookie: true });
+            if (!(await isProAccess(request, reply))) return;
             const { propertyId } = request.params as { propertyId: string };
             const cleanId = propertyId.replace("properties/", "");
 

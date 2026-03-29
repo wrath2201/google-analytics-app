@@ -1,17 +1,8 @@
 import { FastifyInstance } from "fastify";
 import { getPool } from "../plugins/mysql";
-import { verifyFirebaseToken } from "../swytch/commands";
 
-// ─── Normalize response from SwytchCode or Firebase REST ────
-// SwytchCode may return: { users: [...] } or { data: { users: [...] } }
-function extractUsers(data: any): any[] | null {
-    if (Array.isArray(data?.users)) return data.users;
-    if (Array.isArray(data?.data?.users)) return data.data.users;
-    return null;
-}
-
-// ─── Fallback: call Firebase REST API directly ───────────────
-async function firebaseFallback(idToken: string) {
+// ─── Verify Firebase ID token via REST API ───────────────────
+async function verifyFirebaseIdToken(idToken: string) {
     const res = await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.FIREBASE_API_KEY}`,
         {
@@ -33,74 +24,26 @@ export default async function authRoutes(server: FastifyInstance) {
         }
 
         let firebaseUser: any;
-        let provider = "swytch";
 
-        // ── STEP 1: Try SwytchCode (with one retry) ──────────
+        // ── STEP 1: Verify token via Firebase Identity Toolkit REST ──
         try {
-            let data: any = null;
-            let lastError: any = null;
+            const data = await verifyFirebaseIdToken(idToken);
 
-            for (let attempt = 1; attempt <= 2; attempt++) {
-                try {
-                    data = await verifyFirebaseToken(idToken);
-
-                    if (process.env.DEBUG_AUTH === "true") {
-                        server.log.info({
-                            layer: "auth",
-                            attempt,
-                            raw: data
-                        }, "SwytchCode raw response");
-                    }
-
-                    const users = extractUsers(data);
-
-                    if (!users || users.length === 0) {
-                        return reply.status(401).send({ error: "Invalid token" });
-                    }
-
-                    firebaseUser = users[0];
-                    break;
-
-                } catch (err) {
-                    lastError = err;
-                    server.log.warn({
-                        layer: "auth",
-                        attempt,
-                        err
-                    }, `SwytchCode attempt ${attempt} failed`);
-
-                    // Wait briefly before retry
-                    if (attempt === 1) {
-                        await new Promise(res => setTimeout(res, 300));
-                    }
-                }
+            if (process.env.DEBUG_AUTH === "true") {
+                server.log.info({ layer: "auth", raw: data }, "Firebase REST response");
             }
 
-            // ── STEP 2: Fallback if SwytchCode failed ─────────
-            if (!firebaseUser) {
-                server.log.info({
-                    layer: "auth",
-                    provider: "firebase_fallback",
-                    status: "used"
-                }, "Falling back to Firebase REST API");
+            const users: any[] | undefined = (data as any)?.users;
 
-                provider = "firebase_fallback";
-                const fallbackData = await firebaseFallback(idToken);
-                const users = extractUsers(fallbackData);
-
-                if (!users || users.length === 0) {
-                    return reply.status(401).send({ error: "Invalid token" });
-                }
-
-                firebaseUser = users[0];
+            if (!users || users.length === 0) {
+                server.log.warn({ layer: "auth", data }, "Token verification returned no users");
+                return reply.status(401).send({ error: "Invalid or expired token" });
             }
+
+            firebaseUser = users[0];
 
         } catch (err) {
-            server.log.error({
-                layer: "auth",
-                status: "error",
-                error: err
-            }, "Auth failed completely");
+            server.log.error({ layer: "auth", error: err }, "Firebase token verification failed");
             return reply.status(500).send({ error: "Internal server error" });
         }
 
@@ -156,7 +99,7 @@ export default async function authRoutes(server: FastifyInstance) {
 
             server.log.info({
                 layer: "auth",
-                provider,
+                provider: "firebase_rest",
                 status: "success",
                 email: firebaseUser.email
             }, "Auth successful");

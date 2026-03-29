@@ -329,62 +329,80 @@ export default function DashboardPage() {
                 {selectedProperty && (
 
                     <>
+                        {/* Top Row: Metric Cards */}
                         {selectedMetrics.length > 0 && (
-                            <div className="mb-8">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                                    {selectedMetrics.map((metric) => {
-                                        let val: any = "—";
-                                        if (metric === "customerActions") {
-                                            val = eventsData?.values?.reduce?.((a: number, b: number) => a + b, 0) ?? "—";
-                                        } else if (metric === "conversionRate") {
-                                            val = (metricsData.users && eventsData?.values?.length > 0)
-                                                ? ((eventsData.values.reduce((a: number, b: number) => a + b, 0) / metricsData.users) * 100).toFixed(2) + "%"
-                                                : "0%";
-                                        } else {
-                                            val = metricsData[metric as keyof typeof metricsData] ?? "—";
-                                            if (metric === "bounceRate" && typeof val === "number") {
-                                                val = (val * 100).toFixed(2) + "%";
-                                            } else if (metric === "avgSessionDuration" && typeof val === "number") {
-                                                const mins = Math.floor(val / 60);
-                                                const secs = Math.floor(val % 60);
-                                                val = `${mins}m ${secs}s`;
-                                            }
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                                {selectedMetrics.map((metric) => {
+                                    let val: any = "—";
+                                    // Calculate values exactly as before
+                                    if (metric === "customerActions") {
+                                        val = eventsData?.values?.reduce?.((a: number, b: number) => a + b, 0) ?? "—";
+                                    } else if (metric === "conversionRate") {
+                                        val = (metricsData.users && eventsData?.values?.length > 0)
+                                            ? ((eventsData.values.reduce((a: number, b: number) => a + b, 0) / metricsData.users) * 100).toFixed(2) + "%"
+                                            : "0%";
+                                    } else {
+                                        val = metricsData[metric as keyof typeof metricsData] ?? "—";
+                                        if (metric === "bounceRate" && typeof val === "number") {
+                                            val = (val * 100).toFixed(2) + "%";
+                                        } else if (metric === "avgSessionDuration" && typeof val === "number") {
+                                            const mins = Math.floor(val / 60);
+                                            const secs = Math.floor(val % 60);
+                                            val = `${mins}m ${secs}s`;
                                         }
-                                        return (
-                                            <MetricCard
-                                                key={metric}
-                                                title={METRIC_LABELS[metric] || metric}
-                                                value={loadingAnalytics ? "..." : val}
-                                            />
-                                        );
-                                    })}
-                                </div>
+                                    }
+                                    
+                                    const ICONS: Record<string, React.ReactNode> = {
+                                        users: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
+                                        newUsers: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>,
+                                        sessions: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>,
+                                        views: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2zM5 12V3L17 0v13M5 12c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2z" /></svg>
+                                    };
+
+                                    return (
+                                        <MetricCard
+                                            key={metric}
+                                            title={METRIC_LABELS[metric] || metric}
+                                            value={loadingAnalytics ? "..." : val}
+                                            icon={ICONS[metric] || <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>}
+                                        />
+                                    );
+                                })}
                             </div>
                         )}
 
-                        <div className="mb-8">
-                            <InsightsPanel data={intelligenceData} />
+                        {/* Middle Row: Left = Traffic chart (Revenue equivalent), Right = Source chart (Customer donut equivalent) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                            <div className="lg:col-span-2">
+                                <TrafficChart data={chartData} />
+                            </div>
+                            <div className="lg:col-span-1">
+                                <SourceChart data={sourcesData} />
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-6">
-
-                            <TrafficChart data={chartData} />
-
+                        {/* Third Row: Top Pages (Trending items equivalent) & Insights List (Recent reviews equivalent) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                            <div className="lg:col-span-2">
+                                <PageChart data={pagesData} />
+                            </div>
+                            <div className="lg:col-span-1 border border-[#E5E1D8] bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col p-6">
+                                <h2 className="text-lg font-bold text-[#1A1814] mb-4">Executive Intelligence</h2>
+                                <div className="h-full">
+                                    <InsightsPanel data={intelligenceData} hideCard={true} />
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                            <SourceChart data={sourcesData} />
+                        {/* Lower Rows: Hourly, Location, Device in 3-col grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                            <HourlyChart data={hourlyData} />
+                            <LocationChart data={locationsData} />
                             <DeviceChart data={devicesData} />
                         </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                            <PageChart data={pagesData} />
+                        
+                        <div className="mb-8 border border-[#E5E1D8] bg-white rounded-2xl shadow-sm overflow-hidden">
                             <EventChart data={eventsData} />
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                            <LocationChart data={locationsData} />
-                            <HourlyChart data={hourlyData} />
                         </div>
                     </>
 

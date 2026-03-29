@@ -8,9 +8,10 @@ interface InsightsProps {
         insights: string[];
         alerts: string[];
     };
+    hideCard?: boolean;
 }
 
-export default function InsightsPanel({ data }: InsightsProps) {
+export default function InsightsPanel({ data, hideCard }: InsightsProps) {
     
     if ((data as any)?.locked) {
         return (
@@ -45,13 +46,15 @@ export default function InsightsPanel({ data }: InsightsProps) {
 
             {/* Standard Insights Block */}
             {data.insights && data.insights.length > 0 && (
-                <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-[#E5E1D8]">
-                    <div className="flex items-center gap-3 mb-5">
-                        <div className="p-2 bg-blue-50 rounded-lg">
-                            <Lightbulb className="w-5 h-5 text-[#3864FF]" />
+                <div className={hideCard ? "" : "bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-[#E5E1D8]"}>
+                    {!hideCard && (
+                        <div className="flex items-center gap-3 mb-5">
+                            <div className="p-2 bg-blue-50 rounded-lg">
+                                <Lightbulb className="w-5 h-5 text-[#3864FF]" />
+                            </div>
+                            <h3 className="text-lg font-bold text-[#1A1814] tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>Overnight AI Intelligence</h3>
                         </div>
-                        <h3 className="text-lg font-bold text-[#1A1814] tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>Overnight AI Intelligence</h3>
-                    </div>
+                    )}
                     <ul className="space-y-4 text-[#4A453E]">
                         {data.insights.map((insight, idx) => (
                             <li key={idx} className="flex items-start gap-3">

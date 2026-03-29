@@ -26,13 +26,20 @@ export default function PageChart({ data }: ChartProps) {
 
     const isEmpty = formattedData.length === 0;
 
+    const mockData = [
+        { name: '/pricing', value: 8750 },
+        { name: '/features', value: 6420 },
+        { name: '/about', value: 3100 },
+        { name: '/contact', value: 1250 }
+    ];
+
     // Reverse for top-to-bottom display
     const yAxisData = isEmpty
-        ? ['No Data']
+        ? [...mockData].reverse().map(item => item.name)
         : [...formattedData].reverse().map(item => item.name);
 
     const seriesData = isEmpty
-        ? [0]
+        ? [...mockData].reverse().map(item => item.value)
         : [...formattedData].reverse().map(item => item.value);
 
     // Truncate long paths
@@ -74,13 +81,7 @@ export default function PageChart({ data }: ChartProps) {
                 type: 'bar',
                 data: seriesData,
                 itemStyle: {
-                    color: {
-                        type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
-                        colorStops: [
-                            { offset: 0, color: '#F59E0B' },
-                            { offset: 1, color: '#FCD34D' }
-                        ]
-                    },
+                    color: isEmpty ? '#D1D5DB' : '#1B3A6B',
                     borderRadius: [0, 6, 6, 0]
                 },
                 barWidth: 16,

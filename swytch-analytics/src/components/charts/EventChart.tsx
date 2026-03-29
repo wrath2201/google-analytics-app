@@ -25,6 +25,14 @@ export default function EventChart({ data }: ChartProps) {
 
     const isEmpty = formattedData.length === 0;
 
+    const mockData = [
+        { name: 'scroll', value: 3750 },
+        { name: 'click', value: 2420 },
+        { name: 'add_to_cart', value: 1100 },
+        { name: 'purchase', value: 850 },
+        { name: 'form_submit', value: 450 }
+    ];
+
     // Filter out common automatic events if desired, or just show top 5
     const topData = [...formattedData]
         .sort((a, b) => b.value - a.value)
@@ -35,8 +43,8 @@ export default function EventChart({ data }: ChartProps) {
     // If filtering removed everything, just show whatever was there
     const finalData = topData.length > 0 ? topData : [...formattedData].sort((a, b) => b.value - a.value).slice(0, 5).reverse();
 
-    const yAxisData = isEmpty ? ['No Data'] : finalData.map(item => item.name);
-    const seriesData = isEmpty ? [0] : finalData.map(item => item.value);
+    const yAxisData = isEmpty ? [...mockData].reverse().map(item => item.name) : finalData.map(item => item.name);
+    const seriesData = isEmpty ? [...mockData].reverse().map(item => item.value) : finalData.map(item => item.value);
 
     const truncate = (str: string) =>
         str.length > 20 ? str.substring(0, 17) + "..." : str;
@@ -76,13 +84,7 @@ export default function EventChart({ data }: ChartProps) {
                 type: 'bar',
                 data: seriesData,
                 itemStyle: {
-                    color: {
-                        type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
-                        colorStops: [
-                            { offset: 0, color: '#8B5CF6' },
-                            { offset: 1, color: '#A78BFA' }
-                        ]
-                    },
+                    color: isEmpty ? '#D1D5DB' : '#D4C5B0',
                     borderRadius: [0, 6, 6, 0]
                 },
                 barWidth: 16,

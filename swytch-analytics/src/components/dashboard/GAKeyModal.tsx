@@ -50,7 +50,7 @@ export default function GAKeyModal({
     const [createError, setCreateError] = useState("");
 
     const [createdMeasurementId, setCreatedMeasurementId] = useState("");
-    const [createdPropertyInfo, setCreatedPropertyInfo] = useState<{id: string, name: string} | null>(null);
+    const [createdPropertyInfo, setCreatedPropertyInfo] = useState<{ id: string, name: string } | null>(null);
 
     const [createForm, setCreateForm] = useState({
         accountId: "",
@@ -166,9 +166,9 @@ export default function GAKeyModal({
                 setCreatedPropertyInfo({ id: data.property.propertyId, name: data.property.displayName });
             } else {
                 if (onSubmitAction) {
-                    onSubmitAction({ 
-                        propertyId: data.property.propertyId, 
-                        displayName: data.property.displayName 
+                    onSubmitAction({
+                        propertyId: data.property.propertyId,
+                        displayName: data.property.displayName
                     });
                 }
                 onCloseAction();
@@ -198,7 +198,7 @@ export default function GAKeyModal({
 
                     <div className="relative font-mono text-xs">
                         <pre className="bg-[#1A1814] text-[#F9F8F6] p-4 pt-5 pb-5 rounded-lg overflow-x-auto shadow-inner leading-relaxed border border-[#2A2824]">
-{`<!-- Google tag (gtag.js) -->
+                            {`<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=${createdMeasurementId}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -208,7 +208,7 @@ export default function GAKeyModal({
   gtag('config', '${createdMeasurementId}');
 </script>`}
                         </pre>
-                        <button 
+                        <button
                             className="absolute top-2 right-2 p-1.5 px-3 bg-white/10 hover:bg-white/20 rounded text-white transition-colors flex items-center gap-1.5"
                             onClick={() => {
                                 navigator.clipboard.writeText(`<!-- Google tag (gtag.js) -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=${createdMeasurementId}"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  gtag('config', '${createdMeasurementId}');\n</script>`);
@@ -297,7 +297,7 @@ export default function GAKeyModal({
                         </div>
                     ) : (
                         <div className="space-y-5">
-                            
+
                             {createError && (
                                 <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
                                     {createError}
@@ -321,42 +321,43 @@ export default function GAKeyModal({
                                         options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
                                     />
 
-                                    <Input
-                                        label="Property Name *"
-                                        placeholder="e.g. My Website"
-                                        value={createForm.propertyName}
-                                        onChange={(e) => setCreateForm(f => ({ ...f, propertyName: e.target.value }))}
-                                        required
-                                    />
+                            <Input
+                                label="Property Name *"
+                                placeholder="e.g. My Website"
+                                value={createForm.propertyName}
+                                onChange={(e) => setCreateForm(f => ({ ...f, propertyName: e.target.value }))}
+                                required
+                            />
 
-                                    <Input
-                                        label="Website URL"
-                                        placeholder="https://example.com"
-                                        value={createForm.websiteUrl}
-                                        onChange={(e) => setCreateForm(f => ({ ...f, websiteUrl: e.target.value }))}
-                                        type="url"
-                                    />
+                            <Input
+                                label="Website URL"
+                                placeholder="https://example.com"
+                                value={createForm.websiteUrl}
+                                onChange={(e) => setCreateForm(f => ({ ...f, websiteUrl: e.target.value }))}
+                                type="url"
+                            />
 
-                                    <Select
-                                        label="Analytics Data Time Zone"
-                                        value={createForm.timeZone}
-                                        onChange={(e) => setCreateForm(f => ({ ...f, timeZone: e.target.value }))}
-                                        options={TIME_ZONES}
-                                    />
-                                </>
-                            )}
-
-                            <div className="flex justify-end gap-3 pt-4">
-                                <Button variant="outline" onClick={onCloseAction} disabled={creating}>Cancel</Button>
-                                <Button onClick={handleCreateProperty} disabled={creating || accounts.length === 0}>
-                                    {creating ? "Creating..." : "Create Property"}
-                                </Button>
-                            </div>
-                        </div>
+                            <Select
+                                label="Analytics Data Time Zone"
+                                value={createForm.timeZone}
+                                onChange={(e) => setCreateForm(f => ({ ...f, timeZone: e.target.value }))}
+                                options={TIME_ZONES}
+                            />
+                        </>
                     )}
-                </>
-            )}
 
-        </Modal>
+                    <div className="flex justify-end gap-3 pt-4">
+                        <Button variant="outline" onClick={onCloseAction} disabled={creating}>Cancel</Button>
+                        <Button onClick={handleCreateProperty} disabled={creating || accounts.length === 0}>
+                            {creating ? "Creating..." : "Create Property"}
+                        </Button>
+                    </div>
+                </div>
+                    )}
+        </>
+    )
+}
+
+        </Modal >
     );
 }

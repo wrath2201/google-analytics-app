@@ -17,10 +17,16 @@ export default function DeviceChart({ data }: ChartProps) {
 
     const isEmpty = formattedData.length === 0;
 
+    const mockData = [
+        { name: 'Mobile', value: 6500 },
+        { name: 'Desktop', value: 3000 },
+        { name: 'Tablet', value: 500 }
+    ];
+
     const option = {
-        color: ['#10B981', '#3864FF', '#F59E0B', '#8B5CF6'],
+        color: isEmpty ? ['#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280'] : ['#1B3A6B', '#C4956A', '#D4C5B0', '#E5E0D8'],
         title: {
-            text: isEmpty ? 'No Data' : 'Device Categories',
+            text: 'Device Categories',
             textStyle: { color: '#1A1814', fontSize: 16, fontWeight: 600, fontFamily: 'system-ui, -apple-system, sans-serif' },
             left: 0, top: 0
         },
@@ -47,7 +53,7 @@ export default function DeviceChart({ data }: ChartProps) {
                 radius: '75%',
                 center: ['50%', '45%'],
                 data: isEmpty
-                    ? [{ value: 0, name: 'No Data', itemStyle: { color: '#F0ECE4' } }]
+                    ? mockData
                     : formattedData,
                 emphasis: {
                     itemStyle: {

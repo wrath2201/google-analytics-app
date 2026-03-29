@@ -25,11 +25,19 @@ export default function LocationChart({ data }: ChartProps) {
 
     const isEmpty = formattedData.length === 0;
 
+    const mockData = [
+        { name: 'United States', value: 14500 },
+        { name: 'United Kingdom', value: 8300 },
+        { name: 'Canada', value: 6200 },
+        { name: 'Australia', value: 4100 },
+        { name: 'Germany', value: 2900 }
+    ];
+
     // Use top 10 locations to keep it clean
     const topData = [...formattedData].sort((a, b) => b.value - a.value).slice(0, 10).reverse();
 
-    const yAxisData = isEmpty ? ['No Data'] : topData.map(item => item.name);
-    const seriesData = isEmpty ? [0] : topData.map(item => item.value);
+    const yAxisData = isEmpty ? [...mockData].reverse().map(item => item.name) : topData.map(item => item.name);
+    const seriesData = isEmpty ? [...mockData].reverse().map(item => item.value) : topData.map(item => item.value);
 
     const truncate = (str: string) =>
         str.length > 20 ? str.substring(0, 17) + "..." : str;
@@ -69,13 +77,7 @@ export default function LocationChart({ data }: ChartProps) {
                 type: 'bar',
                 data: seriesData,
                 itemStyle: {
-                    color: {
-                        type: 'linear', x: 0, y: 0, x2: 1, y2: 0,
-                        colorStops: [
-                            { offset: 0, color: '#10B981' },
-                            { offset: 1, color: '#34D399' }
-                        ]
-                    },
+                    color: isEmpty ? '#D1D5DB' : '#C4956A',
                     borderRadius: [0, 6, 6, 0]
                 },
                 barWidth: 16,

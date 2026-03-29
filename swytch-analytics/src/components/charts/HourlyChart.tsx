@@ -26,19 +26,26 @@ export default function HourlyChart({ data }: ChartProps) {
 
     const isEmpty = formattedData.length === 0;
 
+    // Generate 24-hour bell curve peaking at 14:00
+    const mockHours = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`);
+    const mockVisits = Array.from({ length: 24 }, (_, i) => {
+        const peakHour = 14; const width = 4; const base = 50; const peak = 800;
+        return Math.floor(base + peak * Math.exp(-Math.pow(i - peakHour, 2) / (2 * Math.pow(width, 2))));
+    });
+
     // Sort by hour to ensure correct chronological order
-    const sortedData = [...formattedData].sort((a, b) => {
+    const sortedData = [...formattedData].sort((a: any, b: any) => {
         const hourA = parseInt(a.name);
         const hourB = parseInt(b.name);
         return hourA - hourB;
     });
 
-    const xAxisData = isEmpty ? ['No Data'] : sortedData.map(item => item.name);
-    const seriesData = isEmpty ? [0] : sortedData.map(item => item.value);
+    const xAxisData = isEmpty ? mockHours : sortedData.map(item => item.name);
+    const seriesData = isEmpty ? mockVisits : sortedData.map(item => item.value);
 
     const option = {
         title: {
-            text: isEmpty ? 'No Data' : 'Peak Visit Time (Hourly)',
+            text: 'Peak Visit Time (Hourly)',
             textStyle: { color: '#1A1814', fontSize: 16, fontWeight: 600, fontFamily: 'system-ui, -apple-system, sans-serif' },
             left: 0, top: 0
         },
@@ -72,13 +79,7 @@ export default function HourlyChart({ data }: ChartProps) {
                 type: 'bar',
                 data: seriesData,
                 itemStyle: {
-                    color: {
-                        type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-                        colorStops: [
-                            { offset: 0, color: '#00C2FF' },
-                            { offset: 1, color: '#3864FF' }
-                        ]
-                    },
+                    color: isEmpty ? '#D1D5DB' : '#1B3A6B',
                     borderRadius: [6, 6, 0, 0]
                 },
                 barWidth: '50%',

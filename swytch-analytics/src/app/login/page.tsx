@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart2 } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -11,8 +11,8 @@ function DashboardBackground() {
             {/* Navbar mockup */}
             <div className="h-14 bg-white border-b border-[#E5E0D8] flex items-center px-8 gap-8 justify-between opacity-90">
                 <div className="flex items-center gap-10">
-                    <div className="w-8 h-8 bg-[#1B3A6B] rounded-lg flex items-center justify-center shadow-md">
-                        <BarChart2 size={16} className="text-white" />
+                    <div className="w-8 h-8 flex items-center justify-center">
+                        <Logo iconOnly iconSize="h-6" />
                     </div>
                     <div className="flex gap-8 text-[13px] font-semibold text-[#8C8578]">
                         <span className="text-[#1A1814] border-b-2 border-[#1A1814] pb-5 translate-y-[10px]">Dashboard</span>
@@ -192,22 +192,13 @@ export default function LoginPage() {
                 <span className="absolute inset-x-[8%] top-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#E8C97A] to-transparent pointer-events-none rounded-full" />
 
                 {/* ── Logo ── */}
-                <div className="flex justify-center mb-4">
-                    <div className="
-                  relative w-16 h-16 md:w-20 md:h-20 rounded-[20px] md:rounded-[24px]
-                  bg-gradient-to-br from-[#1B3A6B] to-[#2A5298]
-                  flex items-center justify-center
-                  shadow-[0_8px_24px_rgba(27,58,107,0.35),0_0_0_4px_rgba(27,58,107,0.10),0_0_0_8px_rgba(27,58,107,0.05)]
-                ">
-                        <span className="absolute inset-0 rounded-[20px] md:rounded-[24px] bg-gradient-to-br from-white/18 to-transparent pointer-events-none" />
-                        <span className="absolute inset-x-[10%] top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent pointer-events-none" />
-                        <BarChart2 size={32} className="text-white relative z-10" />
-                    </div>
+                <div className="flex justify-center mb-6">
+                    <Logo iconSize="h-16 md:h-20" textSize="text-4xl md:text-5xl" className="flex-col gap-6" />
                 </div>
 
                 {/* brand name */}
                 <p className="text-[12px] md:text-[13px] font-extrabold tracking-[0.12em] uppercase text-[#8C8578] text-center mb-4">
-                    SwytchAnalytics
+                    Statsy
                 </p>
 
                 {/* gold divider */}

@@ -1,6 +1,7 @@
 "use client";
 
-import { BarChart2, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,13 +33,8 @@ export default function Navbar() {
         <nav className="fixed top-0 left-0 right-0 z-30 glass border-b border-[#E5E0D8]/60">
             <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                 {/* Left — Logo */}
-                <Link href="/" className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 bg-[#1B3A6B] rounded-lg flex items-center justify-center">
-                        <BarChart2 size={15} className="text-white" />
-                    </div>
-                    <span className="text-lg font-semibold text-[#1A1814]" style={{ fontFamily: "var(--font-display)" }}>
-                        SwytchAnalytics
-                    </span>
+                <Link href="/" className="flex items-center">
+                    <Logo iconSize="h-7" textSize="text-lg" />
                 </Link>
 
                 {/* Center — Nav links */}

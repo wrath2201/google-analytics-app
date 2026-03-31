@@ -3,12 +3,15 @@ import { useRef, useEffect } from "react"
 import Link from "next/link";
 import LogoLoop from "@/components/ui/LogoLoop";
 import type { LogoItem } from "@/components/ui/LogoLoop";
+import { Logo } from "@/components/ui/Logo";
 import {
   BarChart2, Bell, Shield, Zap,
   ActivitySquare, Mail, Settings2, ArrowRight, ChevronDown,
+  Twitter, Linkedin, Github
 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import BlurText from "@/components/ui/BlurText";
+import { SwytchCodeLogo } from "@/components/ui/SwytchCodeLogo";
 const techLogos: LogoItem[] = [
   {
     node: (
@@ -75,12 +78,7 @@ const techLogos: LogoItem[] = [
     ),
   },
   {
-    node: (
-      <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#EDE8E0] border border-[#D5CFC6] text-[#8C6A45] text-sm font-medium shadow-sm">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" /></svg>
-        SwytchCode CLI
-      </span>
-    ),
+    node: <SwytchCodeLogo iconSize="h-5" textSize="text-sm" className="px-4 py-2 rounded-full bg-[#EDE8E0] border border-[#D5CFC6]" />
   },
   {
     node: (
@@ -299,10 +297,8 @@ function StepsCard() {
       {/* Divider */}
       <div className="w-full h-[1.5px] bg-gradient-to-r from-transparent via-[#EDE8E0] to-transparent my-6" />
 
-      {/* Footer */}
-      <div className="flex items-center justify-center gap-2">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="#C4956A" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-        <span className="text-[10px] md:text-[13px] font-black text-[#7B4A2A] uppercase tracking-[0.1em]">Powered by SwytchCode CLI</span>
+      <div className="flex items-center justify-center">
+        <SwytchCodeLogo hideIcon iconSize="h-3.5" textSize="text-[12px]" withLabel="Powered by" />
       </div>
 
     </div>
@@ -319,30 +315,40 @@ export default function LandingPage() {
 
           {/* Left — Logo flush to left edge */}
           <Link href="/">
-            <div className="flex items-center gap-2.5 h-14 px-6 border-r border-[#E5E0D8] hover:bg-[#EDE8E0] transition-all duration-200 cursor-pointer group">
-              <div className="w-7 h-7 bg-[#1B3A6B] rounded-md flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-200">
-                <BarChart2 size={13} className="text-white" />
-              </div>
-              <span className="text-base tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
-                <span className="font-black text-[#1A1814]">SWYTCH</span>
-                <span className="font-light text-[#6B6760] group-hover:text-[#1A1814] transition-colors duration-200">Analytics</span>
-              </span>
+            <div className="flex items-center h-14 px-6 border-r border-[#E5E0D8] hover:bg-[#EDE8E0] transition-all duration-200 cursor-pointer">
+              <Logo iconSize="h-7" textSize="text-xl" />
             </div>
           </Link>
 
           {/* Center — Nav links absolutely centered */}
           <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center h-14">
-            <a href="#features" className="h-full px-8 flex items-center text-xs font-semibold tracking-widest uppercase text-[#6B6760] border-x border-transparent hover:text-[#1A1814] hover:border-[#E5E0D8] hover:bg-[#EDE8E0] transition-all duration-200">
+            <a
+              href="#features"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="h-full px-8 flex items-center text-xs font-semibold tracking-widest uppercase text-[#1A1814] border-x border-transparent hover:border-[#E5E0D8] hover:bg-[#EDE8E0] transition-all duration-200"
+              style={{ fontFamily: "'Inter', sans-serif" }}
+            >
               Features
             </a>
-            <a href="#how-it-works" className="h-full px-8 flex items-center text-xs font-semibold tracking-widest uppercase text-[#6B6760] border-x border-transparent hover:text-[#1A1814] hover:border-[#E5E0D8] hover:bg-[#EDE8E0] transition-all duration-200">
-              How It Works
+            <a
+              href="#about"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="h-full px-8 flex items-center text-xs font-semibold tracking-widest uppercase text-[#1A1814] border-x border-transparent hover:border-[#E5E0D8] hover:bg-[#EDE8E0] transition-all duration-200"
+              style={{ fontFamily: "'Inter', sans-serif" }}
+            >
+              About
             </a>
           </div>
 
           {/* Right — CTA flush to right edge */}
           <Link href="/login">
-            <button className="flex items-center gap-2 h-14 px-6 text-xs font-bold tracking-widest uppercase text-[#1A1814] border-l border-[#E5E0D8] hover:bg-[#1B3A6B] hover:text-white transition-all duration-200 cursor-pointer group">
+            <button className="flex items-center gap-2 h-14 px-6 text-xs font-bold tracking-widest uppercase text-[#1A1814] border-l border-[#E5E0D8] hover:bg-[#EDE8E0] transition-all duration-200 cursor-pointer group">
               Get Started
               <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-200" />
             </button>
@@ -472,20 +478,20 @@ export default function LandingPage() {
               fade-up cursor-default btn-shimmer mb-10
             ">
               <span className="absolute inset-x-[15%] top-0 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none" />
-              <Zap size={13} className="text-[#C4956A] fill-[#C4956A] animate-pulse" />
-              Powered by SwytchCode CLI
+              <SwytchCodeLogo hideIcon iconSize="h-4" textSize="text-[16px]" withLabel="Powered by" />
             </div>
-
-            {/* Heading — your existing BlurText, untouched */}
             <div className="w-full flex justify-center mb-12">
               <BlurText
-                text=" Your Analytics Simplified"
+                text=" Your Google Analytics Simplified"
                 animateBy="words"
                 direction="top"
                 delay={150}
                 stepDuration={0.4}
                 className="text-6xl md:text-[5rem] lg:text-[5.5rem] !font-sans font-semibold text-[#1A1814] leading-[1.1] justify-center tracking-tight gap-x-3 md:gap-x-5"
-                highlightWords={[{ text: "Simplified", className: "text-[#6C3B1C] font-bold italic tracking-tight" }]}
+                highlightWords={[
+                  { text: "Simplified", className: "text-[#6C3B1C] font-bold italic tracking-tight" },
+                  { text: "Your", className: "-ml-4 md:-ml-8" }
+                ]}
               />
             </div>
 
@@ -737,10 +743,8 @@ export default function LandingPage() {
                 {/* Divider */}
                 <div className="w-full h-px bg-gradient-to-r from-transparent via-[#EDE8E0] to-transparent mt-5 mb-4" />
 
-                {/* Footer */}
-                <div className="flex items-center justify-center gap-2">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="#C4956A" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-                  <span className="text-[12px] font-extrabold text-[#7B4A2A] uppercase tracking-[0.1em]">Powered by SwytchCode CLI</span>
+                <div className="flex items-center justify-center">
+                  <SwytchCodeLogo hideIcon iconSize="h-3.5" textSize="text-[12px]" withLabel="Powered by" />
                 </div>
 
               </div>
@@ -764,37 +768,69 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── CTA BANNER ─── */}
-      <section className="min-h-[60vh] flex items-center py-24 px-6 bg-[#1B3A6B] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#C4956A]/10 blur-[120px]" />
-        <div className="max-w-2xl mx-auto text-center relative z-10">
-          <p className="text-xs tracking-[0.2em] uppercase text-[#C4956A] font-medium mb-6">Ready?</p>
-          <h2 className="text-3xl md:text-5xl text-white mb-5" style={{ fontFamily: "var(--font-display)" }}>
-            Ready to simplify
-            <br />your analytics?
-          </h2>
-          <p className="text-[#B8C7DB] text-base mb-10 max-w-md mx-auto">
-            Join teams already using SwytchAnalytics to make data-driven decisions.
-          </p>
-          <Link href="/login">
-            <button className="px-8 py-3.5 bg-white text-[#1B3A6B] rounded-lg text-sm font-semibold hover:bg-[#F7F5F0] transition-all duration-300 cursor-pointer btn-hover shadow-lg shadow-white/10">
-              Get Started for Free
-              <ArrowRight size={15} className="inline ml-2" />
-            </button>
-          </Link>
-        </div>
-      </section>
-
       {/* ─── FOOTER ─── */}
-      <footer className="py-10 px-6 border-t border-[#E5E0D8] bg-[#F7F5F0]">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 bg-[#1B3A6B] rounded-md flex items-center justify-center">
-              <BarChart2 size={11} className="text-white" />
+      <footer id="about" className="bg-[#14120E] pt-28 pb-12 px-6 border-t border-[#2A2621]">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-16 lg:gap-24 mb-28 items-start">
+
+            {/* Brand column */}
+            <div className="flex flex-col items-start gap-10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_20px_rgba(0,0,0,0.4)]">
+                  <Logo iconOnly iconSize="h-8" />
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-black text-white tracking-tighter" style={{ fontFamily: "'Inter', sans-serif" }}>Statsy</span>
+                </div>
+              </div>
+              <p className="text-[#8C8578] max-w-sm text-[18px] leading-[1.6] font-medium tracking-tight">
+                Google Analytics simplified. Connect your properties, visualize key metrics, and receive smart weekly alerts — all in one clean dashboard.
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-[15px] border border-[#2A2621] flex items-center justify-center text-[#8C8578] hover:bg-[#2A2621] hover:text-white transition-all duration-300 cursor-pointer group">
+                  <Twitter size={20} className="group-hover:scale-110 transition-transform" />
+                </div>
+                <div className="w-12 h-12 rounded-[15px] border border-[#2A2621] flex items-center justify-center text-[#8C8578] hover:bg-[#2A2621] hover:text-white transition-all duration-300 cursor-pointer group">
+                  <Linkedin size={20} className="group-hover:scale-110 transition-transform" />
+                </div>
+                <a href="https://github.com/Lakshaycodes08/google-analytics-app" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-[15px] border border-[#2A2621] flex items-center justify-center text-[#8C8578] hover:bg-[#2A2621] hover:text-white transition-all duration-300 cursor-pointer group">
+                  <Github size={20} className="group-hover:scale-110 transition-transform" />
+                </a>
+              </div>
             </div>
-            <span className="text-sm font-medium text-[#8C8578]">SwytchAnalytics</span>
+
+            {/* About content */}
+            <div className="flex flex-col items-start max-w-lg">
+              <p className="text-[12px] font-black uppercase tracking-[0.25em] text-[#C4956A] mb-8">
+                About Statsy
+              </p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.08] tracking-tighter mb-10" style={{ fontFamily: "'Inter', sans-serif" }}>
+                Analytics that actually<br />
+                <span className="italic font-serif text-[#C4956A]">makes sense</span>
+              </h2>
+              <div className="space-y-6 text-[17px] text-[#8C8578] font-medium leading-[1.7] tracking-tight" style={{ fontFamily: "'Inter', sans-serif" }}>
+                <p>
+                  Statsy is a clean, no-nonsense Google Analytics dashboard built for teams who
+                  want clarity, not complexity. Connect your GA properties in seconds and get
+                  your data visualised the way it should be.
+                </p>
+                <p>
+                  We built Statsy because most analytics tools are overwhelming. Statsy strips it
+                  back to what matters — who&apos;s visiting, where they&apos;re from, and what they&apos;re
+                  doing.
+                </p>
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-[#8C8578]">Open source · Built with SwytchCode CLI</p>
+
+          <div className="pt-10 border-t border-[#2A2621] flex flex-col md:flex-row items-center justify-between gap-8">
+            <p className="text-[14px] text-[#524B40] font-bold tracking-tight">
+              © {new Date().getFullYear()} Statsy.in. All rights reserved.
+            </p>
+            <div className="flex items-center gap-2.5">
+              <SwytchCodeLogo hideIcon iconSize="h-4" textSize="text-[14px]" theme="dark" withLabel="Built with" />
+            </div>
+          </div>
         </div>
       </footer>
 

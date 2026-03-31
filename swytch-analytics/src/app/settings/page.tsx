@@ -63,8 +63,8 @@ export default function SettingsPage() {
                                     key={f}
                                     onClick={() => setFrequency(f)}
                                     className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition-all duration-300 cursor-pointer ${frequency === f
-                                            ? "bg-[#1B3A6B] text-white border-[#1B3A6B] shadow-md shadow-[#1B3A6B]/15"
-                                            : "bg-white text-[#8C8578] border-[#E5E0D8] hover:border-[#C4956A] hover:text-[#1A1814]"
+                                        ? "bg-[#1B3A6B] text-white border-[#1B3A6B] shadow-md shadow-[#1B3A6B]/15"
+                                        : "bg-white text-[#8C8578] border-[#E5E0D8] hover:border-[#C4956A] hover:text-[#1A1814]"
                                         }`}
                                 >
                                     {f}

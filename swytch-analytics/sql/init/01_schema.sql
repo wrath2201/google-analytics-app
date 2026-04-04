@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS users (
 -- ============================================================
  
 CREATE TABLE IF NOT EXISTS subscriptions (
-  id                       CHAR(36)                                    NOT NULL DEFAULT (UUID()),
-  user_id                  CHAR(36)                                    NOT NULL,
+  id                       INT UNSIGNED                                NOT NULL AUTO_INCREMENT,
+  user_id                  INT UNSIGNED                                NOT NULL,
   plan                     ENUM('free', 'starter', 'growth')          NOT NULL DEFAULT 'free',
   status                   ENUM('active', 'cancelled', 'past_due',
                                 'trialing', 'incomplete')              NOT NULL DEFAULT 'active',
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 -- ============================================================
  
 CREATE TABLE IF NOT EXISTS apps (
-  id              CHAR(36)      NOT NULL DEFAULT (UUID()),
-  user_id         CHAR(36)      NOT NULL,
+  id              INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  user_id         INT UNSIGNED  NOT NULL,
   app_name        VARCHAR(255)  NOT NULL,
   website_url     VARCHAR(500)  NOT NULL,
   business_type   VARCHAR(100)  NULL,
@@ -88,8 +88,8 @@ CREATE TABLE IF NOT EXISTS apps (
 -- ============================================================
  
 CREATE TABLE IF NOT EXISTS ga_connections (
-  id                  CHAR(36)      NOT NULL DEFAULT (UUID()),
-  app_id              CHAR(36)      NOT NULL,
+  id                  INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  app_id              INT UNSIGNED  NOT NULL,
   ga_property_id      VARCHAR(100)  NOT NULL,
   ga_account_id       VARCHAR(100)  NULL,
   ga_property_name    VARCHAR(255)  NULL,
@@ -159,8 +159,8 @@ CREATE TABLE IF NOT EXISTS daily_analytics (
 -- ============================================================
  
 CREATE TABLE IF NOT EXISTS email_reports (
-  id               CHAR(36)                        NOT NULL DEFAULT (UUID()),
-  app_id           CHAR(36)                        NOT NULL,
+  id               INT UNSIGNED                    NOT NULL AUTO_INCREMENT,
+  app_id           INT UNSIGNED                    NOT NULL,
   enabled          BOOLEAN                         NOT NULL DEFAULT TRUE,
   frequency        ENUM('weekly', 'monthly')       NOT NULL DEFAULT 'weekly',
   last_sent_at     DATETIME                        NULL,
@@ -190,8 +190,8 @@ CREATE TABLE IF NOT EXISTS email_reports (
 -- ============================================================
  
 CREATE TABLE IF NOT EXISTS metrics_preferences (
-  id          CHAR(36)      NOT NULL DEFAULT (UUID()),
-  app_id      CHAR(36)      NOT NULL,
+  id          INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  app_id      INT UNSIGNED  NOT NULL,
   metric_key  VARCHAR(100)  NOT NULL,
   enabled     BOOLEAN       NOT NULL DEFAULT TRUE,
   created_at  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,

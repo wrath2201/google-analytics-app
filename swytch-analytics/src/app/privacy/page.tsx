@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BarChart2, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 
 const LAST_UPDATED = "April 2, 2026";
 const COMPANY = "Statsy";
@@ -130,13 +131,7 @@ export default function PrivacyPage() {
         <div className="w-full h-14 flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center gap-2.5 h-14 px-6 border-r border-[#E5E0D8] hover:bg-[#EDE8E0] transition-all duration-200 cursor-pointer group">
-              <div className="w-7 h-7 bg-[#1B3A6B] rounded-md flex items-center justify-center shadow-sm">
-                <BarChart2 size={13} className="text-white" />
-              </div>
-              <span className="text-base tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
-                <span className="font-black text-[#1A1814]">SWYTCH</span>
-                <span className="font-light text-[#6B6760]">Analytics</span>
-              </span>
+              <Logo iconSize="w-7 h-7" textSize="text-lg" />
             </div>
           </Link>
           <Link href="/">
@@ -159,7 +154,7 @@ export default function PrivacyPage() {
             </h1>
             <p className="text-sm text-[#8C8578]">Last updated: {LAST_UPDATED}</p>
             <div className="mt-6 p-4 bg-white border border-[#E5E0D8] rounded-xl">
-              <p className="text-sm text-[#6B6760] leading-relaxed">
+              <p className="text-base text-[#46403A] leading-relaxed">
                 {COMPANY} (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) operates {DOMAIN}. This Privacy Policy
                 explains how we collect, use, and protect your information when you use our service.
                 By using {COMPANY}, you agree to the practices described in this policy.
@@ -177,9 +172,9 @@ export default function PrivacyPage() {
                   {section.content.map((item, i) => (
                     <div key={i}>
                       {item.subtitle && (
-                        <p className="text-sm font-semibold text-[#1A1814] mb-1">{item.subtitle}</p>
+                        <p className="text-base font-semibold text-[#1A1814] mb-1">{item.subtitle}</p>
                       )}
-                      <p className="text-sm text-[#6B6760] leading-relaxed">{item.text}</p>
+                      <p className="text-base text-[#46403A] leading-relaxed">{item.text}</p>
                     </div>
                   ))}
                 </div>

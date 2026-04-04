@@ -5,7 +5,6 @@ import { Logo } from "@/components/ui/Logo";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { apiRequest } from "@/lib/api";
 
 export default function Navbar() {
     const pathname = usePathname();
@@ -14,16 +13,11 @@ export default function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await apiRequest("/auth", { method: "DELETE" });
-        } catch (e) {
-            console.error("Failed to call backend logout", e);
-        } finally {
-            try {
-                await signOut();
-            } catch (authErr) {
-                console.error("Firebase signout failed", authErr);
-            }
-            router.push("/login");
+            await signOut();
+            router.push("/");
+        } catch (error) {
+            console.error("Logout failed:", error);
+            router.push("/"); // Fallback
         }
     };
 
@@ -68,14 +62,20 @@ export default function Navbar() {
 
                 {/* Right — User + Logout */}
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#EDE8E0] flex items-center justify-center text-sm font-medium text-[#1A1814]">
+                    <div className="w-8 h-8 rounded-full bg-[#EDE8E0] flex items-center justify-center text-sm font-semibold text-[#1A1814] select-none">
                         U
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="p-2 rounded-lg hover:bg-[#EDE8E0] transition-all duration-300 cursor-pointer"
+                        className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                        border border-[#E5E0D8] bg-transparent
+                        text-[13px] font-semibold text-[#8C8578]
+                        hover:text-[#7A3A2E] hover:bg-[#FDF5F3] hover:border-[#E0A89A]/70 hover:shadow-[0_1px_4px_rgba(0,0,0,0.06)]
+                        active:scale-[0.97]
+                        transition-all duration-200 cursor-pointer"
                     >
-                        <LogOut size={16} className="text-[#8C8578]" />
+                        <LogOut size={13} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+                        <span>Sign out</span>
                     </button>
                 </div>
             </div>

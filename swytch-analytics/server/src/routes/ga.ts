@@ -404,11 +404,13 @@ export default async function gaRoutes(server: FastifyInstance) {
             await request.jwtVerify({ onlyCookie: true });
             const user = request.user as { db_id: number };
             const pool = getPool();
-
-            await pool.execute(
-                `UPDATE users SET google_refresh_token = ? WHERE id = ?`,
-                [tokens.refresh_token, user.db_id]
-            );
+            
+            if (tokens.refresh_token) {
+                await pool.execute(
+                    `UPDATE users SET google_refresh_token = ? WHERE id = ?`,
+                    [tokens.refresh_token, user.db_id]
+                );
+            }
 
             reply.setCookie("google_access_token", tokens.access_token, {
                 path: "/",

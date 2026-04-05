@@ -70,12 +70,18 @@ export default async function gaRoutes(server: FastifyInstance) {
             });
 
             if (!res.ok) {
-                if (res.status === 401 || res.status === 403) {
-                    return reply.status(401).send({ error: "Google token expired or invalid" });
+                const text = await res.text();
+                console.log("GA ERROR:", res.status, text);
+
+                if (res.status === 401) {
+                    return reply.status(401).send({ error: "Invalid or expired token" });
                 }
-                const err = await res.text();
-                request.log.error("Google API Error: " + err);
-                return reply.status(res.status).send({ error: "Failed to fetch from Google", details: err });
+                if (res.status === 403) {
+                    return { properties: [], accounts: [] };
+                }
+                
+                request.log.error("Google API Error: " + text);
+                return reply.status(res.status).send({ error: "Failed to fetch from Google", details: text });
             }
 
             const data = await res.json() as any;
@@ -121,12 +127,18 @@ export default async function gaRoutes(server: FastifyInstance) {
             });
 
             if (!propRes.ok) {
-                if (propRes.status === 401 || propRes.status === 403) {
-                    return reply.status(401).send({ error: "Google token expired or invalid" });
+                const text = await propRes.text();
+                console.log("GA ERROR:", propRes.status, text);
+
+                if (propRes.status === 401) {
+                    return reply.status(401).send({ error: "Invalid or expired token" });
                 }
-                const err = await propRes.text();
-                request.log.error("Failed to create property: " + err);
-                return reply.status(propRes.status).send({ error: "Failed to create property", details: err });
+                if (propRes.status === 403) {
+                    return reply.status(403).send({ error: "Google account does not have permission to create properties" });
+                }
+                
+                request.log.error("Failed to create property: " + text);
+                return reply.status(propRes.status).send({ error: "Failed to create property", details: text });
             }
 
             const newProperty = await propRes.json() as any;
@@ -169,12 +181,18 @@ export default async function gaRoutes(server: FastifyInstance) {
             });
 
             if (!res.ok) {
-                if (res.status === 401 || res.status === 403) {
-                    return reply.status(401).send({ error: "Google token expired or invalid" });
+                const text = await res.text();
+                console.log("GA ERROR:", res.status, text);
+
+                if (res.status === 401) {
+                    return reply.status(401).send({ error: "Invalid or expired token" });
                 }
-                const err = await res.text();
-                request.log.error("Google API Error: " + err);
-                return reply.status(res.status).send({ error: "Failed to fetch streams from Google", details: err });
+                if (res.status === 403) {
+                    return { streams: [] };
+                }
+                
+                request.log.error("Google API Error: " + text);
+                return reply.status(res.status).send({ error: "Failed to fetch streams from Google", details: text });
             }
 
             const data = await res.json() as any;

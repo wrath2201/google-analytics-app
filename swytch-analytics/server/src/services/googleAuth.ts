@@ -39,7 +39,8 @@ export async function getOrRefreshAccessToken(
         if (!user) {
             user = await request.jwtVerify({ onlyCookie: true });
         }
-    } catch {
+    } catch (err) {
+        server.log.error({ layer: "oauth", msg: "JWT verify failed in token refresh", err });
         return null;
     }
 
@@ -103,7 +104,7 @@ export async function getOrRefreshAccessToken(
         return newAccessToken;
 
     } catch (err) {
-        server.log.error({ layer: "oauth", err }, "Silent token refresh threw an error");
-        return null;
+        server.log.error({ layer: "oauth", msg: "Silent token refresh threw an error", err });
+        throw err; // DO NOT RETURN NULL, THROW! So the caller knows it was an infrastructure error, not an auth failure.
     }
 }

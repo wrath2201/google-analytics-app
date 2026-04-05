@@ -412,15 +412,16 @@ export default async function gaRoutes(server: FastifyInstance) {
                 );
             }
 
-            reply.setCookie("google_access_token", tokens.access_token, {
-                path: "/",
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "lax",
-                maxAge: 55 * 60,
-            });
-
-            return reply.redirect(`${process.env.FRONTEND_URL}/dashboard?oauth=success`);
+            return reply
+                .setCookie("google_access_token", tokens.access_token, {
+                    domain: process.env.NODE_ENV === "production" ? ".statsy.in" : undefined,
+                    path: "/",
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "none",
+                    maxAge: 55 * 60,
+                })
+                .redirect(`${process.env.FRONTEND_URL}/dashboard?oauth=success`);
         } catch (err) {
             server.log.error(err);
             return reply.redirect(`${process.env.FRONTEND_URL}/dashboard?oauth=error`);

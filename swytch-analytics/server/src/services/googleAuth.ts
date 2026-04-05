@@ -89,11 +89,12 @@ export async function getOrRefreshAccessToken(
 
         // ── 5. Set cookie so next request is instant ─────────
         reply.setCookie("google_access_token", newAccessToken, {
+            domain: process.env.NODE_ENV === "production" ? ".statsy.in" : undefined,
             path: "/",
-            secure: false,      // localhost — flip to true in prod
+            secure: true,
             httpOnly: true,
-            sameSite: "lax",
-            maxAge: 55 * 60,    // 55 min (Google tokens live ~60 min)
+            sameSite: "none",
+            maxAge: 55 * 60,
         });
 
         server.log.info({ layer: "oauth", userId: user.db_id },

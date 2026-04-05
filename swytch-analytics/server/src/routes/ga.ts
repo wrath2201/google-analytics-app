@@ -352,4 +352,77 @@ export default async function gaRoutes(server: FastifyInstance) {
         }
     });
 
+    // -------------------------------------------------------------------------
+    // OAuth Routes (inline — generate consent URL + handle callback)
+    // -------------------------------------------------------------------------
+
+    server.get("/ga/oauth/url", async (request, reply) => {
+        try {
+            await request.jwtVerify({ onlyCookie: true });
+
+            const params = new URLSearchParams({
+                client_id: process.env.GOOGLE_CLIENT_ID || "",
+                redirect_uri: `${process.env.FRONTEND_URL}/api/ga/oauth/callback`,
+                response_type: "code",
+                scope: [
+                    "https://www.googleapis.com/auth/analytics.readonly",
+                    "https://www.googleapis.com/auth/analytics.edit",
+                ].join(" "),
+                access_type: "offline",
+                prompt: "consent",
+            });
+
+            return { url: `https://accounts.google.com/o/oauth2/v2/auth?${params}` };
+        } catch (err) {
+            return reply.status(401).send({ error: "Unauthorized" });
+        }
+    });
+
+    server.get("/ga/oauth/callback", async (request, reply) => {
+        try {
+            const { code } = request.query as { code: string };
+            if (!code) return reply.status(400).send({ error: "Missing code" });
+
+            const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    code,
+                    client_id: process.env.GOOGLE_CLIENT_ID || "",
+                    client_secret: process.env.GOOGLE_CLIENT_SECRET || "",
+                    redirect_uri: `${process.env.FRONTEND_URL}/api/ga/oauth/callback`,
+                    grant_type: "authorization_code",
+                }).toString(),
+            });
+
+            const tokens = await tokenRes.json() as any;
+            if (!tokenRes.ok) {
+                server.log.error(tokens, "OAuth token exchange failed");
+                return reply.redirect(`${process.env.FRONTEND_URL}/dashboard?oauth=error`);
+            }
+
+            await request.jwtVerify({ onlyCookie: true });
+            const user = request.user as { db_id: number };
+            const pool = getPool();
+
+            await pool.execute(
+                `UPDATE users SET google_refresh_token = ? WHERE id = ?`,
+                [tokens.refresh_token, user.db_id]
+            );
+
+            reply.setCookie("google_access_token", tokens.access_token, {
+                path: "/",
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                maxAge: 55 * 60,
+            });
+
+            return reply.redirect(`${process.env.FRONTEND_URL}/dashboard?oauth=success`);
+        } catch (err) {
+            server.log.error(err);
+            return reply.redirect(`${process.env.FRONTEND_URL}/dashboard?oauth=error`);
+        }
+    });
+
 }

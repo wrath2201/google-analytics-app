@@ -42,8 +42,8 @@ export default function BillingPage() {
         const load = async () => {
             try {
                 const [subRes, invRes] = await Promise.all([
-                    fetch(`${BACKEND}/api/subscriptions/me`, { credentials: "include" }),
-                    fetch(`${BACKEND}/api/stripe/invoices`, { credentials: "include" }),
+                    fetch("/api/subscriptions/me", { credentials: "include" }),
+                    fetch("/api/stripe/invoices", { credentials: "include" }),
                 ]);
 
                 if (subRes.ok) setSubscription(await subRes.json());
@@ -66,7 +66,7 @@ export default function BillingPage() {
         setUpgrading(true);
         setError(null);
         try {
-            const res = await fetch(`${BACKEND}/api/stripe/checkout`, {
+            const res = await fetch("/api/stripe/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -89,12 +89,12 @@ export default function BillingPage() {
         setCancelling(true);
         setError(null);
         try {
-            const res = await fetch(`${BACKEND}/api/stripe/cancel`, {
+            const res = await fetch("/api/stripe/cancel", {
                 method: "POST",
                 credentials: "include",
             });
             if (!res.ok) throw new Error("Failed to cancel subscription");
-            const subRes = await fetch(`${BACKEND}/api/subscriptions/me`, { credentials: "include" });
+            const subRes = await fetch("/api/subscriptions/me", { credentials: "include" });
             if (subRes.ok) setSubscription(await subRes.json());
         } catch (err) {
             setError("Failed to cancel subscription. Please try again.");
@@ -105,7 +105,7 @@ export default function BillingPage() {
 
     const handleDownload = async (invoiceId: string) => {
         try {
-            const res = await fetch(`${BACKEND}/api/stripe/invoice/${invoiceId}`, { credentials: "include" });
+            const res = await fetch(`/api/stripe/invoice/${invoiceId}`, { credentials: "include" });
             if (!res.ok) throw new Error("Failed to fetch invoice");
             const { pdf, url } = await res.json();
             window.open(pdf || url, "_blank");

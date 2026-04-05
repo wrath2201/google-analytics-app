@@ -82,7 +82,7 @@ export default function GAKeyModal({
                 setLoading(true);
 
                 const res = await fetch(
-                    `${BACKEND}/api/ga/properties`,
+                    "/api/ga/properties",
                     { credentials: "include" }
                 );
 
@@ -133,7 +133,7 @@ export default function GAKeyModal({
     const handleOAuthConnect = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`${BACKEND}/api/ga/oauth/url`, { credentials: "include" });
+            const res = await fetch("/api/ga/oauth/url", { credentials: "include" });
             const data = await res.json();
             if (data.url) {
                 window.location.href = data.url;
@@ -154,7 +154,7 @@ export default function GAKeyModal({
             setCreating(true);
             setCreateError("");
 
-            const res = await fetch(`${BACKEND}/api/ga/properties/create`, {
+            const res = await fetch("/api/ga/properties/create", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",

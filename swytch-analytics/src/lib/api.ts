@@ -1,16 +1,15 @@
-const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
-// In .env: NEXT_PUBLIC_API_URL=https://statsy.in/api
-// Result: all calls go to https://statsy.in/api/<path>
+const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+// In production .env: NEXT_PUBLIC_API_URL=https://statsy.in
+// All calls go to {BASE}/api/<path>
 
 export async function apiRequest(
     path: string,
     options?: RequestInit
 ): Promise<Response> {
-    if (path.startsWith("/api")) {
-        console.warn(`[api.ts] Warning: path "${path}" starts with /api — this will cause a double /api/ URL.`);
-    }
+    // Prepend /api if not already present
+    const fullPath = path.startsWith("/api") ? path : `/api${path}`;
 
-    const res = await fetch(`${BASE}${path}`, {
+    const res = await fetch(`${fullPath}`, {
         credentials: "include",
         headers: {
             "Content-Type": "application/json",

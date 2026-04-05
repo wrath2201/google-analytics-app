@@ -87,7 +87,7 @@ export default function DashboardPage() {
         const urlParams = new URLSearchParams(window.location.search);
         const sessionId = urlParams.get('session_id');
         if (sessionId) {
-            fetch(`${BACKEND}/api/stripe/verify-session`, {
+            fetch("/api/stripe/verify-session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -112,7 +112,7 @@ export default function DashboardPage() {
 
         const fetchAllProperties = async () => {
             try {
-                const res = await fetch(`${BACKEND}/api/ga/properties`, { credentials: "include" });
+                const res = await fetch("/api/ga/properties", { credentials: "include" });
                 if (res.status === 401) {
                     setProperties([]);
                     setGaModalOpen(true);
@@ -165,7 +165,7 @@ export default function DashboardPage() {
             const cleanId = propertyId.replace("properties/", "");
 
             const res = await fetch(
-                `${BACKEND}/api/ga/report/${cleanId}`,
+                `/api/ga/report/${cleanId}`,
                 { credentials: "include" }
             );
 
@@ -204,14 +204,14 @@ export default function DashboardPage() {
             const cleanId = propertyId.replace("properties/", "");
 
             const [trafficRes, sourcesRes, devicesRes, pagesRes, eventsRes, locationsRes, hourlyRes, insightsRes] = await Promise.all([
-                fetch(`${BACKEND}/api/ga/timeseries/${cleanId}`, { credentials: "include" }),
-                fetch(`${BACKEND}/api/ga/sources/${cleanId}`, { credentials: "include" }),
-                fetch(`${BACKEND}/api/ga/devices/${cleanId}`, { credentials: "include" }),
-                fetch(`${BACKEND}/api/ga/pages/${cleanId}`, { credentials: "include" }),
-                fetch(`${BACKEND}/api/ga/events/${cleanId}`, { credentials: "include" }),
-                fetch(`${BACKEND}/api/ga/locations/${cleanId}`, { credentials: "include" }),
-                fetch(`${BACKEND}/api/ga/hourly/${cleanId}`, { credentials: "include" }),
-                fetch(`${BACKEND}/api/ga/insights/${cleanId}`, { credentials: "include" })
+                fetch(`/api/ga/timeseries/${cleanId}`, { credentials: "include" }),
+                fetch(`/api/ga/sources/${cleanId}`, { credentials: "include" }),
+                fetch(`/api/ga/devices/${cleanId}`, { credentials: "include" }),
+                fetch(`/api/ga/pages/${cleanId}`, { credentials: "include" }),
+                fetch(`/api/ga/events/${cleanId}`, { credentials: "include" }),
+                fetch(`/api/ga/locations/${cleanId}`, { credentials: "include" }),
+                fetch(`/api/ga/hourly/${cleanId}`, { credentials: "include" }),
+                fetch(`/api/ga/insights/${cleanId}`, { credentials: "include" })
             ]);
 
             if (trafficRes.status === 401) {

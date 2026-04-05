@@ -71,7 +71,6 @@ export default async function gaRoutes(server: FastifyInstance) {
 
             if (!res.ok) {
                 if (res.status === 401 || res.status === 403) {
-                    reply.clearCookie("google_access_token", { path: "/" });
                     return reply.status(401).send({ error: "Google token expired or invalid" });
                 }
                 const err = await res.text();
@@ -123,7 +122,6 @@ export default async function gaRoutes(server: FastifyInstance) {
 
             if (!propRes.ok) {
                 if (propRes.status === 401 || propRes.status === 403) {
-                    reply.clearCookie("google_access_token", { path: "/" });
                     return reply.status(401).send({ error: "Google token expired or invalid" });
                 }
                 const err = await propRes.text();
@@ -172,7 +170,6 @@ export default async function gaRoutes(server: FastifyInstance) {
 
             if (!res.ok) {
                 if (res.status === 401 || res.status === 403) {
-                    reply.clearCookie("google_access_token", { path: "/" });
                     return reply.status(401).send({ error: "Google token expired or invalid" });
                 }
                 const err = await res.text();

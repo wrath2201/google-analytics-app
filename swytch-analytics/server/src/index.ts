@@ -10,7 +10,6 @@ import authRoutes from "./routes/auth";
 import dashboardRoutes from "./routes/dashboard";
 import gaRoutes from "./routes/ga";
 import appsRoutes from "./routes/apps";
-import oauthRoutes from "./routes/oauth";
 import subscriptionRoutes from "./routes/subscriptions";
 import emailReportsRoutes from "./routes/email_reports";
 import stripeRoutes from "./routes/stripe";
@@ -54,7 +53,6 @@ const start = async () => {
 
     // Apps routes
     await server.register(appsRoutes, { prefix: "/api" });
-    await server.register(oauthRoutes, { prefix: "/api" });
 
     // Subscription routes
     await server.register(subscriptionRoutes, { prefix: "/api" });

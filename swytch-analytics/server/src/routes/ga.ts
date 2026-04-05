@@ -372,9 +372,9 @@ export default async function gaRoutes(server: FastifyInstance) {
                 prompt: "consent",
             });
 
-            return { url: `https://accounts.google.com/o/oauth2/v2/auth?${params}` };
+            return reply.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
         } catch (err) {
-            return reply.status(401).send({ error: "Unauthorized" });
+            return reply.redirect(`${process.env.FRONTEND_URL}/login`);
         }
     });
 

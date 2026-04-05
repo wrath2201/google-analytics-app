@@ -130,18 +130,9 @@ export default function GAKeyModal({
 
     };
 
-    const handleOAuthConnect = async () => {
-        try {
-            setLoading(true);
-            const res = await fetch("/api/ga/oauth/url", { credentials: "include" });
-            const data = await res.json();
-            if (data.url) {
-                window.location.href = data.url;
-            }
-        } catch (err) {
-            console.error("Failed to get OAuth URL", err);
-            setLoading(false);
-        }
+    const handleOAuthConnect = () => {
+        setLoading(true);
+        window.location.href = "/api/ga/oauth/url";
     };
 
     const handleCreateProperty = async () => {

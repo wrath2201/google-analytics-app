@@ -101,9 +101,8 @@ export default function DashboardPage() {
         }
 
         // ── Clean up OAuth success redirect ──────────────────────
-        const oauthConnected = urlParams.get('connected');
-        if (oauthConnected === 'true') {
-            // Strip ?connected=true from URL without reload
+        const oauthStatus = urlParams.get('oauth');
+        if (oauthStatus === 'success' || oauthStatus === 'error') {
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 

@@ -39,8 +39,8 @@ A modern Google Analytics dashboard built with **Next.js 15**, **TypeScript**, a
 
 ```bash
 # Clone the repository
-git clone https://github.com/Lakshaycodes08/google-analytics-app.git
-cd google-analytics-app
+git clone https://github.com/swytchcodehq/swytchcode-google-analytics.git
+cd swytchcode-google-analytics
 
 # Install dependencies
 npm install

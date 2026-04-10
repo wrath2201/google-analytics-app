@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import { Bell, User, Check } from "lucide-react";
+import Toast from "@/components/ui/Toast";
+import { Bell, User, AlertTriangle } from "lucide-react";
 
 const frequencies = ["Daily", "Weekly", "Biweekly", "Monthly"];
 
@@ -12,20 +14,25 @@ export default function SettingsPage() {
     const [email, setEmail] = useState("user@example.com");
     const [name, setName] = useState("John Doe");
     const [frequency, setFrequency] = useState("Weekly");
-    const [saved, setSaved] = useState(false);
+    const [showToast, setShowToast] = useState(false);
 
     const handleSave = () => {
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2500);
+        setShowToast(true);
     };
 
     return (
         <div className="min-h-screen bg-[#F7F5F0]">
             <Navbar />
             <main className="pt-24 pb-16 px-6">
-                <div className="max-w-2xl mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="max-w-2xl mx-auto"
+                >
 
                     <div className="mb-8">
+                        <p className="text-xs font-medium text-[#8C8578] uppercase tracking-widest mb-1">Account</p>
                         <h1 className="text-3xl text-[#1A1814] mb-1" style={{ fontFamily: "var(--font-display)" }}>
                             Settings
                         </h1>
@@ -35,8 +42,8 @@ export default function SettingsPage() {
                     {/* Profile */}
                     <div className="bg-white rounded-2xl border border-[#E5E0D8] p-6 mb-4 card-hover">
                         <div className="flex items-center gap-2 mb-5">
-                            <div className="w-7 h-7 rounded-lg bg-[#EDE8E0] flex items-center justify-center">
-                                <User size={14} className="text-[#C4956A]" />
+                            <div className="w-7 h-7 rounded-lg bg-[#1B3A6B]/10 flex items-center justify-center">
+                                <User size={14} className="text-[#1B3A6B]" />
                             </div>
                             <h2 className="text-sm font-semibold text-[#1A1814]">Profile</h2>
                         </div>
@@ -47,9 +54,9 @@ export default function SettingsPage() {
                     </div>
 
                     {/* Alert Frequency */}
-                    <div className="bg-white rounded-2xl border border-[#E5E0D8] p-6 mb-6 card-hover">
+                    <div className="bg-white rounded-2xl border border-[#E5E0D8] p-6 mb-4 card-hover">
                         <div className="flex items-center gap-2 mb-2">
-                            <div className="w-7 h-7 rounded-lg bg-[#EDE8E0] flex items-center justify-center">
+                            <div className="w-7 h-7 rounded-lg bg-[#C4956A]/10 flex items-center justify-center">
                                 <Bell size={14} className="text-[#C4956A]" />
                             </div>
                             <h2 className="text-sm font-semibold text-[#1A1814]">Alert Frequency</h2>
@@ -63,8 +70,8 @@ export default function SettingsPage() {
                                     key={f}
                                     onClick={() => setFrequency(f)}
                                     className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition-all duration-300 cursor-pointer ${frequency === f
-                                            ? "bg-[#1B3A6B] text-white border-[#1B3A6B] shadow-md shadow-[#1B3A6B]/15"
-                                            : "bg-white text-[#8C8578] border-[#E5E0D8] hover:border-[#C4956A] hover:text-[#1A1814]"
+                                        ? "bg-[#1B3A6B] text-white border-[#1B3A6B] shadow-md shadow-[#1B3A6B]/15"
+                                        : "bg-white text-[#8C8578] border-[#E5E0D8] hover:border-[#C4956A] hover:text-[#1A1814]"
                                         }`}
                                 >
                                     {f}
@@ -81,19 +88,53 @@ export default function SettingsPage() {
                     </div>
 
                     {/* Save */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 mb-6">
                         <Button onClick={handleSave} size="md" className="min-w-[140px]">
-                            {saved ? (
-                                <span className="flex items-center gap-2">
-                                    <Check size={15} /> Saved!
-                                </span>
-                            ) : "Save Changes"}
+                            Save Changes
                         </Button>
-                        {saved && <span className="text-sm text-[#C4956A] animate-pulse">Settings updated successfully</span>}
                     </div>
 
-                </div>
+                    {/* Danger Zone */}
+                    <div className="bg-white rounded-2xl border border-red-200 p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                            <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center">
+                                <AlertTriangle size={14} className="text-red-500" />
+                            </div>
+                            <h2 className="text-sm font-semibold text-red-700">Danger Zone</h2>
+                        </div>
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between p-3 rounded-xl border border-red-100 bg-red-50/30">
+                                <div>
+                                    <p className="text-sm font-medium text-[#1A1814]">Disconnect Google Analytics</p>
+                                    <p className="text-xs text-[#8C8578]">Remove your GA connection and stop syncing data</p>
+                                </div>
+                                <button className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors cursor-pointer">
+                                    Disconnect
+                                </button>
+                            </div>
+                            <div className="flex items-center justify-between p-3 rounded-xl border border-red-100 bg-red-50/30">
+                                <div>
+                                    <p className="text-sm font-medium text-[#1A1814]">Delete Account</p>
+                                    <p className="text-xs text-[#8C8578]">Permanently delete your account and all data</p>
+                                </div>
+                                <button className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors cursor-pointer">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </motion.div>
             </main>
+
+            {/* Toast Notification */}
+            {showToast && (
+                <Toast
+                    message="Settings updated successfully"
+                    variant="success"
+                    onClose={() => setShowToast(false)}
+                />
+            )}
         </div>
     );
 }

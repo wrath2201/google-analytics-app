@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { getPool } from "../plugins/mysql";
 import swytchExec from "../swytch/client";
+import { getOrRefreshAccessToken } from "../services/googleAuth";
 
 export default async function dashboardRoutes(server: FastifyInstance) {
 
@@ -9,7 +10,7 @@ export default async function dashboardRoutes(server: FastifyInstance) {
     const user = await request.jwtVerify() as any;
     const { appId } = request.params as any;
 
-    const accessToken = request.cookies.google_access_token;
+    const accessToken = await getOrRefreshAccessToken(request, reply, server);
     if (!accessToken) {
       return reply.status(401).send({ error: "Google access token missing" });
     }

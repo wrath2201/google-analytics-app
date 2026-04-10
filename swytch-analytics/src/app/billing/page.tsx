@@ -5,6 +5,7 @@ import { Check, Download, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/layout/Navbar";
+import Button from "@/components/ui/Button";
 
 const BACKEND = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
@@ -25,6 +26,7 @@ const PLANS = [
     },
 ];
 
+
 export default function BillingPage() {
     const { user } = useAuth();
 
@@ -35,12 +37,13 @@ export default function BillingPage() {
     const [cancelling, setCancelling] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+
     useEffect(() => {
         const load = async () => {
             try {
                 const [subRes, invRes] = await Promise.all([
-                    fetch(`${BACKEND}/api/subscriptions/me`, { credentials: "include" }),
-                    fetch(`${BACKEND}/api/stripe/invoices`, { credentials: "include" }),
+                    fetch("/api/subscriptions/me", { credentials: "include" }),
+                    fetch("/api/stripe/invoices", { credentials: "include" }),
                 ]);
 
                 if (subRes.ok) setSubscription(await subRes.json());
@@ -54,6 +57,7 @@ export default function BillingPage() {
                 setLoading(false);
             }
         };
+
         load();
     }, []);
 
@@ -62,7 +66,7 @@ export default function BillingPage() {
         setUpgrading(true);
         setError(null);
         try {
-            const res = await fetch(`${BACKEND}/api/stripe/checkout`, {
+            const res = await fetch("/api/stripe/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -85,12 +89,12 @@ export default function BillingPage() {
         setCancelling(true);
         setError(null);
         try {
-            const res = await fetch(`${BACKEND}/api/stripe/cancel`, {
+            const res = await fetch("/api/stripe/cancel", {
                 method: "POST",
                 credentials: "include",
             });
             if (!res.ok) throw new Error("Failed to cancel subscription");
-            const subRes = await fetch(`${BACKEND}/api/subscriptions/me`, { credentials: "include" });
+            const subRes = await fetch("/api/subscriptions/me", { credentials: "include" });
             if (subRes.ok) setSubscription(await subRes.json());
         } catch (err) {
             setError("Failed to cancel subscription. Please try again.");
@@ -101,7 +105,7 @@ export default function BillingPage() {
 
     const handleDownload = async (invoiceId: string) => {
         try {
-            const res = await fetch(`${BACKEND}/api/stripe/invoice/${invoiceId}`, { credentials: "include" });
+            const res = await fetch(`/api/stripe/invoice/${invoiceId}`, { credentials: "include" });
             if (!res.ok) throw new Error("Failed to fetch invoice");
             const { pdf, url } = await res.json();
             window.open(pdf || url, "_blank");
@@ -125,6 +129,14 @@ export default function BillingPage() {
                     transition={{ duration: 0.4 }}
                     className="max-w-4xl mx-auto space-y-6"
                 >
+                    {/* Page Header */}
+                    <div className="mb-2">
+                        <p className="text-xs font-medium text-[#8C8578] uppercase tracking-widest mb-1">Account</p>
+                        <h1 className="text-3xl text-[#1A1814]" style={{ fontFamily: "var(--font-display)" }}>
+                            Billing & Subscription
+                        </h1>
+                    </div>
+
                     {error && (
                         <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-800">
                             <AlertCircle size={16} className="shrink-0" />
@@ -154,29 +166,53 @@ export default function BillingPage() {
                                     </div>
                                     <div className="flex gap-2 flex-wrap items-start">
                                         {currentPlan === "free" ? (
-                                            <button onClick={handleUpgrade} disabled={upgrading} className="px-4 py-2 text-sm font-medium bg-[#1B3A6B] text-white rounded-lg hover:opacity-90 transition-all disabled:opacity-50">
+                                            <Button onClick={handleUpgrade} disabled={upgrading}>
                                                 {upgrading ? "Redirecting..." : "Upgrade to Pro"}
-                                            </button>
+                                            </Button>
                                         ) : (
-                                            <button onClick={handleCancel} disabled={cancelling} className="px-4 py-2 text-sm font-medium text-red-500 rounded-lg hover:bg-red-500/10 transition-all disabled:opacity-50">
+                                            <button
+                                                onClick={handleCancel}
+                                                disabled={cancelling}
+                                                className="px-4 py-2 text-sm font-medium text-red-500 rounded-lg hover:bg-red-500/10 transition-all disabled:opacity-50 cursor-pointer"
+                                            >
                                                 {cancelling ? "Cancelling..." : "Cancel plan"}
                                             </button>
                                         )}
                                     </div>
                                 </div>
                                 <hr className="border-[#E5E0D8] my-5" />
-                                <div>
-                                    <div className="flex justify-between text-sm mb-1.5">
-                                        <span className="text-[#8C8578]">Websites connected</span>
-                                        <span className="font-medium text-[#1A1814]">{appsUsed} / {appsAllowed >= 999 ? "∞" : appsAllowed}</span>
+                                <div className="flex items-center gap-5">
+                                    {/* SVG Ring Chart */}
+                                    <div className="relative w-16 h-16 shrink-0">
+                                        <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                                            <circle cx="18" cy="18" r="15" fill="none" stroke="#EDE8E0" strokeWidth="3" />
+                                            <motion.circle
+                                                cx="18" cy="18" r="15" fill="none"
+                                                stroke="url(#ringGrad)" strokeWidth="3" strokeLinecap="round"
+                                                strokeDasharray={`${usagePct * 0.9425} 94.25`}
+                                                initial={{ strokeDasharray: "0 94.25" }}
+                                                animate={{ strokeDasharray: `${usagePct * 0.9425} 94.25` }}
+                                                transition={{ duration: 1, ease: "easeOut" }}
+                                            />
+                                            <defs>
+                                                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stopColor="#1B3A6B" />
+                                                    <stop offset="100%" stopColor="#3A64A8" />
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <span className="text-xs font-bold text-[#1A1814]">{appsUsed}/{appsAllowed >= 999 ? "∞" : appsAllowed}</span>
+                                        </div>
                                     </div>
-                                    <div className="h-2 bg-[#EDE8E0] rounded-full overflow-hidden">
-                                        <motion.div
-                                            initial={{ width: 0 }}
-                                            animate={{ width: `${usagePct}%` }}
-                                            transition={{ duration: 0.8, ease: "easeOut" }}
-                                            className="h-full bg-gradient-to-r from-[#1B3A6B] to-[#3A64A8] rounded-full"
-                                        />
+                                    <div>
+                                        <p className="text-sm font-medium text-[#1A1814]">Websites connected</p>
+                                        <p className="text-xs text-[#8C8578] mt-0.5">
+                                            {appsAllowed >= 999
+                                                ? "Unlimited websites on your current plan"
+                                                : `${appsAllowed - appsUsed} website${appsAllowed - appsUsed !== 1 ? "s" : ""} remaining`
+                                            }
+                                        </p>
                                     </div>
                                 </div>
                             </>
@@ -188,7 +224,7 @@ export default function BillingPage() {
                         <p className="text-xs font-medium text-[#8C8578] uppercase tracking-widest mb-5">Choose a plan</p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {PLANS.map((plan) => (
-                                <div key={plan.name} className={`relative rounded-xl p-5 border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${plan.highlight ? "border-[#1B3A6B] border-2" : "border-[#E5E0D8]"}`}>
+                                <div key={plan.name} className={`relative rounded-xl p-5 border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${plan.highlight ? "border-[#1B3A6B] border-2 shadow-[0_0_20px_-4px_rgba(27,58,107,0.2)]" : "border-[#E5E0D8]"}`}>
                                     {plan.highlight && (
                                         <div className="absolute -top-[13px] left-1/2 -translate-x-1/2">
                                             <span className="bg-[#1B3A6B] text-white text-xs font-medium px-3 py-1 rounded-b-lg rounded-t-sm shadow-sm">Recommended</span>
@@ -212,7 +248,7 @@ export default function BillingPage() {
                                     ) : plan.key === "free" ? (
                                         <button disabled className="w-full py-2 text-sm rounded-lg border border-[#E5E0D8] text-[#8C8578] cursor-default">Downgrade</button>
                                     ) : (
-                                        <button onClick={handleUpgrade} disabled={upgrading} className="w-full py-2 text-sm rounded-lg bg-[#1B3A6B] text-white hover:opacity-90 transition-all disabled:opacity-50">
+                                        <button onClick={handleUpgrade} disabled={upgrading} className="relative overflow-hidden w-full py-2.5 text-sm font-medium rounded-lg bg-[#1B3A6B] text-white hover:opacity-90 transition-all disabled:opacity-50 btn-shimmer cursor-pointer">
                                             {upgrading ? "Redirecting..." : "Upgrade to Pro"}
                                         </button>
                                     )}
@@ -223,7 +259,7 @@ export default function BillingPage() {
 
                     {/* Invoices */}
                     <div className="bg-white border border-[#E5E0D8] rounded-2xl p-6">
-                        <p className="text-xs font-medium text-[#8C8578] uppercase tracking-widest mb-5">Invoices & payment history</p>
+                        <p className="text-xs font-medium text-[#8C8578] uppercase tracking-widest mb-5">Invoices &amp; payment history</p>
                         {loading ? (
                             <div className="h-20 animate-pulse bg-[#F7F5F0] rounded-xl" />
                         ) : invoices.length === 0 ? (
@@ -241,7 +277,7 @@ export default function BillingPage() {
                                 </thead>
                                 <tbody>
                                     {invoices.map((inv: any) => (
-                                        <tr key={inv.id} className="border-b border-[#E5E0D8] last:border-0 hover:bg-[#FDFCFB] transition-colors">
+                                        <tr key={inv.id} className="border-b border-[#E5E0D8] last:border-0 hover:bg-[#FDFCFB] border-l-2 border-l-transparent hover:border-l-[#1B3A6B] transition-all">
                                             <td className="py-3 font-medium text-[#1A1814]">{inv.number ?? inv.id}</td>
                                             <td className="py-3 text-[#6B6760]">{new Date(inv.created * 1000).toLocaleDateString()}</td>
                                             <td className="py-3 text-[#1A1814]">${((inv.amount_paid ?? 0) / 100).toFixed(2)}</td>
@@ -252,7 +288,7 @@ export default function BillingPage() {
                                                 </span>
                                             </td>
                                             <td className="py-3 text-right">
-                                                <button onClick={() => handleDownload(inv.id)} className="flex items-center gap-1.5 text-sm px-3 py-1.5 border border-transparent rounded-lg hover:bg-[#EDE8E0] transition-all ml-auto">
+                                                <button onClick={() => handleDownload(inv.id)} className="flex items-center gap-1.5 text-sm px-3 py-1.5 border border-transparent rounded-lg hover:bg-[#EDE8E0] transition-all ml-auto cursor-pointer">
                                                     <Download size={13} />
                                                     Download
                                                 </button>

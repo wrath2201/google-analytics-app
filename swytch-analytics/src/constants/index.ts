@@ -1,5 +1,5 @@
 /**
- * Application-wide constants.
+ * Shared TypeScript type definitions for Statsy.
  */
 
 /** Alert frequency options */
@@ -23,5 +23,5 @@ export const API_ROUTES = {
 } as const;
 
 /** App metadata */
-export const APP_NAME = "SwytchAnalytics";
-export const APP_DESCRIPTION = "Google Analytics dashboard powered by SwytchCode CLI";
+export const APP_NAME = "Statsy";
+export const APP_DESCRIPTION = "Google Analytics dashboard powered by SwytchCode";

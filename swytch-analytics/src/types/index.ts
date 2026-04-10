@@ -1,5 +1,5 @@
 /**
- * Shared TypeScript type definitions for SwytchAnalytics.
+ * Shared TypeScript type definitions for Statsy.
  */
 
 /** User profile */

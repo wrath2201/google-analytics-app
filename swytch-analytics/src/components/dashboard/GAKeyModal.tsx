@@ -6,6 +6,8 @@ import Button from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import Input from "@/components/ui/Input";
 
+const BACKEND = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
 const TIME_ZONES = [
     { value: "America/Los_Angeles", label: "Pacific Time (PT)" },
     { value: "America/New_York", label: "Eastern Time (ET)" },
@@ -50,7 +52,14 @@ export default function GAKeyModal({
     const [createError, setCreateError] = useState("");
 
     const [createdMeasurementId, setCreatedMeasurementId] = useState("");
-    const [createdPropertyInfo, setCreatedPropertyInfo] = useState<{id: string, name: string} | null>(null);
+    const [createdPropertyInfo, setCreatedPropertyInfo] = useState<{ id: string, name: string } | null>(null);
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = (text: string) => {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     const [createForm, setCreateForm] = useState({
         accountId: "",
@@ -63,6 +72,9 @@ export default function GAKeyModal({
 
         if (!isOpen) return;
 
+        // Reset auth state so stale flags from a previous open don't stick
+        setNeedsAuth(false);
+
         const fetchProperties = async () => {
 
             try {
@@ -70,7 +82,7 @@ export default function GAKeyModal({
                 setLoading(true);
 
                 const res = await fetch(
-                    "http://localhost:4000/api/ga/properties",
+                    "/api/ga/properties",
                     { credentials: "include" }
                 );
 
@@ -118,18 +130,9 @@ export default function GAKeyModal({
 
     };
 
-    const handleOAuthConnect = async () => {
-        try {
-            setLoading(true);
-            const res = await fetch("http://localhost:4000/api/ga/oauth/url", { credentials: "include" });
-            const data = await res.json();
-            if (data.url) {
-                window.location.href = data.url;
-            }
-        } catch (err) {
-            console.error("Failed to get OAuth URL", err);
-            setLoading(false);
-        }
+    const handleOAuthConnect = () => {
+        setLoading(true);
+        window.location.href = "/api/ga/oauth/url";
     };
 
     const handleCreateProperty = async () => {
@@ -142,7 +145,7 @@ export default function GAKeyModal({
             setCreating(true);
             setCreateError("");
 
-            const res = await fetch("http://localhost:4000/api/ga/properties/create", {
+            const res = await fetch("/api/ga/properties/create", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -166,9 +169,9 @@ export default function GAKeyModal({
                 setCreatedPropertyInfo({ id: data.property.propertyId, name: data.property.displayName });
             } else {
                 if (onSubmitAction) {
-                    onSubmitAction({ 
-                        propertyId: data.property.propertyId, 
-                        displayName: data.property.displayName 
+                    onSubmitAction({
+                        propertyId: data.property.propertyId,
+                        displayName: data.property.displayName
                     });
                 }
                 onCloseAction();
@@ -198,7 +201,7 @@ export default function GAKeyModal({
 
                     <div className="relative font-mono text-xs">
                         <pre className="bg-[#1A1814] text-[#F9F8F6] p-4 pt-5 pb-5 rounded-lg overflow-x-auto shadow-inner leading-relaxed border border-[#2A2824]">
-{`<!-- Google tag (gtag.js) -->
+                            {`<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=${createdMeasurementId}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -208,14 +211,25 @@ export default function GAKeyModal({
   gtag('config', '${createdMeasurementId}');
 </script>`}
                         </pre>
-                        <button 
-                            className="absolute top-2 right-2 p-1.5 px-3 bg-white/10 hover:bg-white/20 rounded text-white transition-colors flex items-center gap-1.5"
-                            onClick={() => {
-                                navigator.clipboard.writeText(`<!-- Google tag (gtag.js) -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=${createdMeasurementId}"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  gtag('config', '${createdMeasurementId}');\n</script>`);
-                            }}
+                        <button
+                            className={`absolute top-2 right-2 p-1.5 px-3 rounded text-white transition-all flex items-center gap-1.5 text-xs font-medium ${
+                                copied
+                                    ? "bg-green-500/80 hover:bg-green-500"
+                                    : "bg-white/10 hover:bg-white/20"
+                            }`}
+                            onClick={() => handleCopy(`<!-- Google tag (gtag.js) -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=${createdMeasurementId}"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  gtag('config', '${createdMeasurementId}');\n</script>`)}
                         >
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                            Copy
+                            {copied ? (
+                                <>
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                                    Copied!
+                                </>
+                            ) : (
+                                <>
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                    Copy
+                                </>
+                            )}
                         </button>
                     </div>
 
@@ -297,19 +311,29 @@ export default function GAKeyModal({
                         </div>
                     ) : (
                         <div className="space-y-5">
-                            
+
                             {createError && (
                                 <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
                                     {createError}
                                 </div>
                             )}
 
-                            <Select
-                                label="Google Account"
-                                value={createForm.accountId}
-                                onChange={(e) => setCreateForm(f => ({ ...f, accountId: e.target.value }))}
-                                options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
-                            />
+                            {accounts.length === 0 ? (
+                                <div className="p-4 bg-amber-50 rounded-lg border border-amber-200 text-sm text-amber-800 text-center space-y-2 mb-4">
+                                    <p className="font-semibold text-base">No Google Analytics Account Found</p>
+                                    <p>Your Google profile doesn't have a Root Analytics Account yet! Google requires you to accept their Terms of Service directly on their website before third-party apps can generate properties for you.</p>
+                                    <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="inline-block mt-2 px-4 py-2 bg-white border border-amber-300 rounded-md font-medium text-amber-900 transition-colors hover:bg-amber-100">
+                                        Open analytics.google.com
+                                    </a>
+                                </div>
+                            ) : (
+                                <>
+                                    <Select
+                                        label="Google Account"
+                                        value={createForm.accountId}
+                                        onChange={(e) => setCreateForm(f => ({ ...f, accountId: e.target.value }))}
+                                        options={accounts.map(a => ({ value: a.id, label: a.displayName }))}
+                                    />
 
                             <Input
                                 label="Property Name *"
@@ -333,18 +357,21 @@ export default function GAKeyModal({
                                 onChange={(e) => setCreateForm(f => ({ ...f, timeZone: e.target.value }))}
                                 options={TIME_ZONES}
                             />
-
-                            <div className="flex justify-end gap-3 pt-4">
-                                <Button variant="outline" onClick={onCloseAction} disabled={creating}>Cancel</Button>
-                                <Button onClick={handleCreateProperty} disabled={creating}>
-                                    {creating ? "Creating..." : "Create Property"}
-                                </Button>
-                            </div>
-                        </div>
+                        </>
                     )}
-                </>
-            )}
 
-        </Modal>
+                    <div className="flex justify-end gap-3 pt-4">
+                        <Button variant="outline" onClick={onCloseAction} disabled={creating}>Cancel</Button>
+                        <Button onClick={handleCreateProperty} disabled={creating || accounts.length === 0}>
+                            {creating ? "Creating..." : "Create Property"}
+                        </Button>
+                    </div>
+                </div>
+                    )}
+        </>
+    )
+}
+
+        </Modal >
     );
 }

@@ -17,6 +17,7 @@ type BlurTextProps = {
     easing?: Easing | Easing[];
     onAnimationCompleteAction?: () => void;
     stepDuration?: number;
+    highlightWords?: { text: string; className: string }[];
 };
 
 const buildKeyframes = (
@@ -47,6 +48,7 @@ export default function BlurText({
     easing = (t: number) => t,
     onAnimationCompleteAction,
     stepDuration = 0.35,
+    highlightWords = [],
 }: BlurTextProps) {
     const elements = animateBy === "words" ? text.split(" ") : text.split("");
     const [inView, setInView] = useState(false);
@@ -105,12 +107,16 @@ export default function BlurText({
                     delay: (index * delay) / 1000,
                     ease: easing,
                 };
+                const highlightMatch = highlightWords.find(h => h.text === segment);
+                const extraClass = highlightMatch ? highlightMatch.className : "";
+
                 return (
                     <motion.span
                         key={index}
                         initial={fromSnapshot}
                         animate={inView ? animateKeyframes : fromSnapshot}
                         transition={spanTransition}
+                        className={extraClass}
                         onAnimationComplete={
                             index === elements.length - 1
                                 ? onAnimationCompleteAction

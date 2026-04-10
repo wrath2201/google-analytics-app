@@ -15,6 +15,7 @@ import {
     GoogleAuthProvider
 } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
+import { apiRequest } from "@/lib/api";
 
 // ── Types ────────────────────────────────────────────────────
 type User = {
@@ -32,8 +33,6 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const BACKEND = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
@@ -74,10 +73,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         console.log("Captured Google Refresh Token:", googleRefreshToken ? "YES" : "NO");
 
-        const res = await fetch("http://localhost:4000/api/auth", {
+        const res = await apiRequest("/auth", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
             body: JSON.stringify({
                 idToken,
                 accessToken: accessToken || null,
@@ -102,10 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const signOut = async (): Promise<void> => {
         // ── Clear backend cookie first ────────────────────────
-        await fetch(`${BACKEND}/api/auth`, {
-            method: "DELETE",
-            credentials: "include",
-        });
+        await apiRequest("/auth", { method: "DELETE" });
 
         // ── Then sign out of Firebase ─────────────────────────
         await firebaseSignOut(auth);
